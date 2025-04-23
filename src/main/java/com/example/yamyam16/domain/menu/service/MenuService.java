@@ -1,9 +1,14 @@
 package com.example.yamyam16.domain.menu.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
+import com.example.yamyam16.config.exception.CustomException;
+import com.example.yamyam16.config.exception.ErrorCode;
 import com.example.yamyam16.domain.menu.dto.MenuCreateRequestDto;
 import com.example.yamyam16.domain.menu.dto.MenuCreateResponseDto;
+import com.example.yamyam16.domain.menu.dto.MenuListResponseDto;
 import com.example.yamyam16.domain.menu.dto.MenuUpdateRequestDto;
 import com.example.yamyam16.domain.menu.dto.MenuUpdateResponseDto;
 import com.example.yamyam16.domain.menu.entity.Menu;
@@ -24,7 +29,7 @@ public class MenuService {
 		MenuCreateRequestDto menuCreateRequestDto
 	) {
 		Store findStore = storeRepository.findById(storeId)
-			.orElseThrow(() -> new storeNotFoundException("해당 가게가 없습니다.")); //해당 가게가 있는지 확인
+			.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND)); //해당 가게가 있는지 확인
 
 		Menu menu = new Menu(
 			menuCreateRequestDto.getMenuName(),
@@ -35,14 +40,28 @@ public class MenuService {
 		return new MenuCreateResponseDto(savedMenu.getId(), savedMenu.getMenuName(), savedMenu.getMenuPrice());
 	}
 
+	/**
+	 * 
+	 *
+	 *
+	 *
+	 *
+	 */
+
+	public List<MenuListResponseDto> findMenuByPage(Long storeId, Long offset, Long limit) {
+
+		return new List<MenuListResponseDto>()
+	}
+
 	public MenuUpdateResponseDto updateMenu(
 		Long storeId,
 		Long menuId,
 		MenuUpdateRequestDto menuUpdateRequestDto
 	) {
 		Store findStore = storeRepository.findById(storeId)
-			.orElseThrow(() -> new storeNotFoundException("해당 가게가 없습니다."));
-		Menu findMenu = MenuRepository.findById(menuId).orElseThrow(() -> new menuNotFooundException("해당 메뉴가 없습니다"));
+			.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
+		Menu findMenu = MenuRepository.findById(menuId)
+			.orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
 		Menu updateMenu = MenuRepository.save(menuUpdateRequestDto.getMenuName(), menuUpdateRequestDto.getMenuPrice());
 		return new MenuUpdateResponseDto(updateMenu.getId(), updateMenu.getMenuName(), updateMenu.getMenuPrice())
 	}
@@ -53,9 +72,10 @@ public class MenuService {
 		Long menuId
 	) {
 		Store findStore = storeRepository.findById(storeId)
-			.orElseThrow(() -> new storeNotFoundException("해당 가게가 없습니다."));
+			.orElseThrow(() -> new CustomException());
 
-		Menu findMenu = MenuRepository.findById(menuId).orElseThrow(() -> new menuNotFooundException("해당 메뉴가 없습니다"));
+		Menu findMenu = MenuRepository.findById(menuId)
+			.orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
 
 		findMenu.deleteMenu(); // 가게 메뉴는 소프트삭제가 됨
 	}

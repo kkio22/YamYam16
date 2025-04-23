@@ -1,16 +1,20 @@
 package com.example.yamyam16.domain.menu.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.yamyam16.domain.menu.dto.MenuCreateRequestDto;
 import com.example.yamyam16.domain.menu.dto.MenuCreateResponseDto;
+import com.example.yamyam16.domain.menu.dto.MenuListResponseDto;
 import com.example.yamyam16.domain.menu.dto.MenuUpdateRequestDto;
 import com.example.yamyam16.domain.menu.dto.MenuUpdateResponseDto;
 import com.example.yamyam16.domain.menu.service.MenuService;
@@ -33,7 +37,17 @@ public class MenuController {
 		return new ResponseEntity<>(menuCreateResponseDto, HttpStatus.CREATED);
 	}
 
-	@PatchMapping("/stores/{storeId}/menu/{menuId}")
+	@GetMapping("/store/{storeId}")//페이징
+	public ResponseEntity<List<MenuListResponseDto>> findMenuByPage(
+		@PathVariable Long storeId,
+		@RequestParam(defaultValue = "1") Long offset,
+		@RequestParam(defaultValue = "10") Long limit
+	) {
+		List<MenuListResponseDto> menuListResponseDto = menuService.findMenuByPage(storeId, offset, limit);
+		return new ResponseEntity<>(menuListResponseDto, HttpStatus.OK);
+	}
+
+	@PatchMapping("/stores/{storeId}/menu/{menuId}/edit")// url이 달라야 함
 	public ResponseEntity<MenuUpdateResponseDto> updateMenu(
 		@PathVariable Long storeId,
 		Long menuId,
@@ -43,7 +57,7 @@ public class MenuController {
 		return new ResponseEntity<>(menuUpdateResponseDto, HttpStatus.OK);
 	}
 
-	@DeleteMapping("/store/{storeId}/menu/{menuId}")
+	@PatchMapping("/store/{storeId}/menu/{menuId}")
 	public ResponseEntity<Void> deleteMenu(
 		@PathVariable Long storeId,
 		Long menuId
@@ -51,4 +65,7 @@ public class MenuController {
 		menuService.deleteMenu(storeId, menuId);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
+
+	//enum으로 상태 나타내서 판매중이냐 품절로 나타내고,
+	// 완전히 삭제는 그냥 삭제
 }

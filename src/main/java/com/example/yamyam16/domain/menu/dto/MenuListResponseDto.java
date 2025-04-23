@@ -5,7 +5,9 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class MenuUpdateRequestDto {
+public class MenuListResponseDto {
+
+	private Long id;
 
 	private String menuName;
 
