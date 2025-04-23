@@ -1,0 +1,50 @@
+package com.example.yamyam16.order.entity;
+
+import java.awt.*;
+import java.time.LocalDateTime;
+
+import com.example.yamyam16.order.enums.CartStatus;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@Entity
+@NoArgsConstructor
+@Table(name = "cart")
+public class Cart {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long cartId;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "menu_id", nullable = false)
+	private Menu menu;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "order_id")
+	private Order order;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
+
+	private Long quantity;
+
+	@Enumerated(EnumType.STRING)
+	private CartStatus status;
+
+	private LocalDateTime createdAt;
+
+}
