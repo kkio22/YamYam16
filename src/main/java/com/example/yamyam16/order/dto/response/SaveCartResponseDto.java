@@ -16,7 +16,7 @@ public class SaveCartResponseDto {
 	private final Long minOrderPrice; // 최소 주문 금액
 	private boolean canOrder; // 주문 가능 여부 -> 최소 주문 금액을 충족하는가?
 
-	private SaveCartResponseDto toDto(Cart addedCart, List<Cart> userCarts, Long minOrderPrice) {
+	public static SaveCartResponseDto toDto(Cart addedCart, List<Cart> userCarts, Long minOrderPrice) {
 		// 현재 카트 금액 구하기
 		List<CartItemDto> cartItems = userCarts.stream().map(CartItemDto::toDto).toList();
 		Long totalCartPrice = cartItems.stream().mapToLong(CartItemDto::getPrice).sum();

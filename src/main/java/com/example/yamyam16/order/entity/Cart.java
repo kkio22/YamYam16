@@ -3,6 +3,7 @@ package com.example.yamyam16.order.entity;
 import java.awt.*;
 import java.time.LocalDateTime;
 
+import com.example.yamyam16.auth.entity.User;
 import com.example.yamyam16.order.enums.CartStatus;
 
 import jakarta.persistence.Entity;
@@ -47,4 +48,11 @@ public class Cart {
 
 	private LocalDateTime createdAt;
 
+	// 카트 담기용 메서드
+	public Cart(User user, Menu menu, Long quantity) {
+		this.user = user;
+		this.menu = menu;
+		this.quantity = quantity;
+		this.status = CartStatus.IN_CART;
+	}
 }
