@@ -2,16 +2,16 @@ package com.example.yamyam16.auth.service;
 
 import java.util.Optional;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
+import com.example.yamyam16.auth.common.UserErrorCode;
 import com.example.yamyam16.auth.config.PasswordEncoder;
 import com.example.yamyam16.auth.dto.request.LoginRequestDto;
 import com.example.yamyam16.auth.dto.request.SignUpRequestDto;
 import com.example.yamyam16.auth.dto.response.LoginResponseDto;
 import com.example.yamyam16.auth.dto.response.SignUpResponseDto;
 import com.example.yamyam16.auth.entity.User;
+import com.example.yamyam16.auth.exception.UserException;
 import com.example.yamyam16.auth.repository.UserRepository;
 
 import jakarta.validation.Valid;
@@ -24,6 +24,11 @@ public class UserService {
 	private final PasswordEncoder passwordEncoder;
 
 	public SignUpResponseDto signUp(@Valid SignUpRequestDto dto) {
+		//이메일 중복 검증
+		if (userRepository.existsByEmail(dto.getEmail())) {
+			throw new UserException(UserErrorCode.USER_DUPLICATION_EMAIL);
+		}
+
 		//비밀번호 암호화
 		String encodedPassword = passwordEncoder.encode(dto.getPassword());
 
@@ -35,11 +40,11 @@ public class UserService {
 	}
 
 	public LoginResponseDto login(@Valid LoginRequestDto requestDto) {
-		User user = userRepository.findByEmail(requestDto.getEmail()).orElseThrow(() -> new ResponseStatusException(
-			HttpStatus.NOT_FOUND, "존재하지 않는 이메일입니다."));
+		User user = userRepository.findByEmail(requestDto.getEmail())
+			.orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
 		if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 틀렸습니다.");
+			throw new UserException(UserErrorCode.USER_WRONG_PW);
 		}
 
 		return new LoginResponseDto(user.getId());
@@ -49,7 +54,7 @@ public class UserService {
 		Optional<User> optionalUser = userRepository.findById(userId);
 
 		if (optionalUser.isEmpty()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다.");
+			throw new UserException(UserErrorCode.USER_NOT_FOUND);
 		}
 
 		User findUser = optionalUser.get();
@@ -58,11 +63,8 @@ public class UserService {
 
 	public void deleteUser(Long userId, String password) {
 		User findUser = userRepository.findByIdOrElseThrow(userId);
-		System.out.println("입력된 비밀번호: [" + password + "]");
-		System.out.println("DB의 비밀번호: [" + findUser.getPassword() + "]");
-		System.out.println("일치 여부: " + passwordEncoder.matches(password, findUser.getPassword()));
 		if (!passwordEncoder.matches(password, findUser.getPassword())) {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
+			throw new UserException(UserErrorCode.USER_WRONG_PW);
 		}
 		userRepository.delete(findUser);
 	}
