@@ -1,5 +1,7 @@
 package com.example.yamyam16.domain.menu.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,6 +27,12 @@ public class Menu {
 	@Column(nullable = false)
 	private int menuPrice; //이거 integer인지 long인지 확인 한번 하기
 
+	@Column//null은 기본적으로 true임
+	private LocalDateTime deleteAt;
+
+	@Column
+	private boolean is_deleted = false;
+
 	@ManyToOne
 	@JoinColumn(name = "store_id") //연관관계 매핑
 	private Store store;
@@ -35,6 +43,11 @@ public class Menu {
 	public Menu(String menuName, int menuPrice) {
 		this.menuName = menuName;
 		this.menuPrice = menuPrice;
+	}
+
+	public void deleteMenu() {
+		this.is_deleted = true;
+		this.deleteAt = LocalDateTime.now();
 	}
 
 }
