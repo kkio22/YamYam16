@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Entity
@@ -31,6 +32,7 @@ public class User extends BaseEntity {
 	@Email
 	private String email;
 
+	@Setter
 	@Column(nullable = false)
 	private String password;
 

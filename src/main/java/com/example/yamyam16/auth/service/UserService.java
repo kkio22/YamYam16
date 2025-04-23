@@ -3,11 +3,13 @@ package com.example.yamyam16.auth.service;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.yamyam16.auth.common.UserErrorCode;
 import com.example.yamyam16.auth.config.PasswordEncoder;
 import com.example.yamyam16.auth.dto.request.LoginRequestDto;
 import com.example.yamyam16.auth.dto.request.SignUpRequestDto;
+import com.example.yamyam16.auth.dto.request.UpdatePasswordRequestDto;
 import com.example.yamyam16.auth.dto.response.LoginResponseDto;
 import com.example.yamyam16.auth.dto.response.SignUpResponseDto;
 import com.example.yamyam16.auth.entity.User;
@@ -67,6 +69,21 @@ public class UserService {
 			throw new UserException(UserErrorCode.USER_WRONG_PW);
 		}
 		userRepository.delete(findUser);
+	}
+
+	@Transactional
+	public void updatePw(Long userId, UpdatePasswordRequestDto requestDto) {
+		User findUser = userRepository.findByIdOrElseThrow(userId);
+		if (!passwordEncoder.matches(requestDto.getCurrentPw(), findUser.getPassword())) {
+			throw new UserException(UserErrorCode.USER_WRONG_PW);
+		}
+
+		if (passwordEncoder.matches(requestDto.getNewPw(), findUser.getPassword())) {
+			throw new UserException(UserErrorCode.USER_SAME_PW);
+		}
+
+		String encodedPw = passwordEncoder.encode(requestDto.getNewPw());
+		findUser.setPassword(encodedPw);
 	}
 }
 

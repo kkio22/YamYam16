@@ -51,3 +51,14 @@ DELETE http://localhost:8080/auth
 Content-Type: text/plain
 
 Password1!
+
+
+###
+
+PATCH http://localhost:8080/auth
+Content-Type: application/json
+
+{
+  "currentPw": "Password1!",
+  "newPw": "Password12!"
+}
