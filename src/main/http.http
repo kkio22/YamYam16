@@ -1,0 +1,53 @@
+### GET request to example server
+
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "userType": "USER",
+  "email": "test@example.com",
+  "password": "Password1!",
+  "nickname": "테스트"
+}
+
+###
+
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email": "abc@example.com",
+  "password": "asdf"
+}
+
+###
+
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "asdf"
+}
+
+###
+
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "Password1!"
+}
+
+###
+DELETE http://localhost:8080/auth
+Content-Type: text/plain
+
+2345
+
+###
+DELETE http://localhost:8080/auth
+Content-Type: text/plain
+
+Password1!
