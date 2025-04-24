@@ -1,4 +1,4 @@
-package com.example.yamyam16.config.exception;
+package com.example.yamyam16.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

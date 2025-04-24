@@ -1,4 +1,4 @@
-package com.example.yamyam16.config.exception;
+package com.example.yamyam16.exception;
 
 import lombok.Getter;
 
