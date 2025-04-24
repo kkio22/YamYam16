@@ -1,13 +1,12 @@
 package com.example.yamyam16.order.service;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
 
-import com.example.yamyam16.auth.entity.User;
 import com.example.yamyam16.auth.repository.UserRepository;
 import com.example.yamyam16.order.dto.request.CartRequestDto;
-import com.example.yamyam16.order.dto.response.CartItemDto;
+import com.example.yamyam16.order.dto.request.UpdateCartRequestDto;
+import com.example.yamyam16.order.dto.response.FindAllCartResponseDto;
 import com.example.yamyam16.order.dto.response.SaveCartResponseDto;
 import com.example.yamyam16.order.entity.Cart;
 import com.example.yamyam16.order.enums.CartStatus;
@@ -24,25 +23,55 @@ public class CartServiceImpl implements CartService {
 
 		// 가게 찾기
 		Store findStore = storeRepository.findByIdOrElseThrow(storeId);
-		// 유저 찾기
-		User findUser = userRepository.findByIdOrElseThrow(userId);
 		// 메뉴 찾기 (가게 메뉴에서 금액 가져와야함)
-		Menu findMenu = menuRepository.findByNameAndStoreId(requestDto.getMenu(), storeId)
+		Menu findMenu = menuRepository.findByNameAndStoreId(requestDto.getMenu(), storeId);
 
-		// 필요한것 ( 카트 아이디, 메뉴, 수량, 가격 )
-		Cart cart = new Cart(findUser, findMenu, requestDto.getQuantity());
-		cartRepository.save(cart);
+		// 해당 유저의 다른 카트들 조회
+		List<Cart> userCarts = cartRepository.findByUserIdAndStatus(userId, CartStatus.IN_CART);
 
-		// 유저의 다른 카트들 조회
-		List<Cart> userCarts = cartRepository.findByUserAndStatus(findUser, CartStatus.IN_CART);
-		// 같은 스토어 아이디에서만 담을 수 있음
+		// 같은 스토어에서만 담을 수 있음
 		if (!userCarts.isEmpty()) {
 			Store store = userCarts.get(0).getMenu().getStore();
-			if(!store.getId().equals(findStore.getId())){
+			if (!store.getId().equals(findStore.getId())) {
 				throw new RuntimeException("같은 가게의 음식만 담을 수 있습니다.");
 			}
 		}
 
+		// 필요한것 ( 카트 아이디, 메뉴, 수량, 가격 )
+		Cart cart = new Cart(userId, findMenu, requestDto.getQuantity());
+		cartRepository.save(cart);
+
 		return SaveCartResponseDto.toDto(cart, userCarts, findStore.getMinPrice());
 	}
+
+	@Override
+	public FindAllCartResponseDto findAll(Long userId, Long storeId) {
+		// 카트목록을 리스트로
+		List<Cart> userCarts = cartRepository.findByUserIdAndStatus(userId, CartStatus.IN_CART);
+
+		// 스토어의 최소 주문금액
+		Store findStore = storeRepository.findByIdOrElseThrow(storeId);
+
+		return FindAllCartResponseDto.toDto(userCarts, findStore.getMinPrice());
+	}
+
+	@Override
+	public FindAllCartResponseDto update(Long userId, Long cartId, UpdateCartRequestDto requestDto) {
+
+		Cart findCart = cartRepository.findByCartId(cartId);
+		findCart.update(requestDto.getQuantity());
+
+		// 카트목록을 리스트로
+		List<Cart> userCarts = cartRepository.findByUserIdAndStatus(userId, CartStatus.IN_CART);
+
+		Store findStore = findCart.getMenu().getStore();
+
+		return FindAllCartResponseDto.toDto(userCarts, findStore.getMinPrice());
+	}
+
+	@Override
+	public FindAllCartResponseDto delete() {
+		return null;
+	}
+
 }
