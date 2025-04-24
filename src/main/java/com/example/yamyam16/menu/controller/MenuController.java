@@ -66,6 +66,4 @@ public class MenuController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
-	//enum으로 상태 나타내서 판매중이냐 품절로 나타내고,
-	// 완전히 삭제는 그냥 삭제
 }

@@ -18,7 +18,6 @@ import com.example.yamyam16.menu.dto.MenuUpdateRequestDto;
 import com.example.yamyam16.menu.dto.MenuUpdateResponseDto;
 import com.example.yamyam16.menu.entity.Menu;
 import com.example.yamyam16.menu.repository.MenuRepository;
-import com.example.yamyam16.store.repository.StoreRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -76,11 +75,12 @@ public class MenuService {
 		Store findStore = storeRepository.findById(storeId)
 			.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
-		Menu findMenu = MenuRepository.findById(menuId)
+		Menu findMenu = menuRepository.findById(menuId)
 			.orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
 
-		Menu updateMenu = MenuRepository.save(menuUpdateRequestDto.getMenuName(), menuUpdateRequestDto.getMenuPrice());
-		return new MenuUpdateResponseDto(updateMenu.getId(), updateMenu.getMenuName(), updateMenu.getMenuPrice());
+		findMenu.updateMenu(menuUpdateRequestDto.getMenuName(), menuUpdateRequestDto.getMenuPrice());
+
+		return new MenuUpdateResponseDto(findMenu.getId(), findMenu.getMenuName(), findMenu.getMenuPrice());
 	}
 
 	@Transactional
@@ -91,7 +91,7 @@ public class MenuService {
 		Store findStore = storeRepository.findById(storeId)
 			.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
-		Menu findMenu = MenuRepository.findById(menuId)
+		Menu findMenu = menuRepository.findById(menuId)
 			.orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
 
 		findMenu.deleteMenu(); // 가게 메뉴는 소프트삭제가 됨

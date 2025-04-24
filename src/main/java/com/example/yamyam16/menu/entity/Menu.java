@@ -47,6 +47,11 @@ public class Menu {
 		this.menuPrice = menuPrice;
 	}
 
+	public void updateMenu(String menuName, int menuPrice) {
+		this.menuName = menuName;
+		this.menuPrice = menuPrice;
+	}
+
 	public void deleteMenu() {
 		this.is_deleted = true;
 		this.deleteAt = LocalDateTime.now();
