@@ -57,13 +57,20 @@ public class CartServiceImpl implements CartService {
 
 	@Override
 	public FindAllCartResponseDto update(Long userId, Long cartId, UpdateCartRequestDto requestDto) {
-
 		Cart findCart = cartRepository.findByCartId(cartId);
-		findCart.update(requestDto.getQuantity());
+
+		if (!findCart.getUserId().equals(userId)) {
+			throw new RuntimeException("본인의 장바구니만 수정할 수 있습니다");
+		}
+
+		if (requestDto.getQuantity() == 0) {
+			cartRepository.delete(findCart);
+		} else {
+			findCart.update(requestDto.getQuantity());
+		}
 
 		// 카트목록을 리스트로
 		List<Cart> userCarts = cartRepository.findByUserIdAndStatus(userId, CartStatus.IN_CART);
-
 		Store findStore = findCart.getMenu().getStore();
 
 		return FindAllCartResponseDto.toDto(userCarts, findStore.getMinPrice());

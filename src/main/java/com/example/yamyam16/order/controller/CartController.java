@@ -2,6 +2,7 @@ package com.example.yamyam16.order.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -64,4 +65,29 @@ public class CartController {
 
 		return new ResponseEntity<>(cartService.update(userId, cartId, requestDto), HttpStatus.OK);
 	}
+
+	@DeleteMapping("{cartId}")
+	public ResponseEntity<FindAllCartResponseDto> deleteCart(
+		@PathVariable Long cartId,
+		HttpServletRequest userRequest
+	) {
+		// 로그인 정보 불러오기
+		HttpSession session = userRequest.getSession();
+		Long userId = (Long)session.getAttribute("userId");
+
+		return new ResponseEntity<>(cartService.delete());
+	}
+
+	@DeleteMapping("{cartId}")
+	public ResponseEntity<FindAllCartResponseDto> deleteCart(
+		@PathVariable Long cartId,
+		HttpServletRequest userRequest
+	) {
+		// 로그인 정보 불러오기
+		HttpSession session = userRequest.getSession();
+		Long userId = (Long)session.getAttribute("userId");
+
+		return new ResponseEntity<>(cartService.delete());
+	}
+
 }
