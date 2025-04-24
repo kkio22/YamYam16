@@ -3,9 +3,9 @@ package com.example.yamyam16.order.entity;
 import java.awt.*;
 import java.time.LocalDateTime;
 
-import com.example.yamyam16.auth.entity.User;
 import com.example.yamyam16.order.enums.CartStatus;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -29,6 +29,9 @@ public class Cart {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long cartId;
 
+	@Column(name = "user_id", nullable = false)
+	private Long userId;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "menu_id", nullable = false)
 	private Menu menu;
@@ -37,9 +40,9 @@ public class Cart {
 	@JoinColumn(name = "order_id")
 	private Order order;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
+	// @ManyToOne(fetch = FetchType.LAZY)
+	// @JoinColumn(name = "user_id", nullable = false)
+	// private User user;
 
 	private Long quantity;
 
@@ -49,8 +52,8 @@ public class Cart {
 	private LocalDateTime createdAt;
 
 	// 카트 담기용 메서드
-	public Cart(User user, Menu menu, Long quantity) {
-		this.user = user;
+	public Cart(Long userId, Menu menu, Long quantity) {
+		this.userId = userId;
 		this.menu = menu;
 		this.quantity = quantity;
 		this.status = CartStatus.IN_CART;
