@@ -1,4 +1,4 @@
-package com.example.yamyam16.domain.menu.dto;
+package com.example.yamyam16.menu.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

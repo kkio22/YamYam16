@@ -1,8 +1,8 @@
 package com.example.yamyam16.order.entity;
 
-import java.awt.*;
 import java.time.LocalDateTime;
 
+import com.example.yamyam16.menu.entity.Menu;
 import com.example.yamyam16.order.enums.CartStatus;
 
 import jakarta.persistence.Column;

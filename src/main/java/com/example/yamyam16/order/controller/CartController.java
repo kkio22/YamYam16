@@ -75,19 +75,18 @@ public class CartController {
 		HttpSession session = userRequest.getSession();
 		Long userId = (Long)session.getAttribute("userId");
 
-		return new ResponseEntity<>(cartService.delete());
+		return new ResponseEntity<>(cartService.delete(userId, cartId), HttpStatus.OK);
 	}
 
-	@DeleteMapping("{cartId}")
-	public ResponseEntity<FindAllCartResponseDto> deleteCart(
-		@PathVariable Long cartId,
+	@DeleteMapping
+	public ResponseEntity<String> deleteAllCart(
 		HttpServletRequest userRequest
 	) {
 		// 로그인 정보 불러오기
 		HttpSession session = userRequest.getSession();
 		Long userId = (Long)session.getAttribute("userId");
 
-		return new ResponseEntity<>(cartService.delete());
+		return ResponseEntity.ok(" 장바구니가 초기화되었습니다.");
 	}
 
 }
