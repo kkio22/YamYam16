@@ -51,11 +51,16 @@ public class Cart {
 
 	private LocalDateTime createdAt;
 
-	// 카트 담기용 메서드
+	// 카트 담기용 생성자
 	public Cart(Long userId, Menu menu, Long quantity) {
 		this.userId = userId;
 		this.menu = menu;
 		this.quantity = quantity;
 		this.status = CartStatus.IN_CART;
+	}
+
+	// 카트 수량 수정
+	public void update(Long quantity) {
+		this.quantity = quantity;
 	}
 }

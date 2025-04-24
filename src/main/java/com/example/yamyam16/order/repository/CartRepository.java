@@ -4,9 +4,12 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.yamyam16.auth.entity.User;
 import com.example.yamyam16.order.entity.Cart;
+import com.example.yamyam16.order.enums.CartStatus;
 
 public interface CartRepository extends JpaRepository<Cart, Long> {
-	List<Cart> user(User user);
+
+	Cart findByCartId(Long cartId);
+
+	List<Cart> findByUserIdAndStatus(Long userId, CartStatus cartStatus);
 }
