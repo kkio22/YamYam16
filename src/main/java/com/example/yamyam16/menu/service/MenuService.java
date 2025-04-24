@@ -38,11 +38,14 @@ public class MenuService {
 
 		Menu menu = new Menu(
 			menuCreateRequestDto.getMenuName(),
-			menuCreateRequestDto.getMenuPrice()
+			menuCreateRequestDto.getMenuPrice(),
+			menuCreateRequestDto.getMenuStatus() // 처음 생성할 때 메뉴 상태를 저장하게 함
 		); // dto -> entiity로 변환 entity가 자바 클래스이니 객체로 생성해서 값을 보내서 해당 값으로 바꾼 Menu 클래스를 생성
 
-		Menu savedMenu = menuRepository.save(menu); //repository에 엔티티 보내서 데이터 베이스 테이블에 값 생성하고 그 값이 다시 반환됨 그래서 자료형이 Menu
-		return new MenuCreateResponseDto(savedMenu.getId(), savedMenu.getMenuName(), savedMenu.getMenuPrice());
+		Menu savedMenu = menuRepository.save(
+			menu); //repository에 엔티티 보내서 데이터 베이스 테이블에 값 생성하고 그 값이 다시 반환됨 그래서 자료형이 Menu / 그래서
+		return new MenuCreateResponseDto(savedMenu.getId(), savedMenu.getMenuName(), savedMenu.getMenuPrice(),
+			savedMenu.getMenuStatus()); //내가 저장한 내용에 있는 상태가져오는 것
 	}
 
 	public List<MenuListResponseDto> findMenuByPage(Long storeId, Long page, Long size) {
@@ -78,7 +81,8 @@ public class MenuService {
 		Menu findMenu = menuRepository.findById(menuId)
 			.orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
 
-		findMenu.updateMenu(menuUpdateRequestDto.getMenuName(), menuUpdateRequestDto.getMenuPrice());
+		findMenu.updateMenu(menuUpdateRequestDto.getMenuName(), menuUpdateRequestDto.getMenuPrice(),
+			menuUpdateRequestDto.getMenuStatus());
 
 		return new MenuUpdateResponseDto(findMenu.getId(), findMenu.getMenuName(), findMenu.getMenuPrice());
 	}
@@ -94,7 +98,8 @@ public class MenuService {
 		Menu findMenu = menuRepository.findById(menuId)
 			.orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
 
-		findMenu.deleteMenu(); // 가게 메뉴는 소프트삭제가 됨
+		findMenu.deleteMenu(); // 메뉴 삭제 시간 추가 & 삭제 상태로 변경
+
 	}
 
 }

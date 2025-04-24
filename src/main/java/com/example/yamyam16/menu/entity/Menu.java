@@ -2,8 +2,12 @@ package com.example.yamyam16.menu.entity;
 
 import java.time.LocalDateTime;
 
+import com.example.yamyam16.MenuStatus;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,13 +29,17 @@ public class Menu {
 	private String menuName;
 
 	@Column(nullable = false)
-	private int menuPrice; //이거 integer인지 long인지 확인 한번 하기
+	private long menuPrice; //이거 integer인지 long인지 확인 한번 하기
 
 	@Column//null은 기본적으로 true임
 	private LocalDateTime deleteAt;
 
 	@Column
 	private boolean is_deleted = false;
+
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private MenuStatus menuStatus;
 
 	@ManyToOne
 	@JoinColumn(name = "store_id") //연관관계 매핑
@@ -40,19 +48,22 @@ public class Menu {
 	public Menu() {
 	}
 
-	public Menu(String menuName, int menuPrice) {
+	public Menu(String menuName, long menuPrice, MenuStatus menuStatus) {
 		this.menuName = menuName;
 		this.menuPrice = menuPrice;
+		this.menuStatus = menuStatus;
 	}
 
-	public void updateMenu(String menuName, int menuPrice) {
+	public void updateMenu(String menuName, long menuPrice, MenuStatus menuStatus) {
 		this.menuName = menuName;
 		this.menuPrice = menuPrice;
+		this.menuStatus = menuStatus;
 	}
 
 	public void deleteMenu() {
 		this.is_deleted = true;
 		this.deleteAt = LocalDateTime.now();
+		this.menuStatus = MenuStatus.DELETED;
 	}
 
 }
