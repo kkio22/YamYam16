@@ -1,16 +1,14 @@
 package com.example.yamyam16.domain.menu.service;
 
-import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.example.yamyam16.config.exception.CustomException;
-import com.example.yamyam16.config.exception.ErrorCode;
 import com.example.yamyam16.domain.menu.dto.MenuCreateRequestDto;
 import com.example.yamyam16.domain.menu.dto.MenuCreateResponseDto;
 import com.example.yamyam16.domain.menu.dto.MenuListResponseDto;
@@ -18,6 +16,8 @@ import com.example.yamyam16.domain.menu.dto.MenuUpdateRequestDto;
 import com.example.yamyam16.domain.menu.dto.MenuUpdateResponseDto;
 import com.example.yamyam16.domain.menu.entity.Menu;
 import com.example.yamyam16.domain.menu.repository.MenuRepository;
+import com.example.yamyam16.exception.CustomException;
+import com.example.yamyam16.exception.ErrorCode;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -62,9 +62,9 @@ public class MenuService {
 
 		//entity -> dto로 변환해서 반환 => stream이나 for문 사용해야 함
 		return menuList.stream() //컬렉션인 List를 스트림으로 변환
-			.map(Menu -> new MenuListResponseDto(Menu.getId(), Menu.getMenuName(),//스트릶에 있는 menu객체를 하나씩 꺼내옴
-				Menu.getMenuPrice()) // entity -> dto로 변경 (MenuListResponseDto :: new)
-				.toList()); // 다시 List로 변환
+			.map(menu -> new MenuListResponseDto(menu.getId(), menu.getMenuName(),//스트릶에 있는 menu객체를 하나씩 꺼내옴
+				menu.getMenuPrice())) // entity -> dto로 변경 (MenuListResponseDto :: new)
+			.toList(); // 다시 List로 변환
 	}
 
 	public MenuUpdateResponseDto updateMenu(
