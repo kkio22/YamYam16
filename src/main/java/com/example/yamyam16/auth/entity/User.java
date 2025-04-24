@@ -16,7 +16,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +39,7 @@ public class User extends BaseEntity {
 
     @Column(nullable = false)
     private String password;
-	@Setter
-	@Column(nullable = false)
-	private String password;
+
 
     private String nickname;
 
