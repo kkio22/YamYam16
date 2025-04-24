@@ -44,8 +44,9 @@ public class MenuService {
 
 		Menu savedMenu = menuRepository.save(
 			menu); //repository에 엔티티 보내서 데이터 베이스 테이블에 값 생성하고 그 값이 다시 반환됨 그래서 자료형이 Menu / 그래서
+
 		return new MenuCreateResponseDto(savedMenu.getId(), savedMenu.getMenuName(), savedMenu.getMenuPrice(),
-			savedMenu.getMenuStatus()); //내가 저장한 내용에 있는 상태가져오는 것
+			savedMenu.getMenuStatus().getDescription()); //내가 저장한 내용에 있는 상태가져오는 것
 	}
 
 	public List<MenuListResponseDto> findMenuByPage(Long storeId, Long page, Long size) {
@@ -82,9 +83,10 @@ public class MenuService {
 			.orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
 
 		findMenu.updateMenu(menuUpdateRequestDto.getMenuName(), menuUpdateRequestDto.getMenuPrice(),
-			menuUpdateRequestDto.getMenuStatus());
+			menuUpdateRequestDto.getMenuStatus()); //entity update
 
-		return new MenuUpdateResponseDto(findMenu.getId(), findMenu.getMenuName(), findMenu.getMenuPrice());
+		return new MenuUpdateResponseDto(findMenu.getId(), findMenu.getMenuName(), findMenu.getMenuPrice(),
+			menuUpdateRequestDto.getMenuStatus().getDescription());
 	}
 
 	@Transactional

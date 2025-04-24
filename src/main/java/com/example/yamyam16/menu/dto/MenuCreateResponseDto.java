@@ -1,7 +1,5 @@
 package com.example.yamyam16.menu.dto;
 
-import com.example.yamyam16.MenuStatus;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -15,5 +13,6 @@ public class MenuCreateResponseDto {
 
 	private long menuPrice;
 
-	private MenuStatus menuStatus;
+	private String menuStatus;
+
 }
