@@ -1,4 +1,4 @@
-package com.example.yamyam16.domain.menu.controller;
+package com.example.yamyam16.menu.controller;
 
 import java.util.List;
 
@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.yamyam16.domain.menu.dto.MenuCreateRequestDto;
-import com.example.yamyam16.domain.menu.dto.MenuCreateResponseDto;
-import com.example.yamyam16.domain.menu.dto.MenuListResponseDto;
-import com.example.yamyam16.domain.menu.dto.MenuUpdateRequestDto;
-import com.example.yamyam16.domain.menu.dto.MenuUpdateResponseDto;
-import com.example.yamyam16.domain.menu.service.MenuService;
+import com.example.yamyam16.menu.dto.MenuCreateRequestDto;
+import com.example.yamyam16.menu.dto.MenuCreateResponseDto;
+import com.example.yamyam16.menu.dto.MenuListResponseDto;
+import com.example.yamyam16.menu.dto.MenuUpdateRequestDto;
+import com.example.yamyam16.menu.dto.MenuUpdateResponseDto;
+import com.example.yamyam16.menu.service.MenuService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

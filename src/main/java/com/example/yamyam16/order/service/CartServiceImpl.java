@@ -2,6 +2,8 @@ package com.example.yamyam16.order.service;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.yamyam16.auth.repository.UserRepository;
 import com.example.yamyam16.menu.entity.Menu;
 import com.example.yamyam16.menu.repository.MenuRepository;
@@ -60,6 +62,7 @@ public class CartServiceImpl implements CartService {
 		return FindAllCartResponseDto.toDto(userCarts, findStore.getMinprice());
 	}
 
+	@Transactional
 	@Override
 	public FindAllCartResponseDto update(Long userId, Long cartId, UpdateCartRequestDto requestDto) {
 		Cart findCart = cartRepository.findByCartId(cartId);
@@ -81,6 +84,7 @@ public class CartServiceImpl implements CartService {
 		return FindAllCartResponseDto.toDto(userCarts, findStore.getMinprice());
 	}
 
+	@Transactional
 	@Override
 	public FindAllCartResponseDto delete(Long userId, Long cartId) {
 		Cart findCart = cartRepository.findByCartId(cartId);

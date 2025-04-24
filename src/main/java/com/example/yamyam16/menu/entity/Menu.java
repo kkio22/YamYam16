@@ -1,6 +1,8 @@
-package com.example.yamyam16.domain.menu.entity;
+package com.example.yamyam16.menu.entity;
 
 import java.time.LocalDateTime;
+
+import com.example.yamyam16.store.entity.Store;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

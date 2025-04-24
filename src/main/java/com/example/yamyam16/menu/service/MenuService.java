@@ -1,4 +1,4 @@
-package com.example.yamyam16.domain.menu.service;
+package com.example.yamyam16.menu.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,15 +9,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.example.yamyam16.domain.menu.dto.MenuCreateRequestDto;
-import com.example.yamyam16.domain.menu.dto.MenuCreateResponseDto;
-import com.example.yamyam16.domain.menu.dto.MenuListResponseDto;
-import com.example.yamyam16.domain.menu.dto.MenuUpdateRequestDto;
-import com.example.yamyam16.domain.menu.dto.MenuUpdateResponseDto;
-import com.example.yamyam16.domain.menu.entity.Menu;
-import com.example.yamyam16.domain.menu.repository.MenuRepository;
 import com.example.yamyam16.exception.CustomException;
 import com.example.yamyam16.exception.ErrorCode;
+import com.example.yamyam16.menu.dto.MenuCreateRequestDto;
+import com.example.yamyam16.menu.dto.MenuCreateResponseDto;
+import com.example.yamyam16.menu.dto.MenuListResponseDto;
+import com.example.yamyam16.menu.dto.MenuUpdateRequestDto;
+import com.example.yamyam16.menu.dto.MenuUpdateResponseDto;
+import com.example.yamyam16.menu.entity.Menu;
+import com.example.yamyam16.menu.repository.MenuRepository;
+import com.example.yamyam16.store.repository.StoreRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
