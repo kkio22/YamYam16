@@ -1,4 +1,4 @@
-package com.example.yamyam16.domain.menu.controller;
+package com.example.yamyam16.menu.controller;
 
 import java.util.List;
 
@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.yamyam16.domain.menu.dto.MenuCreateRequestDto;
-import com.example.yamyam16.domain.menu.dto.MenuCreateResponseDto;
-import com.example.yamyam16.domain.menu.dto.MenuListResponseDto;
-import com.example.yamyam16.domain.menu.dto.MenuUpdateRequestDto;
-import com.example.yamyam16.domain.menu.dto.MenuUpdateResponseDto;
-import com.example.yamyam16.domain.menu.service.MenuService;
+import com.example.yamyam16.menu.dto.MenuCreateRequestDto;
+import com.example.yamyam16.menu.dto.MenuCreateResponseDto;
+import com.example.yamyam16.menu.dto.MenuListResponseDto;
+import com.example.yamyam16.menu.dto.MenuUpdateRequestDto;
+import com.example.yamyam16.menu.dto.MenuUpdateResponseDto;
+import com.example.yamyam16.menu.service.MenuService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -66,6 +66,4 @@ public class MenuController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
-	//enum으로 상태 나타내서 판매중이냐 품절로 나타내고,
-	// 완전히 삭제는 그냥 삭제
 }
