@@ -11,5 +11,5 @@ public class MenuCreateResponseDto {
 
 	private String menuName;
 
-	private Integer menuPrice;
+	private int menuPrice;
 }

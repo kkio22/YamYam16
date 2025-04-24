@@ -37,14 +37,14 @@ public class MenuController {
 		return new ResponseEntity<>(menuCreateResponseDto, HttpStatus.CREATED);
 	}
 
-	@GetMapping("/store/{storeId}")//페이징
+	@GetMapping("/store/{storeId}")
 	public ResponseEntity<List<MenuListResponseDto>> findMenuByPage(
 		@PathVariable Long storeId,
-		@RequestParam(defaultValue = "1") Long offset,
-		@RequestParam(defaultValue = "10") Long limit
-	) {
-		List<MenuListResponseDto> menuListResponseDto = menuService.findMenuByPage(storeId, offset, limit);
-		return new ResponseEntity<>(menuListResponseDto, HttpStatus.OK);
+		@RequestParam(defaultValue = "1") Long page, // 페이지 번호
+		@RequestParam(defaultValue = "10") Long size // 한페이지에 몇개의 데이터를 가져올지
+	) {//url 파라미터로 페이지 번호, 크기 받기
+		List<MenuListResponseDto> menuList = menuService.findMenuByPage(storeId, page, size);
+		return new ResponseEntity<>(menuList, HttpStatus.OK);
 	}
 
 	@PatchMapping("/stores/{storeId}/menu/{menuId}/edit")// url이 달라야 함

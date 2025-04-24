@@ -9,5 +9,5 @@ public class MenuUpdateRequestDto {
 
 	private String menuName;
 
-	private Integer menuPrice;
+	private int menuPrice;
 }
