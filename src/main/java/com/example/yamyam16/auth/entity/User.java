@@ -1,6 +1,6 @@
 package com.example.yamyam16.auth.entity;
 
-import com.example.yamyam16.auth.common.UserType;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,11 +38,18 @@ public class User extends BaseEntity {
 
 	private String nickname;
 
+	@Setter
+	private boolean deleted;
+
+	@Setter
+	private LocalDateTime deletedAt;
+
 	// 필드 초기화용 생성자
 	public User(UserType userType, String email, String password, String nickname) {
 		this.userType = userType;
 		this.email = email;
 		this.password = password;
 		this.nickname = nickname;
+		this.deleted = false;
 	}
 }

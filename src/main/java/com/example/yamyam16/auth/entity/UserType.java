@@ -1,4 +1,4 @@
-package com.example.yamyam16.auth.common;
+package com.example.yamyam16.auth.entity;
 
 import lombok.Getter;
 

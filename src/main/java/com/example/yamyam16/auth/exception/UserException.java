@@ -1,6 +1,6 @@
 package com.example.yamyam16.auth.exception;
 
-import com.example.yamyam16.auth.common.UserErrorCode;
+import com.example.yamyam16.auth.common.exception.UserErrorCode;
 
 import lombok.Getter;
 

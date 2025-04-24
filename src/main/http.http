@@ -37,14 +37,14 @@ Content-Type: application/json
 
 {
   "email": "test@example.com",
-  "password": "Password1!"
+  "password": "Password12!"
 }
 
 ###
-DELETE http://localhost:8080/auth
+PATCH http://localhost:8080/auth/delete
 Content-Type: text/plain
 
-2345
+Password12!
 
 ###
 DELETE http://localhost:8080/auth
