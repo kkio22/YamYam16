@@ -19,13 +19,13 @@ public class Store {
     private String name;
 
     @Column(nullable = false, length = 30)
-    private Long open_time;
+    private Long opentime;
 
     @Column(nullable = false, length = 30)
-    private Long close_time;
+    private Long closetime;
 
     @Column(nullable = false, length = 30)
-    private String min_price;
+    private String minprice;
 
     private boolean isDelete;
 
