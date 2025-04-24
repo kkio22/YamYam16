@@ -1,4 +1,4 @@
-package com.example.yamyam16.domain.menu.entity;
+package com.example.yamyam16.menu.entity;
 
 import java.time.LocalDateTime;
 
@@ -41,6 +41,11 @@ public class Menu {
 	}
 
 	public Menu(String menuName, int menuPrice) {
+		this.menuName = menuName;
+		this.menuPrice = menuPrice;
+	}
+
+	public void updateMenu(String menuName, int menuPrice) {
 		this.menuName = menuName;
 		this.menuPrice = menuPrice;
 	}

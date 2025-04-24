@@ -1,4 +1,4 @@
-package com.example.yamyam16.domain.menu.dto;
+package com.example.yamyam16.menu.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

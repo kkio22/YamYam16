@@ -1,4 +1,4 @@
-package com.example.yamyam16.domain.menu.service;
+package com.example.yamyam16.menu.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,15 +9,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.example.yamyam16.domain.menu.dto.MenuCreateRequestDto;
-import com.example.yamyam16.domain.menu.dto.MenuCreateResponseDto;
-import com.example.yamyam16.domain.menu.dto.MenuListResponseDto;
-import com.example.yamyam16.domain.menu.dto.MenuUpdateRequestDto;
-import com.example.yamyam16.domain.menu.dto.MenuUpdateResponseDto;
-import com.example.yamyam16.domain.menu.entity.Menu;
-import com.example.yamyam16.domain.menu.repository.MenuRepository;
 import com.example.yamyam16.exception.CustomException;
 import com.example.yamyam16.exception.ErrorCode;
+import com.example.yamyam16.menu.dto.MenuCreateRequestDto;
+import com.example.yamyam16.menu.dto.MenuCreateResponseDto;
+import com.example.yamyam16.menu.dto.MenuListResponseDto;
+import com.example.yamyam16.menu.dto.MenuUpdateRequestDto;
+import com.example.yamyam16.menu.dto.MenuUpdateResponseDto;
+import com.example.yamyam16.menu.entity.Menu;
+import com.example.yamyam16.menu.repository.MenuRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -75,11 +75,12 @@ public class MenuService {
 		Store findStore = storeRepository.findById(storeId)
 			.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
-		Menu findMenu = MenuRepository.findById(menuId)
+		Menu findMenu = menuRepository.findById(menuId)
 			.orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
 
-		Menu updateMenu = MenuRepository.save(menuUpdateRequestDto.getMenuName(), menuUpdateRequestDto.getMenuPrice());
-		return new MenuUpdateResponseDto(updateMenu.getId(), updateMenu.getMenuName(), updateMenu.getMenuPrice());
+		findMenu.updateMenu(menuUpdateRequestDto.getMenuName(), menuUpdateRequestDto.getMenuPrice());
+
+		return new MenuUpdateResponseDto(findMenu.getId(), findMenu.getMenuName(), findMenu.getMenuPrice());
 	}
 
 	@Transactional
@@ -90,7 +91,7 @@ public class MenuService {
 		Store findStore = storeRepository.findById(storeId)
 			.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
-		Menu findMenu = MenuRepository.findById(menuId)
+		Menu findMenu = menuRepository.findById(menuId)
 			.orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
 
 		findMenu.deleteMenu(); // 가게 메뉴는 소프트삭제가 됨
