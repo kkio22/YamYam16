@@ -1,6 +1,6 @@
 package com.example.yamyam16.auth.dto.request;
 
-import com.example.yamyam16.auth.common.UserType;
+import com.example.yamyam16.auth.entity.UserType;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

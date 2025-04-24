@@ -2,16 +2,17 @@ package com.example.yamyam16.auth.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
-import com.example.yamyam16.auth.common.Const;
+import com.example.yamyam16.auth.common.consts.Const;
 import com.example.yamyam16.auth.dto.request.LoginRequestDto;
 import com.example.yamyam16.auth.dto.request.SignUpRequestDto;
+import com.example.yamyam16.auth.dto.request.UpdatePasswordRequestDto;
 import com.example.yamyam16.auth.dto.response.LoginResponseDto;
 import com.example.yamyam16.auth.dto.response.SignUpResponseDto;
 import com.example.yamyam16.auth.entity.User;
@@ -55,7 +56,15 @@ public class UserController {
 		return new ResponseEntity<>("로그인 성공", HttpStatus.OK);
 	}
 
-	@DeleteMapping
+	@PatchMapping
+	public ResponseEntity<String> updatePw(@Valid @RequestBody UpdatePasswordRequestDto requestDto,
+		@SessionAttribute(name = "loginUser") User loginUSer) {
+		Long userId = loginUSer.getId();
+		userService.updatePw(userId, requestDto);
+		return new ResponseEntity<>("업데이트 완료", HttpStatus.OK);
+	}
+
+	@PatchMapping("/delete")
 	public ResponseEntity<String> delete(@RequestBody String password,
 		@SessionAttribute(name = "loginUser") User loginUser) {
 		Long userId = loginUser.getId();
