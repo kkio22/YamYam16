@@ -51,7 +51,7 @@ public class MenuController {
 	public ResponseEntity<MenuUpdateResponseDto> updateMenu(
 		@PathVariable Long storeId,
 		Long menuId,
-		@RequestBody MenuUpdateRequestDto menuUpdateRequestDto
+		@Valid @RequestBody MenuUpdateRequestDto menuUpdateRequestDto
 	) {
 		MenuUpdateResponseDto menuUpdateResponseDto = menuService.updateMenu(storeId, menuId, menuUpdateRequestDto);
 		return new ResponseEntity<>(menuUpdateResponseDto, HttpStatus.OK);
