@@ -27,4 +27,5 @@ public class CreateStoreResponseDto {
         this.category = store.getCategory();
         this.notice = store.getNotice();
     }
+
 }

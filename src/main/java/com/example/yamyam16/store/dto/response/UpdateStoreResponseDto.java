@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 public class UpdateStoreResponseDto {
-
+    private Long id;
     private String storename;
     private Long opentime;
     private Long closetime;
@@ -17,6 +17,7 @@ public class UpdateStoreResponseDto {
     private String notice;
 
     public UpdateStoreResponseDto(Store store) {
+        this.id = store.getId();
         this.storename = store.getName();
         this.opentime = store.getOpentime();
         this.closetime = store.getClosetime();

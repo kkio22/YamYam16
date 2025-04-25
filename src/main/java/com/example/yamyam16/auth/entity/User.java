@@ -40,6 +40,12 @@ public class User extends BaseEntity {
             orphanRemoval = true)        // 컬렉션에서 빠지면 자식 레코드 삭제
     private List<Store> items = new ArrayList<>();
 
+    
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<Store> store = new ArrayList<>();
+
     // 필드 초기화용 생성자
     public User(UserType userType, String email, String password, String nickname) {
         this.userType = userType;

@@ -1,5 +1,6 @@
 package com.example.yamyam16.store.controller;
 
+import com.example.yamyam16.auth.common.consts.Const;
 import com.example.yamyam16.auth.entity.User;
 import com.example.yamyam16.auth.service.UserService;
 import com.example.yamyam16.store.dto.request.CreateStoreRequestDto;
@@ -29,12 +30,13 @@ public class StoreController {
 
     //가게생성
     @PostMapping
-    public ResponseEntity<Void> createStore(
+    public ResponseEntity<CreateStoreResponseDto> createStore(
             @Valid @RequestBody CreateStoreRequestDto dto,
-            User user
+            @SessionAttribute(name = Const.LOGIN_USER) User user
     ) {
+
         CreateStoreResponseDto createPostsResponseDto = storeService.createStore(dto, user);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(createPostsResponseDto, HttpStatus.OK);
     }
 
     //가게 조회
@@ -44,7 +46,6 @@ public class StoreController {
             @RequestParam(defaultValue = "10") int size
     ) {
 
-        //todo 추가함 확인필요
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(storeService.getAllStores(pageable));
 
@@ -63,7 +64,7 @@ public class StoreController {
     //가게수정
     @PatchMapping("/{storeId}")
     public ResponseEntity<UpdateStoreResponseDto> updateStoreById(
-            @PathVariable Long storeId,
+            @SessionAttribute(name = Const.LOGIN_USER) Long storeId,
             @Valid @RequestBody UpdateStoreRequestDto dto
     ) {
         UpdateStoreResponseDto updateStoreResponseDto = storeService.updateStoreById(storeId, dto);
@@ -74,6 +75,7 @@ public class StoreController {
     // 가게삭제
     @DeleteMapping("/{storeId}")
     public ResponseEntity<DeactivateStoreResponseDto> deactivateStore(
+            @SessionAttribute(name = Const.LOGIN_USER) User user,
             @PathVariable Long storeId,
             DeactivateStoreRequestDto dto
     ) {
