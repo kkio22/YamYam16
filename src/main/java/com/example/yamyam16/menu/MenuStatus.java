@@ -1,4 +1,4 @@
-package com.example.yamyam16;
+package com.example.yamyam16.menu;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
