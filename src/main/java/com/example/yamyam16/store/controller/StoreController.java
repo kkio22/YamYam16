@@ -44,7 +44,7 @@ public class StoreController {
             @RequestParam(defaultValue = "10") int size
     ) {
 
-
+        //todo 추가함 확인필요
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(storeService.getAllStores(pageable));
 
