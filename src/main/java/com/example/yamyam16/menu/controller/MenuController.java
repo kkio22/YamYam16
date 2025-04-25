@@ -38,7 +38,7 @@ public class MenuController {
 		return new ResponseEntity<>(menuCreateResponseDto, HttpStatus.CREATED);
 	}
 
-	@GetMapping("/store/{storeId}")
+	@GetMapping("/store/{storeId}/menu")
 	public ResponseEntity<List<MenuListResponseDto>> findMenuByPage(
 		@PathVariable Long storeId,
 		@RequestParam(defaultValue = "1") Long page, // 페이지 번호
