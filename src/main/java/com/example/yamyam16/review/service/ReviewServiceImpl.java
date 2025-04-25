@@ -9,7 +9,7 @@ import com.example.yamyam16.auth.entity.User;
 import com.example.yamyam16.auth.repository.UserRepository;
 import com.example.yamyam16.order.entity.Order;
 import com.example.yamyam16.order.enums.OrderStatus;
-import com.example.yamyam16.review.dto.ReviewCreatedResponseDto;
+import com.example.yamyam16.order.repository.OrderRepository;
 import com.example.yamyam16.review.dto.ReviewRequestDto;
 import com.example.yamyam16.review.dto.ReviewResponseDto;
 import com.example.yamyam16.review.entity.Review;
@@ -27,7 +27,7 @@ public class ReviewServiceImpl implements ReviewService {
 	private final OrderRepository orderRepository;
 
 	@Override
-	public ReviewCreatedResponseDto createReview(ReviewRequestDto reviewRequestDto, HttpSession session) {
+	public void createReview(ReviewRequestDto reviewRequestDto, HttpSession session) {
 		Long userId = (Long)session.getAttribute("user");
 
 		if (userId == null) {
@@ -51,11 +51,6 @@ public class ReviewServiceImpl implements ReviewService {
 		Review savereview = new Review(reviewRequestDto.getContent(), reviewRequestDto.getGrade());
 		reviewRepository.save(savereview); // 엔티티 저장
 
-		return new ReviewCreatedResponseDto(
-			savereview.getId(),
-			savereview.getContent(),
-			savereview.getGrade()
-		);
 	}
 
 	@Transactional(readOnly = true)
