@@ -98,14 +98,32 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public void cancleOrder(Long userId, Long orderId, ChangeOrderStatusRequestDto statusRequestDto) {
+	public void cancleOrder(Long userId, Long orderId, Long loginUserId) {
+		// 로그인 유저 = Path의 유저인지 확인
+		if (!userId.equals(loginUserId)) {
+			throw new RuntimeException("본인의 주문만 취소할 수 있습니다");
+		}
 
 		// 주문 조회
 		Order order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("해당 주문이 존재하지 않습니다."));
 
-		// 유저가 취소하는 경우
+		// 주문자 = 유저인지 확인
+		if (!order.getUserId().equals(loginUserId)) {
+			throw new RuntimeException("본인의 주문만 취소할 수 있습니다");
+		}
 
-		// 오너가 취소하는 경우
+		// 이미 취소라면?
+		if (order.getStatus() == OrderStatus.CANCELED) {
+			throw new RuntimeException("이미 취소된 주문입니다.");
+		}
+
+		// 주문 상태 확인
+		if (order.getStatus() != OrderStatus.ORDERED) {
+			throw new RuntimeException("주문이 수락되어 취소할 수 없습니다.");
+		}
+
+		// 상태 변경 -> 취소완료
+		order.setStatus(OrderStatus.CANCELED);
 
 	}
 }

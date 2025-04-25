@@ -16,5 +16,5 @@ public interface OrderService {
 
 	ChangeOrderStatusResponseDto changeStatus(Long userId, Long orderId, ChangeOrderStatusRequestDto statusRequestDto);
 
-	void cancleOrder(Long userId, Long orderId, ChangeOrderStatusRequestDto statusRequestDto);
+	void cancleOrder(Long userId, Long orderId, Long loginUserId);
 }

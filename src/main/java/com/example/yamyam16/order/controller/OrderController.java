@@ -62,14 +62,14 @@ public class OrderController {
 
 	@DeleteMapping({"/user/{userId}/order/{orderId}"})
 	public ResponseEntity<String> cancleOrder(
+		@PathVariable Long userId,
 		@PathVariable Long orderId,
-		@RequestBody ChangeOrderStatusRequestDto statusRequestDto,
 		HttpServletRequest userRequest
 	) {
 		HttpSession session = userRequest.getSession();
-		Long userId = (Long)session.getAttribute("userId");
+		Long loginUserId = (Long)session.getAttribute("userId");
 
-		orderService.cancleOrder(userId, orderId, statusRequestDto);
+		orderService.cancleOrder(userId, orderId, loginUserId);
 
 		return ResponseEntity.ok("주문 취소가 완료되었습니다.");
 	}
