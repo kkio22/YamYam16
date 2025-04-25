@@ -1,9 +1,9 @@
-package com.example.yamyam16.order.entity;
+package com.example.yamyam16.cart.entity;
 
 import java.time.LocalDateTime;
 
+import com.example.yamyam16.cart.enums.CartStatus;
 import com.example.yamyam16.menu.entity.Menu;
-import com.example.yamyam16.order.enums.CartStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,9 +36,9 @@ public class Cart {
 	@JoinColumn(name = "menu_id", nullable = false)
 	private Menu menu;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "order_id")
-	private Order order;
+	// @ManyToOne(fetch = FetchType.LAZY)
+	// @JoinColumn(name = "order_id")
+	// private Order order;
 
 	// @ManyToOne(fetch = FetchType.LAZY)
 	// @JoinColumn(name = "user_id", nullable = false)

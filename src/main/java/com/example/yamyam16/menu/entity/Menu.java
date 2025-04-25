@@ -27,7 +27,7 @@ public class Menu {
 	private String menuName;
 
 	@Column(nullable = false)
-	private int menuPrice; //이거 integer인지 long인지 확인 한번 하기
+	private long menuPrice; //이거 integer인지 long인지 확인 한번 하기
 
 	@Column//null은 기본적으로 true임
 	private LocalDateTime deleteAt;
@@ -42,12 +42,12 @@ public class Menu {
 	public Menu() {
 	}
 
-	public Menu(String menuName, int menuPrice) {
+	public Menu(String menuName, long menuPrice) {
 		this.menuName = menuName;
 		this.menuPrice = menuPrice;
 	}
 
-	public void updateMenu(String menuName, int menuPrice) {
+	public void updateMenu(String menuName, long menuPrice) {
 		this.menuName = menuName;
 		this.menuPrice = menuPrice;
 	}

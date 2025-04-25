@@ -11,6 +11,6 @@ public class MenuListResponseDto {
 
 	private String menuName;
 
-	private int menuPrice;
+	private Long menuPrice;
 
 }

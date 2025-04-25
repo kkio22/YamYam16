@@ -18,6 +18,8 @@ import com.example.yamyam16.menu.dto.MenuUpdateRequestDto;
 import com.example.yamyam16.menu.dto.MenuUpdateResponseDto;
 import com.example.yamyam16.menu.entity.Menu;
 import com.example.yamyam16.menu.repository.MenuRepository;
+import com.example.yamyam16.store.entity.Store;
+import com.example.yamyam16.store.repository.StoreRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

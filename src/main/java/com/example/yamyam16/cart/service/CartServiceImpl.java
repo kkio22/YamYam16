@@ -1,22 +1,24 @@
-package com.example.yamyam16.order.service;
+package com.example.yamyam16.cart.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.yamyam16.auth.repository.UserRepository;
+import com.example.yamyam16.cart.dto.request.CartRequestDto;
+import com.example.yamyam16.cart.dto.request.UpdateCartRequestDto;
+import com.example.yamyam16.cart.dto.response.FindAllCartResponseDto;
+import com.example.yamyam16.cart.dto.response.SaveCartResponseDto;
+import com.example.yamyam16.cart.entity.Cart;
+import com.example.yamyam16.cart.enums.CartStatus;
+import com.example.yamyam16.cart.repository.CartRepository;
 import com.example.yamyam16.menu.entity.Menu;
 import com.example.yamyam16.menu.repository.MenuRepository;
-import com.example.yamyam16.order.dto.request.CartRequestDto;
-import com.example.yamyam16.order.dto.request.UpdateCartRequestDto;
-import com.example.yamyam16.order.dto.response.FindAllCartResponseDto;
-import com.example.yamyam16.order.dto.response.SaveCartResponseDto;
-import com.example.yamyam16.order.entity.Cart;
-import com.example.yamyam16.order.enums.CartStatus;
-import com.example.yamyam16.order.repository.CartRepository;
 import com.example.yamyam16.store.entity.Store;
 import com.example.yamyam16.store.repository.StoreRepository;
 
+@Service
 public class CartServiceImpl implements CartService {
 
 	private static CartRepository cartRepository;
