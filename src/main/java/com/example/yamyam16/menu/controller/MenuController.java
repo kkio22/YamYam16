@@ -47,7 +47,7 @@ public class MenuController {
 		return new ResponseEntity<>(menuList, HttpStatus.OK);
 	}
 
-	@PatchMapping("/stores/{storeId}/menu/{menuId}/edit")// url이 달라야 함
+	@PatchMapping("/stores/{storeId}/menu/{menuId}/edit")// url이 달라야 함,
 	public ResponseEntity<MenuUpdateResponseDto> updateMenu(
 		@PathVariable Long storeId,
 		Long menuId,
