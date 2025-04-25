@@ -1,6 +1,6 @@
-package com.example.yamyam16.order.dto.response;
+package com.example.yamyam16.cart.dto.response;
 
-import com.example.yamyam16.order.entity.Cart;
+import com.example.yamyam16.cart.entity.Cart;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,10 +15,10 @@ public class CartItemDto {
 	private Long price;
 
 	public static CartItemDto toDto(Cart cart) {
-		Long menuPrice = cart.getMenu().getPrice();
+		Long menuPrice = cart.getMenu().getMenuPrice();
 		return new CartItemDto(
 			cart.getCartId(),
-			cart.getMenu().getName(),
+			cart.getMenu().getMenuName(),
 			cart.getQuantity(),
 			menuPrice * cart.getQuantity()
 		);

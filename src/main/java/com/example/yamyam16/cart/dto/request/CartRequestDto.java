@@ -1,4 +1,4 @@
-package com.example.yamyam16.order.dto.request;
+package com.example.yamyam16.cart.dto.request;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

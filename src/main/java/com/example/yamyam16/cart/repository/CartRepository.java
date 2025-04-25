@@ -1,11 +1,11 @@
-package com.example.yamyam16.order.repository;
+package com.example.yamyam16.cart.repository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.yamyam16.order.entity.Cart;
-import com.example.yamyam16.order.enums.CartStatus;
+import com.example.yamyam16.cart.entity.Cart;
+import com.example.yamyam16.cart.enums.CartStatus;
 
 public interface CartRepository extends JpaRepository<Cart, Long> {
 
