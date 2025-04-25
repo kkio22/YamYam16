@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.yamyam16.auth.entity.User;
 import com.example.yamyam16.auth.repository.UserRepository;
 import com.example.yamyam16.order.entity.Order;
+import com.example.yamyam16.order.enums.OrderStatus;
 import com.example.yamyam16.review.dto.ReviewCreatedResponseDto;
 import com.example.yamyam16.review.dto.ReviewRequestDto;
 import com.example.yamyam16.review.dto.ReviewResponseDto;
@@ -39,11 +40,11 @@ public class ReviewServiceImpl implements ReviewService {
 		Order order = orderRepository.findById(reviewRequestDto.getOrderId())
 			.orElseThrow(() -> new IllegalArgumentException("주문 정보를 찾을 수 없습니다."));
 
-		if (!order.isDelivered()) {
+		if (order.getStatus() != OrderStatus.DELIVERED) {
 			throw new IllegalStateException("배달 완료된 주문만 리뷰를 작성할 수 있습니다");
 		}
 
-		if (!order.getUser().getId().equals(user.getId())) {
+		if (!order.getUserId().equals(user.getId())) {
 			throw new IllegalAccessError("본인 주문에 대해서만 리뷰 작성이 가능합니다");
 		}
 
@@ -85,7 +86,7 @@ public class ReviewServiceImpl implements ReviewService {
 		Review review = reviewRepository.findById(reviewId)
 			.orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다"));
 
-		if (!review.getOrder().getUser().getId().equals(userId)) {
+		if (!review.getOrder().getUserId().equals(userId)) {
 			throw new IllegalAccessError("본인의 리뷰만 수정할 수 있습니다");
 		}
 
@@ -102,7 +103,7 @@ public class ReviewServiceImpl implements ReviewService {
 		Review review = reviewRepository.findById(reviewId)
 			.orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다"));
 
-		if (!review.getOrder().getUser().getId().equals(userId)) {
+		if (!review.getOrder().getUserId().equals(userId)) {
 			throw new IllegalAccessError("본인의 리뷰만 삭제 가능합니다");
 		}
 
