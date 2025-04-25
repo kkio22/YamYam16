@@ -1,6 +1,6 @@
 package com.example.yamyam16.menu.dto;
 
-import com.example.yamyam16.MenuStatus;
+import com.example.yamyam16.menu.MenuStatus;
 
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;

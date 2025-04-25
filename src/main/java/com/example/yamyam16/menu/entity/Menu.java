@@ -2,7 +2,7 @@ package com.example.yamyam16.menu.entity;
 
 import java.time.LocalDateTime;
 
-import com.example.yamyam16.MenuStatus;
+import com.example.yamyam16.menu.MenuStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
