@@ -37,26 +37,31 @@ Content-Type: application/json
 
 {
   "email": "test@example.com",
-  "password": "Password12!"
+  "password": "Password1!"
 }
+> {%
+    client.global.set("accessToken", response.body.accessToken)
+%}
 
 ###
-PATCH http://localhost:8080/auth/delete
+PATCH http://localhost:8080/auth/user
 Content-Type: text/plain
 
 Password12!
 
 ###
-DELETE http://localhost:8080/auth
+DELETE http://localhost:8080/auth/user
 Content-Type: text/plain
+Authorization: Bearer {{accessToken}}
 
-Password1!
+Password12!
 
 
 ###
 
-PATCH http://localhost:8080/auth
+PATCH http://localhost:8080/auth/user
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
   "currentPw": "Password1!",
