@@ -60,7 +60,7 @@ public class OrderController {
 		return new ResponseEntity<>(orderService.changeStatus(userId, orderId, statusRequestDto), HttpStatus.OK);
 	}
 
-	@DeleteMapping({"/{orderId}"})
+	@DeleteMapping({"/user/{userId}/order/{orderId}"})
 	public ResponseEntity<String> cancleOrder(
 		@PathVariable Long orderId,
 		@RequestBody ChangeOrderStatusRequestDto statusRequestDto,

@@ -2,7 +2,6 @@ package com.example.yamyam16.order.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -58,15 +57,7 @@ public class OrderServiceImpl implements OrderService {
 			cart.setStatus(CartStatus.ORDERED);
 		}
 		// 리스트 만들기 -> Menuitemdto 사용
-		List<MenuItemDto> menuItems = userCarts.stream()
-			.map(cart -> new MenuItemDto(cart.getMenu().getMenuName(), cart.getQuantity()))
-			.collect(
-				Collectors.toList());
-
-		// List<MenuItemDto> menuItems = new ArrayList<>();
-		// for (Cart cart : userCarts) {
-		// 	menuItems.add(new MenuItemDto(cart.getMenu().getName(), cart.getQuantity()));
-		// }
+		List<MenuItemDto> menuItems = userCarts.stream().map(MenuItemDto::toDto).toList();
 
 		return new UserOrderResponseDto(order.getOrderId(), findStore.getName(), totalPrice, order.getStatus().name(),
 			order.getOrderedAt());
@@ -74,17 +65,47 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public OwnerOrderResponseDto accept(Long userId, Long orderId) {
-		return null;
+		// 주문 조회
+		Order order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("해당 주문이 존재하지 않습니다."));
+
+		// 로그인 유저가 해당 가게의 사장님이 맞는지 조회
+		Store store = storeRepository.findByIdOrElseThrow(userId);
+		if (!store.getUser().getId().equals(userId)) {
+			throw new RuntimeException("가게 주인만 수락할 수 있습니다");
+		}
+
+		// 주문 상태 설정
+		order.setStatus(OrderStatus.PREPARING);
+
+		// 리스트 만들기 -> Menuitemdto 사용
+		List<MenuItemDto> menuItems = order.getCarts().stream().map(MenuItemDto::toDto).toList();
+
+		return new OwnerOrderResponseDto(order.getOrderId(), menuItems, order.getTotalPrice(), order.getStatus().name(),
+			order.getOrderedAt());
 	}
 
 	@Override
 	public ChangeOrderStatusResponseDto changeStatus(Long userId, Long orderId,
 		ChangeOrderStatusRequestDto statusRequestDto) {
-		return null;
+
+		// 주문 조회
+		Order order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("해당 주문이 존재하지 않습니다."));
+
+		// 상태 변경
+		order.setStatus(statusRequestDto.getStatus());
+
+		return new ChangeOrderStatusResponseDto(order.getOrderId(), order.getStatus().name(), order.getOrderedAt());
 	}
 
 	@Override
 	public void cancleOrder(Long userId, Long orderId, ChangeOrderStatusRequestDto statusRequestDto) {
+
+		// 주문 조회
+		Order order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("해당 주문이 존재하지 않습니다."));
+
+		// 유저가 취소하는 경우
+
+		// 오너가 취소하는 경우
 
 	}
 }

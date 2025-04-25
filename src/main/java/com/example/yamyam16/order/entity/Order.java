@@ -18,6 +18,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Entity
@@ -37,6 +38,7 @@ public class Order {
 
 	private Long totalPrice;
 
+	@Setter
 	@Enumerated(EnumType.STRING)
 	private OrderStatus status;
 

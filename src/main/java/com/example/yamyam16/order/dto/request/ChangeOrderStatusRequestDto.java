@@ -1,5 +1,7 @@
 package com.example.yamyam16.order.dto.request;
 
+import com.example.yamyam16.order.enums.OrderStatus;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,5 +18,5 @@ public class ChangeOrderStatusRequestDto {
 		+ "DELIVERING,   // 배달 중\n"
 		+ "DELIVERED,    // 배달 완료\n"
 		+ "CANCELED      // 주문 취소")
-	private String status;
+	private OrderStatus status;
 }
