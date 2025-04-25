@@ -1,0 +1,69 @@
+### GET request to example server
+
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "userType": "USER",
+  "email": "test@example.com",
+  "password": "Password1!",
+  "nickname": "테스트"
+}
+
+###
+
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email": "abc@example.com",
+  "password": "asdf"
+}
+
+###
+
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "asdf"
+}
+
+###
+
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "Password1!"
+}
+> {%
+    client.global.set("accessToken", response.body.accessToken)
+%}
+
+###
+PATCH http://localhost:8080/auth/user
+Content-Type: text/plain
+
+Password12!
+
+###
+DELETE http://localhost:8080/auth/user
+Content-Type: text/plain
+Authorization: Bearer {{accessToken}}
+
+Password12!
+
+
+###
+
+PATCH http://localhost:8080/auth/user
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "currentPw": "Password1!",
+  "newPw": "Password12!"
+}
