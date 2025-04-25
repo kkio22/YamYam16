@@ -34,30 +34,30 @@ public class Store {
     @Column(nullable = false, length = 30)
     private Long minprice;
 
-    private boolean isDelete;
-
     @Column(nullable = false, length = 30)
     private String category;
 
-    @Column(nullable = false, length = 30)
+    @Column(length = 30)
     private String notice;
 
-    //양방향매핑관계
+    private boolean isDelete;
+    //양방향매핑관계 unique 설정 일대일 매핑
     //유저
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)//이게 디폴트값 -> 유저라는 완성된 객체를 나중에 불러오도록 -> 주로 store만조회하고 싶을때 씀 -> 필요할때만 불러오는
+    @JoinColumn(name = "user_id") // userid로테이블에 저장이 되고 아래 객체를 테이블의 해당 타입으로 변하게 해주는게 이 두개
     private User user;
 
     //리뷰
     @OneToMany(mappedBy = "store",
             cascade = CascadeType.ALL,
-            orphanRemoval = true)
+            orphanRemoval = true
+    )
     private List<Review> reviews = new ArrayList<>();
 
     // 메뉴
     @OneToMany(mappedBy = "store",
-            cascade = CascadeType.ALL,   // 부모 → 자식으로 영속성 전이
-            orphanRemoval = true)        // 컬렉션에서 빠지면 자식 레코드 삭제
+            cascade = CascadeType.ALL,   // 부모 → 자식으로 영속성 전이 객체
+            orphanRemoval = true)        // 컬렉션에서 빠지면 자식 레코드 삭제 컬렉션
     private List<Menu> items = new ArrayList<>();
 
 
@@ -81,6 +81,7 @@ public class Store {
     public void deactivate() {
         this.isDelete = true;
     }
+
 
 }
 
