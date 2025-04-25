@@ -1,10 +1,10 @@
 package com.example.yamyam16.store.service;
 
 
-import com.example.yamyam16.auth.common.consts.Const;
 import com.example.yamyam16.auth.entity.User;
 import com.example.yamyam16.auth.entity.UserType;
 import com.example.yamyam16.auth.repository.UserRepository;
+import com.example.yamyam16.review.repository.ReviewRepository;
 import com.example.yamyam16.store.dto.request.CreateStoreRequestDto;
 import com.example.yamyam16.store.dto.request.DeactivateStoreRequestDto;
 import com.example.yamyam16.store.dto.request.UpdateStoreRequestDto;
@@ -20,7 +20,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttribute;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,10 +27,11 @@ public class StoreService {
 
     private final StoreRepository storeRepository;
     private final UserRepository userRepository;
+    private final ReviewRepository reviewRepository;
 
     //가게생성
     @Transactional
-    public CreateStoreResponseDto createStore(@SessionAttribute(name = Const.LOGIN_USER) CreateStoreRequestDto dto, User user) {
+    public CreateStoreResponseDto createStore(CreateStoreRequestDto dto, User user) {
 
         //생성
         Long userId = user.getId();
@@ -39,7 +39,7 @@ public class StoreService {
             throw new EntityNotFoundException("사장님 권한이 없습니다");
         }
         if (storeRepository.countByUserAndisDeleteFalse(user) > 3) {
-            throw new EntityNotFoundException("3개이상 만들수없습니다");
+            throw new EntityNotFoundException("4개이상 운영할 수 없습니다");
         }
         Store store = new Store(dto, user);
         //저장
@@ -63,7 +63,7 @@ public class StoreService {
 
     //가게수정
     @Transactional
-    public UpdateStoreResponseDto updateStoreById(@SessionAttribute(name = Const.LOGIN_USER) Long id, UpdateStoreRequestDto dto) {
+    public UpdateStoreResponseDto updateStoreById(Long id, UpdateStoreRequestDto dto) {
         Store store = storeRepository.findByIdOrElseThrow(id);
         store.update(dto);
         Store updateStore = storeRepository.save(store);
@@ -72,7 +72,7 @@ public class StoreService {
 
     //가게삭제
     @Transactional
-    public DeactivateStoreResponseDto deactivateStoreById(@SessionAttribute(name = Const.LOGIN_USER) Long id, DeactivateStoreRequestDto dto) {
+    public DeactivateStoreResponseDto deactivateStoreById(Long id, DeactivateStoreRequestDto dto) {
 
         if (!storeRepository.existsById(id)) {
             throw new EntityNotFoundException("가게를 찾을 수 없습니다.");

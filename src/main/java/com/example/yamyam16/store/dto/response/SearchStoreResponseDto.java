@@ -9,7 +9,7 @@ public class SearchStoreResponseDto {
     private Long id;
 
     private String storename;
-    private int grade;
+    private Long grade;
     private Long opentime;
     private Long closetime;
 
@@ -18,11 +18,10 @@ public class SearchStoreResponseDto {
 
         this.id = store.getId();
         this.storename = store.getName();
-        this.grade = store.getReviews().stream()
-                .mapToInt(R::getRating)   // rating이 int라면
+        this.grade = (long) store.getReviews().stream()
+                .mapToLong(review -> review.getGrade())
                 .average()
-                .map(avg -> (int) Math.round(avg))
-                .orElse(0);
+                .orElse(0.0);
         this.closetime = store.getClosetime();
         this.opentime = store.getOpentime();
     }

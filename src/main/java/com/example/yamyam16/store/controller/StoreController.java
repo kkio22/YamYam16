@@ -4,7 +4,6 @@ import com.example.yamyam16.auth.common.consts.Const;
 import com.example.yamyam16.auth.entity.User;
 import com.example.yamyam16.auth.service.UserService;
 import com.example.yamyam16.store.dto.request.CreateStoreRequestDto;
-import com.example.yamyam16.store.dto.request.DeactivateStoreRequestDto;
 import com.example.yamyam16.store.dto.request.UpdateStoreRequestDto;
 import com.example.yamyam16.store.dto.response.CreateStoreResponseDto;
 import com.example.yamyam16.store.dto.response.DeactivateStoreResponseDto;
@@ -51,6 +50,9 @@ public class StoreController {
 
     }
 
+    //가게 단일 조회
+
+
     //가게 카테고리별 조회
 //    @GetMapping("/allstores/{category}")
 //    public ResponseEntity<Page<SearchStoreResponseDto>> getStoresByCategory(
@@ -76,10 +78,9 @@ public class StoreController {
     @DeleteMapping("/{storeId}")
     public ResponseEntity<DeactivateStoreResponseDto> deactivateStore(
             @SessionAttribute(name = Const.LOGIN_USER) User user,
-            @PathVariable Long storeId,
-            DeactivateStoreRequestDto dto
+            @PathVariable Long storeId
     ) {
-        DeactivateStoreResponseDto deactivateUserResponseDto = storeService.deactivateStoreById(storeId, dto);
+        DeactivateStoreResponseDto deactivateUserResponseDto = storeService.deactivateStoreById(storeId);
 
         return new ResponseEntity<>(deactivateUserResponseDto, HttpStatus.OK);
 

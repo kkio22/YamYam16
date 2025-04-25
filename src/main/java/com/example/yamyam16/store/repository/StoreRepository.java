@@ -9,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StoreRepository extends JpaRepository<Store, Long> {
-    Page<Store> findAllByOrderByCreateAtDesc(Pageable pageable);
 
     Page<Store> findAllByIsDeleteFalseOrderByCreateAtDesc(Pageable pageable);
 
