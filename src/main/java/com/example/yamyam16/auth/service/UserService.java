@@ -1,6 +1,8 @@
 package com.example.yamyam16.auth.service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -12,11 +14,13 @@ import com.example.yamyam16.auth.config.PasswordEncoder;
 import com.example.yamyam16.auth.dto.request.LoginRequestDto;
 import com.example.yamyam16.auth.dto.request.SignUpRequestDto;
 import com.example.yamyam16.auth.dto.request.UpdatePasswordRequestDto;
-import com.example.yamyam16.auth.dto.response.LoginResponseDto;
 import com.example.yamyam16.auth.dto.response.SignUpResponseDto;
+import com.example.yamyam16.auth.entity.RefreshToken;
 import com.example.yamyam16.auth.entity.User;
 import com.example.yamyam16.auth.exception.UserException;
+import com.example.yamyam16.auth.repository.RefreshTokenRepository;
 import com.example.yamyam16.auth.repository.UserRepository;
+import com.example.yamyam16.auth.security.JwtTokenProvider;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +30,8 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final JwtTokenProvider jwtTokenProvider;
+	private final RefreshTokenRepository refreshTokenRepository;
 
 	@CheckUserDeleted
 	public SignUpResponseDto signUp(@Valid SignUpRequestDto requestDto) {
@@ -45,7 +51,8 @@ public class UserService {
 	}
 
 	@CheckUserDeleted
-	public LoginResponseDto login(@Valid LoginRequestDto requestDto) {
+	@Transactional
+	public Map<String, String> login(@Valid LoginRequestDto requestDto) {
 		User user = userRepository.findByEmail(requestDto.getEmail())
 			.orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
@@ -53,7 +60,33 @@ public class UserService {
 			throw new UserException(UserErrorCode.USER_WRONG_PW);
 		}
 
-		return new LoginResponseDto(user.getId());
+		String accessToken = jwtTokenProvider.createAccessToken(requestDto);
+
+		Map<String, String> tokens = new HashMap<>();
+		tokens.put("accessToken", accessToken);
+
+		refreshTokenRepository.findByUserId(user.getId())
+			.ifPresentOrElse(
+				token -> {
+					if (!jwtTokenProvider.validateToken(token.getToken())) {
+						// 만료되거나 검증 통과 안될경우
+						String newRefreshToken = jwtTokenProvider.createRefreshToken(requestDto);
+						token.updateToken(newRefreshToken);
+						refreshTokenRepository.save(new RefreshToken(user.getId(), newRefreshToken));
+						tokens.put("refreshToken", newRefreshToken);
+					} else {
+						// 유효한 기존 토큰 그대로 사용
+						tokens.put("refreshToken", token.getToken());
+					}
+				},
+				() -> {
+					String newRefreshToken = jwtTokenProvider.createRefreshToken(requestDto);
+					refreshTokenRepository.save(new RefreshToken(user.getId(), newRefreshToken));
+					tokens.put("refreshToken", newRefreshToken);
+				}
+			);
+
+		return tokens;
 	}
 
 	@CheckUserDeleted
@@ -97,6 +130,33 @@ public class UserService {
 
 		String encodedPw = passwordEncoder.encode(requestDto.getNewPw());
 		findUser.setPassword(encodedPw);
+	}
+
+	public Map<String, String> reissue(String token) {
+		if (!jwtTokenProvider.validateToken(token)) {
+			throw new UserException(UserErrorCode.INVALID_TOKEN);
+		}
+
+		String email = jwtTokenProvider.extractEmail(token);
+		User user = userRepository.findByEmailOrElseThrow(email);
+
+		RefreshToken tokenInDb = refreshTokenRepository.findByUserId(user.getId())
+			.orElseThrow(() -> new UserException(UserErrorCode.TOKEN_NOT_FOUND));
+
+		if (!tokenInDb.getToken().equals(token)) {
+			throw new UserException(UserErrorCode.INVALID_TOKEN);
+		}
+
+		String newAccessToken = jwtTokenProvider.createAccessToken(email);
+		String newRefreshToken = jwtTokenProvider.createRefreshToken(email);
+
+		tokenInDb.updateToken(newRefreshToken);
+		refreshTokenRepository.save(tokenInDb);
+
+		Map<String, String> tokens = new HashMap<>();
+		tokens.put("accessToken", newAccessToken);
+		tokens.put("refreshToken", newRefreshToken);
+		return tokens;
 	}
 }
 
