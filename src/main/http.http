@@ -20,15 +20,6 @@ Content-Type: application/json
   "password": "asdf"
 }
 
-###
-
-POST http://localhost:8080/auth/login
-Content-Type: application/json
-
-{
-  "email": "test@example.com",
-  "password": "asdf"
-}
 
 ###
 
@@ -45,6 +36,16 @@ PATCH http://localhost:8080/auth/delete
 Content-Type: text/plain
 
 Password12!
+=======
+  "password": "Password1!"
+}
+
+###
+DELETE http://localhost:8080/auth
+Content-Type: text/plain
+
+2345
+>>>>>>> origin/feature-order
 
 ###
 DELETE http://localhost:8080/auth
