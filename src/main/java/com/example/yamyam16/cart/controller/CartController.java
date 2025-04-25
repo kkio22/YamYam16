@@ -22,7 +22,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/store/{storeId}/cart")
+@RequestMapping("/store/{storeId}/cart/")
 @RequiredArgsConstructor
 public class CartController {
 
@@ -85,6 +85,8 @@ public class CartController {
 		// 로그인 정보 불러오기
 		HttpSession session = userRequest.getSession();
 		Long userId = (Long)session.getAttribute("userId");
+
+		cartService.deleteAll(userId);
 
 		return ResponseEntity.ok(" 장바구니가 초기화되었습니다.");
 	}
