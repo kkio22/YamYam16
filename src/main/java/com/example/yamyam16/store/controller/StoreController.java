@@ -4,14 +4,11 @@ import com.example.yamyam16.auth.entity.User;
 import com.example.yamyam16.auth.service.UserService;
 import com.example.yamyam16.store.dto.request.CreateStoreRequestDto;
 import com.example.yamyam16.store.dto.request.DeactivateStoreRequestDto;
-import com.example.yamyam16.store.dto.request.SearchStoreRequestDto;
 import com.example.yamyam16.store.dto.request.UpdateStoreRequestDto;
 import com.example.yamyam16.store.dto.response.CreateStoreResponseDto;
 import com.example.yamyam16.store.dto.response.DeactivateStoreResponseDto;
 import com.example.yamyam16.store.dto.response.SearchStoreResponseDto;
 import com.example.yamyam16.store.dto.response.UpdateStoreResponseDto;
-import com.example.yamyam16.store.entity.CategoryType;
-import com.example.yamyam16.store.entity.Store;
 import com.example.yamyam16.store.service.StoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -42,26 +39,25 @@ public class StoreController {
 
     //가게 조회
     @GetMapping("/allstores")
-    public ResponseEntity<Page<SearchStoreResponseDto>> getAllStores( SearchStoreRequestDto dto,
+    public ResponseEntity<Page<SearchStoreResponseDto>> getAllStores(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
+
+
         Pageable pageable = PageRequest.of(page, size);
-        storeService.getAllStores(pageable)
-
-
-        return ResponseEntity.ok();
+        return ResponseEntity.ok(storeService.getAllStores(pageable));
 
     }
 
     //가게 카테고리별 조회
-    @GetMapping("/allstores/{category}")
-    public ResponseEntity<Page<SearchStoreResponseDto>> getStoresByCategory(
-            @Valid @RequestBody SearchStoreRequestDto dto,
-            @PathVariable CategoryType categorytype
-    ) {
-
-    }
+//    @GetMapping("/allstores/{category}")
+//    public ResponseEntity<Page<SearchStoreResponseDto>> getStoresByCategory(
+//            @Valid @RequestBody SearchStoreRequestDto dto,
+//            @PathVariable CategoryType categorytype
+//    ) {
+//
+//    }
 
 
     //가게수정
