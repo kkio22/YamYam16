@@ -20,6 +20,12 @@ import com.example.yamyam16.order.dto.response.OwnerOrderResponseDto;
 import com.example.yamyam16.order.dto.response.UserOrderResponseDto;
 import com.example.yamyam16.order.entity.Order;
 import com.example.yamyam16.order.enums.OrderStatus;
+import com.example.yamyam16.order.exception.AlreadyCanceledOrderException;
+import com.example.yamyam16.order.exception.EmptyCartOrderException;
+import com.example.yamyam16.order.exception.OrderAlreadyAcceptedException;
+import com.example.yamyam16.order.exception.UnauthorizedOrderAcceptException;
+import com.example.yamyam16.order.exception.UnauthorizedOrderAccessException;
+import com.example.yamyam16.order.exception.UnauthorizedOrderCancelException;
 import com.example.yamyam16.order.repository.OrderRepository;
 import com.example.yamyam16.store.entity.Store;
 import com.example.yamyam16.store.repository.StoreRepository;
@@ -46,7 +52,7 @@ public class OrderServiceImpl implements OrderService {
 
 		// 비었다면?
 		if (userCarts.isEmpty()) {
-			throw new RuntimeException("장바구니가 비어있습니다.");
+			throw new EmptyCartOrderException();
 		}
 
 		// 카트 - 해당 스토어 조회
@@ -74,12 +80,11 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public OwnerOrderResponseDto accept(Long userId, Long orderId) {
 		// 주문 조회
-		Order order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("해당 주문이 존재하지 않습니다."));
-
+		Order order = orderRepository.findByIdOrElseThrow(orderId);
 		// 로그인 유저가 해당 가게의 사장님이 맞는지 조회
 		Store store = storeRepository.findByIdOrElseThrow(userId);
 		if (!store.getUser().getId().equals(userId)) {
-			throw new RuntimeException("가게 주인만 수락할 수 있습니다");
+			throw new UnauthorizedOrderAcceptException();
 		}
 
 		// 주문 상태 설정
@@ -97,8 +102,7 @@ public class OrderServiceImpl implements OrderService {
 		ChangeOrderStatusRequestDto statusRequestDto) {
 
 		// 주문 조회
-		Order order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("해당 주문이 존재하지 않습니다."));
-
+		Order order = orderRepository.findByIdOrElseThrow(orderId);
 		// 상태 변경
 		order.setStatus(statusRequestDto.getStatus());
 
@@ -109,21 +113,21 @@ public class OrderServiceImpl implements OrderService {
 	public void cancelOrder(Long orderId, Long loginUserId) {
 
 		// 주문 조회
-		Order order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("해당 주문이 존재하지 않습니다."));
+		Order order = orderRepository.findByIdOrElseThrow(orderId);
 
 		// 주문자 = 유저인지 확인
 		if (!order.getUserId().equals(loginUserId)) {
-			throw new RuntimeException("본인의 주문만 취소할 수 있습니다");
+			throw new UnauthorizedOrderCancelException();
 		}
 
 		// 이미 취소라면?
 		if (order.getStatus() == OrderStatus.CANCELED) {
-			throw new RuntimeException("이미 취소된 주문입니다.");
+			throw new AlreadyCanceledOrderException();
 		}
 
 		// 주문 상태 확인
 		if (order.getStatus() != OrderStatus.ORDERED) {
-			throw new RuntimeException("주문이 수락되어 취소할 수 없습니다.");
+			throw new OrderAlreadyAcceptedException();
 		}
 
 		// 상태 변경 -> 취소완료
@@ -139,11 +143,11 @@ public class OrderServiceImpl implements OrderService {
 
 		// usertype이 user인 경우
 		if (user.getUserType().equals(UserType.USER)) {
-			orders = orderRepository.findAllByUserId(userId);
+			orders = orderRepository.findAllByUserIdOrElseThrow(userId);
 
 		} else if (user.getUserType().equals(UserType.OWNER)) { // usertype이 owner인 경우
 			Store store = storeRepository.findByUserId(userId);
-			orders = orderRepository.findByStoreId(store.getId());
+			orders = orderRepository.findByStoreIdOrElseThrow(store.getId());
 		}
 
 		return orders.stream().map(order -> new FindAllOrderResponseDto(
@@ -158,11 +162,10 @@ public class OrderServiceImpl implements OrderService {
 	public OwnerOrderResponseDto findOne(Long userId, Long orderId) {
 
 		// 주문 조회
-		Order order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("해당 주문이 존재하지 않습니다."));
-
+		Order order = orderRepository.findByIdOrElseThrow(orderId);
 		// 본인 확인
 		if (!order.getUserId().equals(userId)) {
-			throw new RuntimeException("본인의 주문만 조회할 수 있습니다.");
+			throw new UnauthorizedOrderAccessException();
 		}
 
 		List<MenuItemDto> menuItems = order.getCarts().stream()
