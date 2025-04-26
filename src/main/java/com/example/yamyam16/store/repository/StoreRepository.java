@@ -18,4 +18,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
 	Long user(User user);
 	//쿼리 sum count
+
+	Store findByUserId(Long userId);
+
 }

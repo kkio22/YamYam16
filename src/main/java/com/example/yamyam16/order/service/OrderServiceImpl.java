@@ -1,17 +1,20 @@
 package com.example.yamyam16.order.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.yamyam16.auth.entity.User;
+import com.example.yamyam16.auth.entity.UserType;
+import com.example.yamyam16.auth.repository.UserRepository;
 import com.example.yamyam16.cart.entity.Cart;
 import com.example.yamyam16.cart.enums.CartStatus;
 import com.example.yamyam16.cart.repository.CartRepository;
-import com.example.yamyam16.cart.service.CartService;
-import com.example.yamyam16.menu.repository.MenuRepository;
 import com.example.yamyam16.order.dto.request.ChangeOrderStatusRequestDto;
 import com.example.yamyam16.order.dto.response.ChangeOrderStatusResponseDto;
+import com.example.yamyam16.order.dto.response.FindAllOrderResponseDto;
 import com.example.yamyam16.order.dto.response.MenuItemDto;
 import com.example.yamyam16.order.dto.response.OwnerOrderResponseDto;
 import com.example.yamyam16.order.dto.response.UserOrderResponseDto;
@@ -20,15 +23,20 @@ import com.example.yamyam16.order.enums.OrderStatus;
 import com.example.yamyam16.order.repository.OrderRepository;
 import com.example.yamyam16.store.entity.Store;
 import com.example.yamyam16.store.repository.StoreRepository;
+import com.example.yamyam16.store.service.StoreService;
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
 	private static CartRepository cartRepository;
-	private static MenuRepository menuRepository;
 	private static StoreRepository storeRepository;
 	private static OrderRepository orderRepository;
-	private static CartService cartService;
+	private static StoreService storeService;
+	private final UserRepository userRepository;
+
+	public OrderServiceImpl(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
 
 	@Override
 	public UserOrderResponseDto save(Long userId) {
@@ -98,11 +106,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public void cancleOrder(Long userId, Long orderId, Long loginUserId) {
-		// 로그인 유저 = Path의 유저인지 확인
-		if (!userId.equals(loginUserId)) {
-			throw new RuntimeException("본인의 주문만 취소할 수 있습니다");
-		}
+	public void cancelOrder(Long orderId, Long loginUserId) {
 
 		// 주문 조회
 		Order order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("해당 주문이 존재하지 않습니다."));
@@ -125,5 +129,52 @@ public class OrderServiceImpl implements OrderService {
 		// 상태 변경 -> 취소완료
 		order.setStatus(OrderStatus.CANCELED);
 
+	}
+
+	@Override
+	public List<FindAllOrderResponseDto> findAll(Long userId) {
+
+		User user = userRepository.findByIdOrElseThrow(userId);
+		List<Order> orders = new ArrayList<>();
+
+		// usertype이 user인 경우
+		if (user.getUserType().equals(UserType.USER)) {
+			orders = orderRepository.findAllByUserId(userId);
+
+		} else if (user.getUserType().equals(UserType.OWNER)) { // usertype이 owner인 경우
+			Store store = storeRepository.findByUserId(userId);
+			orders = orderRepository.findByStoreId(store.getId());
+		}
+
+		return orders.stream().map(order -> new FindAllOrderResponseDto(
+			order.getOrderId(),
+			storeService.findStoreName(order.getStoreId()),
+			order.getStatus().name(),
+			order.getOrderedAt()
+		)).toList();
+	}
+
+	@Override
+	public OwnerOrderResponseDto findOne(Long userId, Long orderId) {
+
+		// 주문 조회
+		Order order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("해당 주문이 존재하지 않습니다."));
+
+		// 본인 확인
+		if (!order.getUserId().equals(userId)) {
+			throw new RuntimeException("본인의 주문만 조회할 수 있습니다.");
+		}
+
+		List<MenuItemDto> menuItems = order.getCarts().stream()
+			.map(MenuItemDto::toDto)
+			.toList();
+
+		return new OwnerOrderResponseDto(
+			order.getOrderId(),
+			menuItems,
+			order.getTotalPrice(),
+			order.getStatus().name(),
+			order.getOrderedAt()
+		);
 	}
 }
