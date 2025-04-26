@@ -1,5 +1,6 @@
 package com.example.yamyam16.store.entity;
 
+import com.example.yamyam16.auth.entity.User;
 import com.example.yamyam16.review.entity.Review;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -26,8 +27,11 @@ public class OwnerComment {
     private LocalDateTime createAt;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "review_id")
+    @JoinColumn(name = "review_id", unique = true)
     private Review review;
 
-
+    //유저
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
+    private User user;
 }

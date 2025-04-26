@@ -21,9 +21,9 @@ public class CreateStoreResponseDto {
     public CreateStoreResponseDto(Store store) {
         this.id = store.getId();
         this.name = store.getName();
-        this.open_time = store.getOpentime();
-        this.close_time = store.getClosetime();
-        this.minOrderPrice = store.getMinprice();
+        this.open_time = store.getOpenTime();
+        this.close_time = store.getCloseTime();
+        this.minOrderPrice = store.getMinOrderPrice();
         this.category = store.getCategory();
         this.notice = store.getNotice();
     }
