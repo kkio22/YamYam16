@@ -26,13 +26,13 @@ public class Store {
     private String name;
 
     @Column(nullable = false, length = 30)
-    private Long opentime;
+    private Long openTime;
 
     @Column(nullable = false, length = 30)
-    private Long closetime;
+    private Long closeTime;
 
     @Column(nullable = false, length = 30)
-    private Long minprice;
+    private Long minOrderPrice;
 
     @Column(nullable = false, length = 30)
     private String category;
@@ -66,16 +66,21 @@ public class Store {
         this.name = dto.getName();
         this.category = dto.getCategory();
         this.notice = dto.getNotice();
-        this.minprice = dto.getMinOrderPrice();
-        this.opentime = dto.getOpen_time();
-        this.closetime = dto.getClose_time();
+        this.minOrderPrice = dto.getMinOrderPrice();
+        this.openTime = dto.getOpen_time();
+        this.closeTime = dto.getClose_time();
         this.user = user;
         this.isDelete = false;
     }
 
     //crud관련
-    public void update(UpdateStoreRequestDto updatePostsRequestDto) {
-        //todo 이거 고칠것
+    public void update(UpdateStoreRequestDto dto) {
+        this.name = dto.getStorename();
+        this.openTime = dto.getOpen_time();
+        this.closeTime = dto.getClose_time();
+        this.minOrderPrice = dto.getMinOrderPrice();
+        this.category = dto.getCategory();
+        this.notice = dto.getNotice();
     }
 
     public void deactivate() {
