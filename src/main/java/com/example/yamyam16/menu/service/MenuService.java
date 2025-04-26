@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.example.yamyam16.auth.common.annotation.CheckStoreByStoreId;
 import com.example.yamyam16.exception.CustomException;
 import com.example.yamyam16.exception.ErrorCode;
 import com.example.yamyam16.menu.dto.MenuCreateRequestDto;
@@ -24,19 +25,21 @@ import com.example.yamyam16.store.repository.StoreRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+//MENUSERVICE를 BEAN으로 주입해서 CONTROLLER에서 사용
 @Service
 @RequiredArgsConstructor
 public class MenuService {
 
 	public final MenuRepository menuRepository;
-	public final StoreRepository storeRepository;
+	//public final StoreRepository storeRepository;
 
+	@CheckStoreByStoreId
 	public MenuCreateResponseDto createMenu(
 		Long storeId,
 		MenuCreateRequestDto menuCreateRequestDto
 	) {
-		Store findStore = storeRepository.findById(storeId)
-			.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND)); //해당 가게가 있는지 확인
+		//Store findStore = storeRepository.findById(storeId)
+		//.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND)); //해당 가게가 있는지 확인
 
 		Menu menu = new Menu(
 			menuCreateRequestDto.getMenuName(),
@@ -47,13 +50,18 @@ public class MenuService {
 		Menu savedMenu = menuRepository.save(
 			menu); //repository에 엔티티 보내서 데이터 베이스 테이블에 값 생성하고 그 값이 다시 반환됨 그래서 자료형이 Menu / 그래서
 
-		return new MenuCreateResponseDto(savedMenu.getId(), savedMenu.getMenuName(), savedMenu.getMenuPrice(),
-			savedMenu.getMenuStatus().getDescription()); //내가 저장한 내용에 있는 상태가져오는 것
+		return new MenuCreateResponseDto(
+			savedMenu.getId(),
+			savedMenu.getMenuName(),
+			savedMenu.getMenuPrice(),
+			savedMenu.getMenuStatus().getDescription()
+		); //내가 저장한 내용에 있는 상태가져오는 것
 	}
 
+	@CheckStoreByStoreId
 	public List<MenuListResponseDto> findMenuByPage(Long storeId, Long page, Long size) {
-		Store findStore = storeRepository.findById(storeId)
-			.orElseThrow(() -> new CustomException((ErrorCode.STORE_NOT_FOUND))); // 해당 가게가 있는지 확인
+		//Store findStore = storeRepository.findById(storeId)
+		//	.orElseThrow(() -> new CustomException((ErrorCode.STORE_NOT_FOUND))); // 해당 가게가 있는지 확인
 
 		//pageable 객체 생성 => 페이지 번호, 페이지 갯수, 정렬 나타냄
 		Pageable pageable = PageRequest.of(page.intValue() - 1, size.intValue(),
@@ -68,18 +76,22 @@ public class MenuService {
 
 		//entity -> dto로 변환해서 반환 => stream이나 for문 사용해야 함
 		return menuList.stream() //컬렉션인 List를 스트림으로 변환
-			.map(menu -> new MenuListResponseDto(menu.getId(), menu.getMenuName(),//스트릶에 있는 menu객체를 하나씩 꺼내옴
-				menu.getMenuPrice())) // entity -> dto로 변경 (MenuListResponseDto :: new)
+			.map(menu -> new MenuListResponseDto(
+				menu.getId(),
+				menu.getMenuName(),//스트릶에 있는 menu객체를 하나씩 꺼내옴
+				menu.getMenuPrice())
+			) // entity -> dto로 변경 (MenuListResponseDto :: new)
 			.toList(); // 다시 List로 변환
 	}
 
+	@CheckStoreByStoreId
 	public MenuUpdateResponseDto updateMenu(
 		Long storeId,
 		Long menuId,
 		MenuUpdateRequestDto menuUpdateRequestDto
 	) {
-		Store findStore = storeRepository.findById(storeId)
-			.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
+		//Store findStore = storeRepository.findById(storeId)
+		//	.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
 		Menu findMenu = menuRepository.findById(menuId)
 			.orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
@@ -87,17 +99,22 @@ public class MenuService {
 		findMenu.updateMenu(menuUpdateRequestDto.getMenuName(), menuUpdateRequestDto.getMenuPrice(),
 			menuUpdateRequestDto.getMenuStatus()); //entity update
 
-		return new MenuUpdateResponseDto(findMenu.getId(), findMenu.getMenuName(), findMenu.getMenuPrice(),
-			menuUpdateRequestDto.getMenuStatus().getDescription());
+		return new MenuUpdateResponseDto(
+			findMenu.getId(),
+			findMenu.getMenuName(),
+			findMenu.getMenuPrice(),
+			menuUpdateRequestDto.getMenuStatus().getDescription()
+		);
 	}
 
+	@CheckStoreByStoreId
 	@Transactional
 	public void deleteMenu( //softDelete
 		Long storeId,
 		Long menuId
 	) {
-		Store findStore = storeRepository.findById(storeId)
-			.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
+		//Store findStore = storeRepository.findById(storeId)
+		//	.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
 		Menu findMenu = menuRepository.findById(menuId)
 			.orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));

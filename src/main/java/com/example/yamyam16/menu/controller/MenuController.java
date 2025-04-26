@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,7 +38,7 @@ public class MenuController {
 		return new ResponseEntity<>(menuCreateResponseDto, HttpStatus.CREATED);
 	}
 
-	@GetMapping("/store/{storeId}")
+	@GetMapping("/store/{storeId}/menu")
 	public ResponseEntity<List<MenuListResponseDto>> findMenuByPage(
 		@PathVariable Long storeId,
 		@RequestParam(defaultValue = "1") Long page, // 페이지 번호
@@ -47,17 +48,17 @@ public class MenuController {
 		return new ResponseEntity<>(menuList, HttpStatus.OK);
 	}
 
-	@PatchMapping("/stores/{storeId}/menu/{menuId}/edit")// url이 달라야 함,
+	@PatchMapping("/stores/{storeId}/menu/{menuId}")// url이 달라야 함,
 	public ResponseEntity<MenuUpdateResponseDto> updateMenu(
 		@PathVariable Long storeId,
 		Long menuId,
-		@RequestBody MenuUpdateRequestDto menuUpdateRequestDto
+		@Valid @RequestBody MenuUpdateRequestDto menuUpdateRequestDto
 	) {
 		MenuUpdateResponseDto menuUpdateResponseDto = menuService.updateMenu(storeId, menuId, menuUpdateRequestDto);
 		return new ResponseEntity<>(menuUpdateResponseDto, HttpStatus.OK);
 	}
 
-	@PatchMapping("/store/{storeId}/menu/{menuId}")
+	@DeleteMapping("/store/{storeId}/menu/{menuId}")
 	public ResponseEntity<Void> deleteMenu(
 		@PathVariable Long storeId,
 		Long menuId
