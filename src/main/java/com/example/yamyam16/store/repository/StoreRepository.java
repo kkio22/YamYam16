@@ -15,9 +15,6 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     //n+1 문제 해결 방법 2가지
     Page<Store> findAllByIsDeleteFalseAndNameContainingOrderByCreateAtDesc(String storename, Pageable pageable);
 
-    //JPQL
-//    @Query("SELECT new com.example.yamyam16.store.dto.response.SearchStoreResponseDto(s.id, s.name, u.name) FROM Store s JOIN s.owner u WHERE s.isDelete = false")
-//    Page<SearchStoreResponseDto> findStoreDtos(Pageable pageable);
 
     default Store findByIdOrElseThrow(Long id) {
         return findById(id).orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));

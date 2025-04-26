@@ -89,13 +89,6 @@ public class StoreController {
         return new ResponseEntity<>(updateStoreResponseDto, HttpStatus.OK);
     }
 
-    //가게 공지 수정
-    @PatchMapping("/{storeId}")
-    public ResponseEntity<UpdateStoreResponseDto> updateStoreById(
-            @SessionAttribute(name = Const.LOGIN_USER) User user,
-    ){
-
-    }
 
     // 가게삭제
     @DeleteMapping("/{storeId}")

@@ -14,7 +14,7 @@ public class SearchStoreResponseDto {
     private Long closetime;
 
 
-    private SearchStoreResponseDto(Store store) {
+    public SearchStoreResponseDto(Store store) {
 
         this.id = store.getId();
         this.storename = store.getName();

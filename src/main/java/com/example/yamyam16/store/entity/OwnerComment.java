@@ -36,5 +36,8 @@ public class OwnerComment {
     @JoinColumn(name = "review_id", unique = true)
     private Review review;
 
-
+    //유저
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
+    private User user;
 }
