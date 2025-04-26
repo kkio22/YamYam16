@@ -12,6 +12,9 @@ import com.example.yamyam16.cart.dto.response.FindAllCartResponseDto;
 import com.example.yamyam16.cart.dto.response.SaveCartResponseDto;
 import com.example.yamyam16.cart.entity.Cart;
 import com.example.yamyam16.cart.enums.CartStatus;
+import com.example.yamyam16.cart.exception.DifferentStoreCartException;
+import com.example.yamyam16.cart.exception.UnauthorizedCartDeleteException;
+import com.example.yamyam16.cart.exception.UnauthorizedCartModificationException;
 import com.example.yamyam16.cart.repository.CartRepository;
 import com.example.yamyam16.menu.entity.Menu;
 import com.example.yamyam16.menu.repository.MenuRepository;
@@ -42,7 +45,7 @@ public class CartServiceImpl implements CartService {
 		if (!userCarts.isEmpty()) {
 			Store store = findMenu.getStore();
 			if (!store.getId().equals(findStore.getId())) {
-				throw new RuntimeException("같은 가게의 음식만 담을 수 있습니다.");
+				throw new DifferentStoreCartException();
 			}
 		}
 
@@ -50,7 +53,7 @@ public class CartServiceImpl implements CartService {
 		Cart cart = new Cart(userId, findMenu, requestDto.getQuantity());
 		cartRepository.save(cart);
 
-		return SaveCartResponseDto.toDto(cart, userCarts, findStore.getMinprice());
+		return SaveCartResponseDto.toDto(cart, userCarts, findStore.getMinOrderPrice());
 	}
 
 	@Override
@@ -61,16 +64,16 @@ public class CartServiceImpl implements CartService {
 		// 스토어의 최소 주문금액
 		Store findStore = storeRepository.findById(storeId).orElseThrow(() -> new RuntimeException());
 
-		return FindAllCartResponseDto.toDto(userCarts, findStore.getMinprice());
+		return FindAllCartResponseDto.toDto(userCarts, findStore.getMinOrderPrice());
 	}
 
 	@Transactional
 	@Override
 	public FindAllCartResponseDto update(Long userId, Long cartId, UpdateCartRequestDto requestDto) {
-		Cart findCart = cartRepository.findByCartId(cartId);
+		Cart findCart = cartRepository.findByIdOrElseThrow(cartId);
 
 		if (!findCart.getUserId().equals(userId)) {
-			throw new RuntimeException("본인의 장바구니만 수정할 수 있습니다");
+			throw new UnauthorizedCartDeleteException();
 		}
 
 		if (requestDto.getQuantity() == 0) {
@@ -83,16 +86,16 @@ public class CartServiceImpl implements CartService {
 		List<Cart> userCarts = cartRepository.findByUserIdAndStatus(userId, CartStatus.IN_CART);
 		Store findStore = findCart.getMenu().getStore();
 
-		return FindAllCartResponseDto.toDto(userCarts, findStore.getMinprice());
+		return FindAllCartResponseDto.toDto(userCarts, findStore.getMinOrderPrice());
 	}
 
 	@Transactional
 	@Override
 	public FindAllCartResponseDto delete(Long userId, Long cartId) {
-		Cart findCart = cartRepository.findByCartId(cartId);
+		Cart findCart = cartRepository.findByIdOrElseThrow(cartId);
 
 		if (!findCart.getUserId().equals(userId)) {
-			throw new RuntimeException("본인의 장바구니만 삭제할 수 있습니다");
+			throw new UnauthorizedCartModificationException();
 		}
 
 		cartRepository.delete(findCart);
@@ -101,7 +104,7 @@ public class CartServiceImpl implements CartService {
 		List<Cart> userCarts = cartRepository.findByUserIdAndStatus(userId, CartStatus.IN_CART);
 		Store findStore = findCart.getMenu().getStore();
 
-		return FindAllCartResponseDto.toDto(userCarts, findStore.getMinprice());
+		return FindAllCartResponseDto.toDto(userCarts, findStore.getMinOrderPrice());
 	}
 
 	@Override
