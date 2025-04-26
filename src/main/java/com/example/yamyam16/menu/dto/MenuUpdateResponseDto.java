@@ -11,6 +11,8 @@ public class MenuUpdateResponseDto {
 
 	private String menuName;
 
-	private int menuPrice;
+	private long menuPrice;
+
+	private String menuStatus;
 
 }

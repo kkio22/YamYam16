@@ -1,11 +1,10 @@
 ### GET request to example server
-### 회원가입
 POST http://localhost:8080/auth/signup
 Content-Type: application/json
 
 {
   "userType": "USER",
-  "email": "test1@example.com",
+  "email": "test@example.com",
   "password": "Password1!",
   "nickname": "테스트"
 }

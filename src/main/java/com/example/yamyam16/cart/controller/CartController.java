@@ -1,4 +1,4 @@
-package com.example.yamyam16.order.controller;
+package com.example.yamyam16.cart.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,18 +11,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.yamyam16.order.dto.request.CartRequestDto;
-import com.example.yamyam16.order.dto.request.UpdateCartRequestDto;
-import com.example.yamyam16.order.dto.response.FindAllCartResponseDto;
-import com.example.yamyam16.order.dto.response.SaveCartResponseDto;
-import com.example.yamyam16.order.service.CartService;
+import com.example.yamyam16.cart.dto.request.CartRequestDto;
+import com.example.yamyam16.cart.dto.request.UpdateCartRequestDto;
+import com.example.yamyam16.cart.dto.response.FindAllCartResponseDto;
+import com.example.yamyam16.cart.dto.response.SaveCartResponseDto;
+import com.example.yamyam16.cart.service.CartService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/store/{storeId}/cart")
+@RequestMapping("/store/{storeId}/cart/")
 @RequiredArgsConstructor
 public class CartController {
 
@@ -85,6 +85,8 @@ public class CartController {
 		// 로그인 정보 불러오기
 		HttpSession session = userRequest.getSession();
 		Long userId = (Long)session.getAttribute("userId");
+
+		cartService.deleteAll(userId);
 
 		return ResponseEntity.ok(" 장바구니가 초기화되었습니다.");
 	}

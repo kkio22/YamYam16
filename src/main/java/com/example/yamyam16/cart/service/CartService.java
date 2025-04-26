@@ -1,11 +1,11 @@
-package com.example.yamyam16.order.service;
+package com.example.yamyam16.cart.service;
 
 import org.springframework.stereotype.Service;
 
-import com.example.yamyam16.order.dto.request.CartRequestDto;
-import com.example.yamyam16.order.dto.request.UpdateCartRequestDto;
-import com.example.yamyam16.order.dto.response.FindAllCartResponseDto;
-import com.example.yamyam16.order.dto.response.SaveCartResponseDto;
+import com.example.yamyam16.cart.dto.request.CartRequestDto;
+import com.example.yamyam16.cart.dto.request.UpdateCartRequestDto;
+import com.example.yamyam16.cart.dto.response.FindAllCartResponseDto;
+import com.example.yamyam16.cart.dto.response.SaveCartResponseDto;
 
 @Service
 public interface CartService {

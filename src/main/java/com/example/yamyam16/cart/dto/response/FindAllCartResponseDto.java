@@ -1,8 +1,8 @@
-package com.example.yamyam16.order.dto.response;
+package com.example.yamyam16.cart.dto.response;
 
 import java.util.List;
 
-import com.example.yamyam16.order.entity.Cart;
+import com.example.yamyam16.cart.entity.Cart;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

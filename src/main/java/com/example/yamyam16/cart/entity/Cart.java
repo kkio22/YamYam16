@@ -1,9 +1,10 @@
-package com.example.yamyam16.order.entity;
+package com.example.yamyam16.cart.entity;
 
 import java.time.LocalDateTime;
 
+import com.example.yamyam16.cart.enums.CartStatus;
 import com.example.yamyam16.menu.entity.Menu;
-import com.example.yamyam16.order.enums.CartStatus;
+import com.example.yamyam16.order.entity.Order;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,6 +19,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Entity
@@ -40,12 +42,9 @@ public class Cart {
 	@JoinColumn(name = "order_id")
 	private Order order;
 
-	// @ManyToOne(fetch = FetchType.LAZY)
-	// @JoinColumn(name = "user_id", nullable = false)
-	// private User user;
-
 	private Long quantity;
 
+	@Setter
 	@Enumerated(EnumType.STRING)
 	private CartStatus status;
 

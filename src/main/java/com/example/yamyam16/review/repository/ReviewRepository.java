@@ -1,15 +1,18 @@
 package com.example.yamyam16.review.repository;
 
-import com.example.yamyam16.review.entity.Review;
+import java.awt.print.Pageable;
+
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import com.example.yamyam16.order.entity.Order;
+import com.example.yamyam16.review.entity.Review;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
+	boolean existsByOrder(Order order);
 
-    @Query("SELECT AVG(r.grade) FROM Review r WHERE r.store.id = :store_id")
-    Double findAverageGradeByStoreId(@Param("store_id") Long storeId);
-
+	Page<Review> findByOrderStoreIdAndRatingBetweenOrderByCreatedAtDesc(Long storeId, int min, int max,
+		Pageable pageable);
 }

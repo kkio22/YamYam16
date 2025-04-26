@@ -32,10 +32,11 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
+
     private String nickname;
 
     // 자식 컬렉션을 가진 부모‑측 매핑
-    @OneToMany(mappedBy = "order",
+    @OneToMany(mappedBy = "order",          // ← OrderItem 안의 ‘order’ 필드를 가리킴
             cascade = CascadeType.ALL,   // 부모 → 자식으로 영속성 전이
             orphanRemoval = true)        // 컬렉션에서 빠지면 자식 레코드 삭제
     private List<Store> items = new ArrayList<>();
@@ -53,11 +54,18 @@ public class User extends BaseEntity {
         this.password = password;
         this.nickname = nickname;
     }
+	@Setter
+	private boolean deleted;
 
-    @Setter
-    private boolean deleted;
+	@Setter
+	private LocalDateTime deletedAt;
 
-    @Setter
-    private LocalDateTime deletedAt;
-
+	// 필드 초기화용 생성자
+	public User(UserType userType, String email, String password, String nickname) {
+		this.userType = userType;
+		this.email = email;
+		this.password = password;
+		this.nickname = nickname;
+		this.deleted = false;
+	}
 }

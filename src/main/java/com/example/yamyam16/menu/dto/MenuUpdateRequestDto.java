@@ -1,5 +1,8 @@
 package com.example.yamyam16.menu.dto;
 
+import com.example.yamyam16.menu.MenuStatus;
+
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -9,5 +12,8 @@ public class MenuUpdateRequestDto {
 
 	private String menuName;
 
-	private int menuPrice;
+	@Positive(message = "메뉴 가격은 0보다 커야 합니다")
+	private Long menuPrice;
+
+	private MenuStatus menuStatus;
 }
