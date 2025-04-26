@@ -10,7 +10,7 @@ import lombok.Getter;
 public class UserOrderResponseDto {
 
 	private final Long orderId;
-	private final String store;
+	private final String storeName;
 	private final Long totalPrice;
 	private String orderStatus;
 	private LocalDateTime orderedAt;
