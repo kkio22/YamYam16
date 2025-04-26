@@ -2,7 +2,6 @@ package com.example.yamyam16.store.service;
 
 
 import com.example.yamyam16.auth.entity.User;
-import com.example.yamyam16.auth.entity.UserType;
 import com.example.yamyam16.auth.repository.UserRepository;
 import com.example.yamyam16.exception.CustomException;
 import com.example.yamyam16.exception.ErrorCode;
@@ -11,7 +10,6 @@ import com.example.yamyam16.menu.repository.MenuRepository;
 import com.example.yamyam16.store.common.exception.StoreCustomErrorCode;
 import com.example.yamyam16.store.common.exception.StoreCustomException;
 import com.example.yamyam16.store.dto.request.CreateStoreRequestDto;
-import com.example.yamyam16.store.dto.request.DeactivateStoreRequestDto;
 import com.example.yamyam16.store.dto.request.UpdateStoreRequestDto;
 import com.example.yamyam16.store.dto.response.*;
 import com.example.yamyam16.store.entity.Store;

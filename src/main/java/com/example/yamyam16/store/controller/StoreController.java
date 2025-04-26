@@ -6,7 +6,6 @@ import com.example.yamyam16.auth.service.UserService;
 import com.example.yamyam16.store.dto.request.CreateStoreRequestDto;
 import com.example.yamyam16.store.dto.request.UpdateStoreRequestDto;
 import com.example.yamyam16.store.dto.response.*;
-import com.example.yamyam16.store.entity.enums.CategoryType;
 import com.example.yamyam16.store.service.StoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -53,16 +52,16 @@ public class StoreController {
 
     }
 
-    //가게 카테고리별 조회
-
-    @GetMapping("/{storeId}")
-    public ResponseEntity<Page<SearchStoreResponseDto>> getStoresByCategory(
-            @RequestParam(required = false) String storeName,
-            @PathVariable CategoryType categorytype
-    ) {
-
-        return ResponseEntity.of()
-    }
+//    //가게 카테고리별 조회
+//
+//    @GetMapping("/{storeId}")
+//    public ResponseEntity<Page<SearchStoreResponseDto>> getStoresByCategory(
+//            @RequestParam(required = false) String storeName,
+//            @PathVariable CategoryType categorytype
+//    ) {
+//
+//        return ResponseEntity.of()
+//    }
 
     //가게 단일 조회
 
