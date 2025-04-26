@@ -17,7 +17,7 @@ public class OwnerComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
 
     @Column(length = 30)
     private String content;
@@ -26,12 +26,15 @@ public class OwnerComment {
     @Column(updatable = false)
     private LocalDateTime createAt;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "review_id", unique = true)
-    private Review review;
-
     //유저
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private User user;
+
+    // unique 설정 일대일 매핑
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "review_id", unique = true)
+    private Review review;
+
+
 }

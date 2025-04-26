@@ -2,13 +2,13 @@ package com.example.yamyam16.store.service;
 
 
 import com.example.yamyam16.auth.entity.User;
-import com.example.yamyam16.auth.entity.UserType;
 import com.example.yamyam16.auth.repository.UserRepository;
 import com.example.yamyam16.exception.CustomException;
 import com.example.yamyam16.exception.ErrorCode;
 import com.example.yamyam16.menu.entity.Menu;
 import com.example.yamyam16.menu.repository.MenuRepository;
-import com.example.yamyam16.review.repository.ReviewRepository;
+import com.example.yamyam16.store.common.exception.StoreCustomErrorCode;
+import com.example.yamyam16.store.common.exception.StoreCustomException;
 import com.example.yamyam16.store.dto.request.CreateStoreRequestDto;
 import com.example.yamyam16.store.dto.request.UpdateStoreRequestDto;
 import com.example.yamyam16.store.dto.response.*;
@@ -28,38 +28,37 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class StoreService {
+public class StoreService extends CommonAuthforOwner {
 
     private final StoreRepository storeRepository;
     private final UserRepository userRepository;
-    private final ReviewRepository reviewRepository;
     public final MenuRepository menuRepository;
 
     //가게생성
     @Transactional
     public CreateStoreResponseDto createStore(CreateStoreRequestDto dto, User user) {
 
-        //생성
-        Long userId = user.getId();
-        if (!user.getUserType().equals(UserType.OWNER)) {
-            throw new EntityNotFoundException("사장님 권한이 없습니다");
+        //권환확인
+        validateOwnerRole(user);
+        //가게 갯수 확인
+        if (storeRepository.countByUserAndIsDeleteFalse(user) > 3) {
+            throw new StoreCustomException(StoreCustomErrorCode.OVER_CREATE);
         }
-        if (storeRepository.countByUserAndisDeleteFalse(user) > 3) {
-            throw new EntityNotFoundException("4개이상 운영할 수 없습니다");
-        }
+        //가게생성
         Store store = new Store(dto, user);
         //저장
         Store createStore = storeRepository.save(store);
-        return new CreateStoreResponseDto(createStore);
+        return CreateStoreResponseDto.fromStoreToDto(createStore);
 
     }
 
+    //todo : 이거 수정할 것
     //가게전체조회 : 폐업된 가게 조회 안함
     @Transactional
-    public Page<SearchStoreResponseDto> getAllStores(Pageable pageable) {
+    public Page<SearchStoreResponseDto> getAllStores(String storeName, Pageable pageable) {
+        return storeRepository.findAllByIsDeleteFalseAndNameContainingOrderByCreateAtDesc(storeName, pageable)
+                .map(SearchStoreResponseDto::fromStoreToDto); // map (반환데이터 값 :: 객체(new나 메소드))
 
-        return storeRepository.findAllByIsDeleteFalseOrderByCreateAtDesc(pageable)
-                .map(SearchStoreResponseDto::new);
     }
 
 //    //가게목록조회
@@ -92,17 +91,23 @@ public class StoreService {
 
     //가게수정
     @Transactional
-    public UpdateStoreResponseDto updateStoreById(Long id, UpdateStoreRequestDto dto) {
+    public UpdateStoreResponseDto updateStoreById(Long id, UpdateStoreRequestDto dto, User user) {
+        //권환확인
+        validateOwnerRole(user);
+        //가게 찾기
         Store store = storeRepository.findByIdOrElseThrow(id);
+        //해당 객체 가져와서 엔티티에서 수정
         store.update(dto);
-        Store updateStore = storeRepository.save(store);
-        return new UpdateStoreResponseDto(updateStore);
+        return new UpdateStoreResponseDto(store);
     }
 
     //가게삭제
     @Transactional
-    public DeactivateStoreResponseDto deactivateStoreById(Long id) {
+    public DeactivateStoreResponseDto deactivateStoreById(Long id, User user) {
 
+        //권환확인
+        validateOwnerRole(user);
+        //가게 존재 여부
         if (!storeRepository.existsById(id)) {
             throw new EntityNotFoundException("가게를 찾을 수 없습니다.");
         }
@@ -115,3 +120,4 @@ public class StoreService {
     }
 
 }
+

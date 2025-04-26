@@ -18,7 +18,7 @@ public class CreateStoreResponseDto {
     private String category;
     private String notice;
 
-    public CreateStoreResponseDto(Store store) {
+    private CreateStoreResponseDto(Store store) {
         this.id = store.getId();
         this.name = store.getName();
         this.open_time = store.getOpenTime();
@@ -28,4 +28,8 @@ public class CreateStoreResponseDto {
         this.notice = store.getNotice();
     }
 
+
+    public static CreateStoreResponseDto fromStoreToDto(Store store) {
+        return new CreateStoreResponseDto(store);
+    }
 }
