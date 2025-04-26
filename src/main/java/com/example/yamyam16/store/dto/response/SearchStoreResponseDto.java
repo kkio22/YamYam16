@@ -18,11 +18,13 @@ public class SearchStoreResponseDto {
 
         this.id = store.getId();
         this.storename = store.getName();
-        this.grade = (long) store.getReviews().stream()
-                .mapToLong(review -> review.getGrade())
-                .average()
-                .orElse(0.0);
-        this.closetime = store.getClosetime();
-        this.opentime = store.getOpentime();
+//        this.grade = (long) store.getReviews().stream()
+//                .mapToLong(review -> review.getGrade())
+//                .average()
+//                .orElse(0.0);
+        this.grade = store.
+                this.closetime = store.getCloseTime();
+        this.opentime = store.getOpenTime();
+        this.closetime = store.getCloseTime();
     }
 }

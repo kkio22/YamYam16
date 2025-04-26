@@ -5,6 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class SearchStoreRequestDto {
-    private CategoryType category;
+
+    private CategoryType.
 
 }
