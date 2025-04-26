@@ -106,6 +106,13 @@ public class OrderServiceImpl implements OrderService {
 		// 상태 변경
 		order.setStatus(statusRequestDto.getStatus());
 
+		// 카트 상태 복구
+		if (statusRequestDto.getStatus() == OrderStatus.CANCELED) {
+			for (Cart cart : order.getCarts()) {
+				cart.setStatus(CartStatus.IN_CART);
+			}
+		}
+
 		return new ChangeOrderStatusResponseDto(order.getOrderId(), order.getStatus().name(), order.getOrderedAt());
 	}
 
@@ -132,6 +139,10 @@ public class OrderServiceImpl implements OrderService {
 
 		// 상태 변경 -> 취소완료
 		order.setStatus(OrderStatus.CANCELED);
+		// 카트 상태 복구
+		for (Cart cart : order.getCarts()) {
+			cart.setStatus(CartStatus.IN_CART);
+		}
 
 	}
 
