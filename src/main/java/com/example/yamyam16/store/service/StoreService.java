@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.yamyam16.auth.entity.User;
 import com.example.yamyam16.auth.repository.UserRepository;
+import com.example.yamyam16.exception.CustomException;
+import com.example.yamyam16.exception.ErrorCode;
 import com.example.yamyam16.menu.entity.Menu;
 import com.example.yamyam16.menu.repository.MenuRepository;
 import com.example.yamyam16.store.common.exception.StoreCustomErrorCode;
@@ -128,8 +130,8 @@ public class StoreService extends CommonAuthforOwner {
 	// 오더에서 사용합니다
 	public String findStoreName(Long storeId) {
 		Store store = storeRepository.findById(storeId)
-			.orElseThrow(() -> new RuntimeException("가게를 찾을 수 없습니다."));
+			.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 		return store.getName();
 	}
-
+	
 }

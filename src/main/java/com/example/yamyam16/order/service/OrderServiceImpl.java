@@ -89,8 +89,10 @@ public class OrderServiceImpl implements OrderService {
 		// 주문 상태 설정
 		order.setStatus(OrderStatus.PREPARING);
 
+		List<Cart> carts = cartRepository.findByOrders_OrderId(orderId);
+
 		// 리스트 만들기 -> Menuitemdto 사용
-		List<MenuItemDto> menuItems = order.getCarts().stream().map(MenuItemDto::toDto).toList();
+		List<MenuItemDto> menuItems = carts.stream().map(MenuItemDto::toDto).toList();
 
 		return new OwnerOrderResponseDto(order.getOrderId(), menuItems, order.getTotalPrice(), order.getStatus().name(),
 			order.getOrderedAt());

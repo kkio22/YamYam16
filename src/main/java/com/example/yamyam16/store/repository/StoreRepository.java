@@ -49,6 +49,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 	Store findByUserId(Long userId);
 
 	List<Store> findAllByIsDeleteFalseAndUser_Id(Long userId);
+
 }
 
 

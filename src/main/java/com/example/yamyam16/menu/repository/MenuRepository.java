@@ -9,7 +9,7 @@ import com.example.yamyam16.menu.entity.Menu;
 
 public interface MenuRepository extends JpaRepository<Menu, Long> {
 
-	@EntityGraph(attributePaths = {"store_id"})
+	@EntityGraph(attributePaths = {"store"})
 	Page<Menu> findAllByStoreId(Long storeId, Pageable pageable);
 
 	Menu findByMenuNameAndStore_Id(String menuName, Long storeId);
