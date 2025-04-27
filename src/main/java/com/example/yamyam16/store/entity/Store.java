@@ -3,6 +3,7 @@ package com.example.yamyam16.store.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.yamyam16.auth.entity.BaseEntity;
 import com.example.yamyam16.auth.entity.User;
 import com.example.yamyam16.menu.entity.Menu;
 import com.example.yamyam16.review.entity.Review;
@@ -29,7 +30,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Table(name = "store")
-public class Store {
+public class Store extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
