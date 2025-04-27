@@ -15,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -67,6 +68,14 @@ public class Menu {
 		this.is_deleted = true;
 		this.deleteAt = LocalDateTime.now();
 		this.menuStatus = MenuStatus.DELETED;
+	}
+
+	@Builder
+	public Menu(String menuName, Long menuPrice, MenuStatus menuStatus) {
+		this.menuName = menuName;
+		this.menuPrice = menuPrice;
+		this.menuStatus = menuStatus;
+
 	}
 
 }
