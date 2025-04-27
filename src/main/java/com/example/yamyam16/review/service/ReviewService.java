@@ -10,11 +10,12 @@ import jakarta.servlet.http.HttpSession;
 
 public interface ReviewService {
 
-	void createReview(ReviewRequestDto reviewRequestDto, HttpSession session);
-
 	void updateReview(Long reviewId, ReviewRequestDto dto, HttpSession session);
 
 	void deleteReview(Long reviewId, HttpSession session);
+
+	void createReview(Long storeId, Long orderId, ReviewRequestDto reviewRequestDto,
+		HttpSession session);
 
 	@Transactional(readOnly = true)
 	Page<ReviewResponseDto> getReviewByStore(Long storeId,
