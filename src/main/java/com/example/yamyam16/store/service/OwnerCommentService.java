@@ -4,8 +4,8 @@ import com.example.yamyam16.auth.entity.User;
 import com.example.yamyam16.review.repository.ReviewRepository;
 import com.example.yamyam16.store.common.exception.StoreCustomErrorCode;
 import com.example.yamyam16.store.common.exception.StoreCustomException;
-import com.example.yamyam16.store.dto.request.CreateOwnerCommmentRequstDto;
-import com.example.yamyam16.store.dto.response.CreateOwnerCommentResponseDto;
+import com.example.yamyam16.store.dto.request.OwnerCommmentRequstDto;
+import com.example.yamyam16.store.dto.response.OwnerCommentResponseDto;
 import com.example.yamyam16.store.entity.OwnerComment;
 import com.example.yamyam16.store.repository.OwnerCommentRepository;
 import com.example.yamyam16.store.repository.StoreRepository;
@@ -24,7 +24,7 @@ public class OwnerCommentService extends CommonAuthforOwner {
     private final ReviewRepository reviewRepository;
 
     @Transactional
-    public CreateOwnerCommentResponseDto createComment(User user, CreateOwnerCommmentRequstDto createDto) {
+    public OwnerCommentResponseDto createComment(User user, OwnerCommmentRequstDto createDto) {
         //오너인지 확인
         validateOwnerRole(user);
 
@@ -34,7 +34,7 @@ public class OwnerCommentService extends CommonAuthforOwner {
         //저장
         OwnerComment createStore = ownerCommentRepository.save(comment);
 
-        return CreateOwnerCommentResponseDto.fromCommentToDto(createStore);
+        return OwnerCommentResponseDto.fromCommentToDto(createStore);
     }
 
     @Transactional
