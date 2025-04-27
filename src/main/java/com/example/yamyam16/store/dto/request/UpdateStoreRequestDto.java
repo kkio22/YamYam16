@@ -5,14 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalTime;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateStoreRequestDto {
 
-    private String storename;
-    private Long openTime;
-    private Long closeTime;
+    private String storeName;
+    private LocalTime openTime;
+    private LocalTime closeTime;
     private Long minOrderPrice;
     private String category;
     @Size(max = 100, message = "공지는 30글자 이하로 입력해주세요.")

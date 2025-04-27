@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,11 +26,11 @@ public class Store {
     @Column(nullable = false, length = 30)
     private String name;
 
-    @Column(nullable = false, length = 30)
-    private Long openTime;
+    @Column(nullable = false)
+    private LocalTime openTime;
 
-    @Column(nullable = false, length = 30)
-    private Long closeTime;
+    @Column(nullable = false)
+    private LocalTime closeTime;
 
     @Column(nullable = false, length = 30)
     private Long minOrderPrice;
