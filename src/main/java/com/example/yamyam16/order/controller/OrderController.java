@@ -25,7 +25,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping
 @RequiredArgsConstructor
 public class OrderController {
 
@@ -41,7 +41,7 @@ public class OrderController {
 		return new ResponseEntity<>(orderService.save(userId), HttpStatus.CREATED);
 	}
 
-	@PostMapping("/{orderId}")
+	@PostMapping("/orders/{orderId}")
 	public ResponseEntity<OwnerOrderResponseDto> acceptOrder(
 		@PathVariable Long orderId,
 		HttpServletRequest userRequest
@@ -52,7 +52,7 @@ public class OrderController {
 		return new ResponseEntity<>(orderService.accept(userId, orderId), HttpStatus.OK);
 	}
 
-	@PatchMapping("/{orderId}")
+	@PatchMapping("/orders/{orderId}")
 	public ResponseEntity<ChangeOrderStatusResponseDto> changeStatus(
 		@PathVariable Long orderId,
 		@RequestBody ChangeOrderStatusRequestDto statusRequestDto,
@@ -64,7 +64,7 @@ public class OrderController {
 		return new ResponseEntity<>(orderService.changeStatus(userId, orderId, statusRequestDto), HttpStatus.OK);
 	}
 
-	@DeleteMapping({"/{orderId}"})
+	@DeleteMapping({"/orders/{orderId}"})
 	public ResponseEntity<String> cancelOrder(
 		@PathVariable Long orderId,
 		HttpServletRequest userRequest
@@ -77,7 +77,7 @@ public class OrderController {
 		return ResponseEntity.ok("주문 취소가 완료되었습니다.");
 	}
 
-	@GetMapping
+	@GetMapping("/orders")
 	public ResponseEntity<List<FindAllOrderResponseDto>> findAll(
 		HttpServletRequest userRequest
 	) {
@@ -87,7 +87,7 @@ public class OrderController {
 		return new ResponseEntity<>(orderService.findAll(loginUserId), HttpStatus.OK);
 	}
 
-	@GetMapping("/{orderId}")
+	@GetMapping("/orders/{orderId}")
 	public ResponseEntity<OwnerOrderResponseDto> findOne(
 		@PathVariable Long orderId,
 		HttpServletRequest request

@@ -31,18 +31,17 @@ import com.example.yamyam16.store.entity.Store;
 import com.example.yamyam16.store.repository.StoreRepository;
 import com.example.yamyam16.store.service.StoreService;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
-	private static CartRepository cartRepository;
-	private static StoreRepository storeRepository;
-	private static OrderRepository orderRepository;
-	private static StoreService storeService;
+	private final CartRepository cartRepository;
+	private final StoreRepository storeRepository;
+	private final OrderRepository orderRepository;
+	private final StoreService storeService;
 	private final UserRepository userRepository;
-
-	public OrderServiceImpl(UserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
 
 	@Override
 	public UserOrderResponseDto save(Long userId) {
