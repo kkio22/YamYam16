@@ -31,7 +31,7 @@ public class OrderController {
 
 	private final OrderService orderService;
 
-	@PostMapping("/cart/{cartId}/orders")
+	@PostMapping("/orders")
 	public ResponseEntity<UserOrderResponseDto> saveOrder(
 		HttpServletRequest userRequest
 	) {
