@@ -10,18 +10,15 @@ import com.example.yamyam16.menu.repository.MenuRepository;
 import com.example.yamyam16.store.common.exception.StoreCustomErrorCode;
 import com.example.yamyam16.store.common.exception.StoreCustomException;
 import com.example.yamyam16.store.dto.request.CreateStoreRequestDto;
-import com.example.yamyam16.store.dto.request.DeactivateStoreRequestDto;
 import com.example.yamyam16.store.dto.request.UpdateStoreRequestDto;
-import com.example.yamyam16.store.dto.response.CreateStoreResponseDto;
-import com.example.yamyam16.store.dto.response.DeactivateStoreResponseDto;
-import com.example.yamyam16.store.dto.response.SearchStoreResponseDto;
-import com.example.yamyam16.store.dto.response.UpdateStoreResponseDto;
+import com.example.yamyam16.store.dto.response.*;
 import com.example.yamyam16.store.entity.Store;
 import com.example.yamyam16.store.repository.StoreRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -110,22 +107,16 @@ public class StoreService extends CommonAuthforOwner {
         //권환확인
         validateOwnerRole(user);
         //가게 존재 여부
-        if (!storeRepository.existsById(id)) {
-            throw new EntityNotFoundException("가게를 찾을 수 없습니다.");
-        }
-
-        storeRepository.deleteById(id);
         Store findStore = storeRepository.findByIdOrElseThrow(id);
-
         findStore.deactivate();
         return new DeactivateStoreResponseDto(findStore);
     }
 
-	// 오더에서 사용합니다
-	public String findStoreName(Long storeId) {
-		Store store = storeRepository.findById(storeId)
-			.orElseThrow(() -> new RuntimeException("가게를 찾을 수 없습니다."));
-		return store.getName();
-	}
+    // 오더에서 사용합니다
+    public String findStoreName(Long storeId) {
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new RuntimeException("가게를 찾을 수 없습니다."));
+        return store.getName();
+    }
 
 }
