@@ -12,10 +12,15 @@ public class CreateOwnerCommentResponseDto {
     @JsonFormat(pattern = "yyyy-mm-dd hh:mm:ss")
     private LocalDateTime createAt;
 
-    public CreateOwnerCommentResponseDto(OwnerComment ownerComment) {
+    private CreateOwnerCommentResponseDto(OwnerComment ownerComment) {
         this.id = ownerComment.getId();
         this.content = ownerComment.getContent();
         this.createAt = ownerComment.getCreateAt();
     }
 
+    public static CreateOwnerCommentResponseDto fromCommentToDto(OwnerComment ownerComment) {
+
+        return new CreateOwnerCommentResponseDto(ownerComment);
+
+    }
 }

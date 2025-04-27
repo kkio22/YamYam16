@@ -1,4 +1,4 @@
-package com.example.yamyam16.menu.dto;
+package com.example.yamyam16.store.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,10 +7,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public class MenuListResponseDto {
 
-	private Long id;
+    private Long id;
 
-	private String menuName;
+    private String menuName;
 
-	private long menuPrice;
+    private long menuPrice;
 
 }

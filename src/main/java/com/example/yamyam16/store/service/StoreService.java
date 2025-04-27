@@ -3,8 +3,6 @@ package com.example.yamyam16.store.service;
 
 import com.example.yamyam16.auth.entity.User;
 import com.example.yamyam16.auth.repository.UserRepository;
-import com.example.yamyam16.exception.CustomException;
-import com.example.yamyam16.exception.ErrorCode;
 import com.example.yamyam16.menu.entity.Menu;
 import com.example.yamyam16.menu.repository.MenuRepository;
 import com.example.yamyam16.store.common.exception.StoreCustomErrorCode;
@@ -60,15 +58,27 @@ public class StoreService extends CommonAuthforOwner {
 
     }
 
-//    //가게목록조회
+    //    //가게목록조회
 //    @Transactional
 //    public Page<SearchStoreResponseDto> getStoresByCategory() {
 //
 //    }
 
+
+    // 자신이 운영하는 가게 찾기
+    public List<Store> getAllStoresByOwner(Long userId) {
+        List<Store> stores = storeRepository.findAllByIsDeleteFalseAndOwnerId(userId);
+
+        if (stores.isEmpty()) {
+            throw new StoreCustomException(StoreCustomErrorCode.STORE_NOT_FOUND);
+        }
+        return stores;
+    }
+
+
     public List<MenuListResponseDto> findMenuByPage(Long storeId, Long page, Long size) {
         Store findStore = storeRepository.findById(storeId)
-                .orElseThrow(() -> new CustomException((ErrorCode.STORE_NOT_FOUND))); // 해당 가게가 있는지 확인
+                .orElseThrow(() -> new StoreCustomException((StoreCustomErrorCode.STORE_NOT_FOUND))); // 해당 가게가 있는지 확인
 
         //pageable 객체 생성 => 페이지 번호, 페이지 갯수, 정렬 나타냄
         Pageable pageable = PageRequest.of(page.intValue() - 1, size.intValue(),

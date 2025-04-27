@@ -60,7 +60,7 @@ public class Store {
     @OneToMany(mappedBy = "store",
             cascade = CascadeType.ALL,   // 부모 → 자식으로 영속성 전이 객체
             orphanRemoval = true)        // 컬렉션에서 빠지면 자식 레코드 삭제 컬렉션
-    private List<Menu> items = new ArrayList<>();
+    private List<Menu> menus = new ArrayList<>();
 
 
     // 생성자
