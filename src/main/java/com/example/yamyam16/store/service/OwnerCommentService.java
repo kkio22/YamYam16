@@ -1,14 +1,12 @@
 package com.example.yamyam16.store.service;
 
 import com.example.yamyam16.auth.entity.User;
-import com.example.yamyam16.review.repository.ReviewRepository;
 import com.example.yamyam16.store.common.exception.StoreCustomErrorCode;
 import com.example.yamyam16.store.common.exception.StoreCustomException;
 import com.example.yamyam16.store.dto.request.OwnerCommmentRequstDto;
 import com.example.yamyam16.store.dto.response.OwnerCommentResponseDto;
 import com.example.yamyam16.store.entity.OwnerComment;
 import com.example.yamyam16.store.repository.OwnerCommentRepository;
-import com.example.yamyam16.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,10 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class OwnerCommentService extends CommonAuthforOwner {
 
     private final OwnerCommentRepository ownerCommentRepository;
-    private final StoreRepository storeRepository;
-
-    private final StoreService storeService;
-    private final ReviewRepository reviewRepository;
 
     @Transactional
     public OwnerCommentResponseDto createComment(User user, OwnerCommmentRequstDto createDto) {
