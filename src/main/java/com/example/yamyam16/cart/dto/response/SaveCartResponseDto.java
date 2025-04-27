@@ -19,7 +19,8 @@ public class SaveCartResponseDto {
 	public static SaveCartResponseDto toDto(Cart addedCart, List<Cart> userCarts, Long minOrderPrice) {
 		// 현재 카트 금액 구하기
 		List<CartItemDto> cartItems = userCarts.stream().map(CartItemDto::toDto).toList();
-		Long totalCartPrice = cartItems.stream().mapToLong(CartItemDto::getPrice).sum();
+		Long totalCartPrice = cartItems.stream().mapToLong(CartItemDto::getPrice).sum()
+			+ addedCart.getQuantity() * addedCart.getMenu().getMenuPrice();
 
 		return new SaveCartResponseDto(
 			CartItemDto.toDto(addedCart),

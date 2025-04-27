@@ -13,9 +13,10 @@ import com.example.yamyam16.cart.dto.response.SaveCartResponseDto;
 import com.example.yamyam16.cart.entity.Cart;
 import com.example.yamyam16.cart.enums.CartStatus;
 import com.example.yamyam16.cart.exception.DifferentStoreCartException;
-import com.example.yamyam16.cart.exception.UnauthorizedCartDeleteException;
 import com.example.yamyam16.cart.exception.UnauthorizedCartModificationException;
 import com.example.yamyam16.cart.repository.CartRepository;
+import com.example.yamyam16.exception.CustomException;
+import com.example.yamyam16.exception.ErrorCode;
 import com.example.yamyam16.menu.entity.Menu;
 import com.example.yamyam16.menu.repository.MenuRepository;
 import com.example.yamyam16.store.entity.Store;
@@ -36,13 +37,14 @@ public class CartServiceImpl implements CartService {
 	public SaveCartResponseDto save(Long storeId, Long userId, CartRequestDto requestDto) {
 
 		// 가게 찾기
-		Store findStore = storeRepository.findById(storeId).orElseThrow(() -> new RuntimeException());
+		Store findStore = storeRepository.findById(storeId)
+			.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
 		// 메뉴 찾기 (가게 메뉴에서 금액 가져와야함)
 		Menu findMenu = menuRepository.findByMenuNameAndStore_Id(requestDto.getMenuName(), storeId);
 
 		if (findMenu == null) {
-			throw new RuntimeException("메뉴를 찾을 수 없습니다");
+			throw new CustomException(ErrorCode.MENU_NOT_FOUND);
 		}
 
 		// 해당 유저의 다른 카트들 조회
@@ -50,8 +52,7 @@ public class CartServiceImpl implements CartService {
 
 		// 같은 스토어에서만 담을 수 있음
 		if (!userCarts.isEmpty()) {
-			Store store = findMenu.getStore();
-			if (!store.getId().equals(findStore.getId())) {
+			if (!userCarts.get(0).getMenu().getStore().getId().equals(storeId)) {
 				throw new DifferentStoreCartException();
 			}
 		}
@@ -76,12 +77,12 @@ public class CartServiceImpl implements CartService {
 
 	@Transactional
 	@Override
-	public FindAllCartResponseDto update(Long userId, Long cartId, UpdateCartRequestDto requestDto) {
-		Cart findCart = cartRepository.findByIdOrElseThrow(cartId);
+	public FindAllCartResponseDto update(Long userId, UpdateCartRequestDto requestDto) {
+		List<Cart> userCarts = cartRepository.findByUserIdAndStatus(userId, CartStatus.IN_CART);
 
-		if (!findCart.getUserId().equals(userId)) {
-			throw new UnauthorizedCartDeleteException();
-		}
+		Cart findCart = userCarts.stream()
+			.filter(cart -> cart.getMenu().getMenuName().equals(requestDto.getMenuName()))
+			.findFirst().orElseThrow(() -> new CustomException(ErrorCode.CART_NOT_FOUND));
 
 		if (requestDto.getQuantity() == 0) {
 			cartRepository.delete(findCart);
@@ -90,7 +91,8 @@ public class CartServiceImpl implements CartService {
 		}
 
 		// 카트목록을 리스트로
-		List<Cart> userCarts = cartRepository.findByUserIdAndStatus(userId, CartStatus.IN_CART);
+		userCarts = cartRepository.findByUserIdAndStatus(userId, CartStatus.IN_CART);
+
 		Store findStore = findCart.getMenu().getStore();
 
 		return FindAllCartResponseDto.toDto(userCarts, findStore.getMinOrderPrice());

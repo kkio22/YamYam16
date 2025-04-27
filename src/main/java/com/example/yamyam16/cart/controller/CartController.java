@@ -53,9 +53,8 @@ public class CartController {
 		return new ResponseEntity<>(cartService.findAll(userId, storeId), HttpStatus.OK);
 	}
 
-	@PatchMapping("/{cartId}")
+	@PatchMapping
 	public ResponseEntity<FindAllCartResponseDto> updateCart(
-		@PathVariable Long cartId,
 		@RequestBody UpdateCartRequestDto requestDto,
 		HttpServletRequest userRequest
 	) {
@@ -63,7 +62,7 @@ public class CartController {
 		HttpSession session = userRequest.getSession();
 		Long userId = (Long)session.getAttribute("userId");
 
-		return new ResponseEntity<>(cartService.update(userId, cartId, requestDto), HttpStatus.OK);
+		return new ResponseEntity<>(cartService.update(userId, requestDto), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{cartId}")

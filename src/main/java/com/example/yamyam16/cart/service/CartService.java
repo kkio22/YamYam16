@@ -14,7 +14,7 @@ public interface CartService {
 
 	FindAllCartResponseDto findAll(Long userId, Long storeId);
 
-	FindAllCartResponseDto update(Long userId, Long cartId, UpdateCartRequestDto requestDto);
+	FindAllCartResponseDto update(Long userId, UpdateCartRequestDto requestDto);
 
 	FindAllCartResponseDto delete(Long userId, Long cartId);
 
