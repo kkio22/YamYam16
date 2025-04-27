@@ -60,8 +60,6 @@ public class MenuService {
 
 	@CheckStoreByStoreId
 	public List<MenuListResponseDto> findMenuByPage(Long storeId, Long page, Long size) {
-		//Store findStore = storeRepository.findById(storeId)
-		//	.orElseThrow(() -> new CustomException((ErrorCode.STORE_NOT_FOUND))); // 해당 가게가 있는지 확인
 
 		//pageable 객체 생성 => 페이지 번호, 페이지 갯수, 정렬 나타냄
 		Pageable pageable = PageRequest.of(page.intValue() - 1, size.intValue(),
@@ -90,8 +88,6 @@ public class MenuService {
 		Long menuId,
 		MenuUpdateRequestDto menuUpdateRequestDto
 	) {
-		//Store findStore = storeRepository.findById(storeId)
-		//	.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
 		Menu findMenu = menuRepository.findById(menuId)
 			.orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
@@ -113,8 +109,6 @@ public class MenuService {
 		Long storeId,
 		Long menuId
 	) {
-		//Store findStore = storeRepository.findById(storeId)
-		//	.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
 		Menu findMenu = menuRepository.findById(menuId)
 			.orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
