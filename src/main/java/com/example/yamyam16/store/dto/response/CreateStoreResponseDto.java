@@ -1,9 +1,14 @@
 package com.example.yamyam16.store.dto.response;
 
+import org.springframework.stereotype.Service;
+
 import com.example.yamyam16.store.entity.Store;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
 public class CreateStoreResponseDto {
 
 	private Long id;
