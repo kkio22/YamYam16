@@ -2,8 +2,8 @@ package com.example.yamyam16.store.controller;
 
 import com.example.yamyam16.auth.common.consts.Const;
 import com.example.yamyam16.auth.entity.User;
-import com.example.yamyam16.store.dto.request.CreateOwnerCommmentRequstDto;
-import com.example.yamyam16.store.dto.response.CreateOwnerCommentResponseDto;
+import com.example.yamyam16.store.dto.request.OwnerCommmentRequestDto;
+import com.example.yamyam16.store.dto.response.OwnerCommentResponseDto;
 import com.example.yamyam16.store.service.OwnerCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,11 +18,11 @@ public class OwnerCommentConroller {
     private final OwnerCommentService ownercommentService;
 
     @PostMapping
-    public ResponseEntity<CreateOwnerCommentResponseDto> createOwnerComment(
+    public ResponseEntity<OwnerCommentResponseDto> createOwnerComment(
             @SessionAttribute(name = Const.LOGIN_USER) User user,
-            @RequestBody CreateOwnerCommmentRequstDto requestDto) {
+            @RequestBody OwnerCommmentRequestDto requestDto) {
 
-        CreateOwnerCommentResponseDto responseDto = ownercommentService.createComment(user, requestDto);
+        OwnerCommentResponseDto responseDto = ownercommentService.createComment(user, requestDto);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
 
     }

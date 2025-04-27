@@ -3,7 +3,7 @@ package com.example.yamyam16.store.service;
 import com.example.yamyam16.auth.entity.User;
 import com.example.yamyam16.store.common.exception.StoreCustomErrorCode;
 import com.example.yamyam16.store.common.exception.StoreCustomException;
-import com.example.yamyam16.store.dto.request.OwnerCommmentRequstDto;
+import com.example.yamyam16.store.dto.request.OwnerCommmentRequestDto;
 import com.example.yamyam16.store.dto.response.OwnerCommentResponseDto;
 import com.example.yamyam16.store.entity.OwnerComment;
 import com.example.yamyam16.store.repository.OwnerCommentRepository;
@@ -18,7 +18,7 @@ public class OwnerCommentService extends CommonAuthforOwner {
     private final OwnerCommentRepository ownerCommentRepository;
 
     @Transactional
-    public OwnerCommentResponseDto createComment(User user, OwnerCommmentRequstDto createDto) {
+    public OwnerCommentResponseDto createComment(User user, OwnerCommmentRequestDto createDto) {
         //오너인지 확인
         validateOwnerRole(user);
 

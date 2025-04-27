@@ -2,7 +2,7 @@ package com.example.yamyam16.store.entity;
 
 import com.example.yamyam16.auth.entity.User;
 import com.example.yamyam16.review.entity.Review;
-import com.example.yamyam16.store.dto.request.OwnerCommmentRequstDto;
+import com.example.yamyam16.store.dto.request.OwnerCommmentRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,7 +37,7 @@ public class OwnerComment {
     @JoinColumn(name = "review_id", unique = true)
     private Review review;
 
-    public OwnerComment(OwnerCommmentRequstDto createDto, User user) {
+    public OwnerComment(OwnerCommmentRequestDto createDto, User user) {
         this.content = createDto.getContent();
         this.createAt = LocalDateTime.now();
         this.user = user;
