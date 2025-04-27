@@ -86,6 +86,7 @@ public class UserService {
 	@CheckUserDeleted
 	@Transactional
 	public void updatePw(Long userId, UpdatePasswordRequestDto requestDto) {
+		System.out.printf("업데이트 서비스 진입 🚀🚀🚀🚀");
 		User findUser = userRepository.findByIdOrElseThrow(userId);
 		if (!passwordEncoder.matches(requestDto.getCurrentPw(), findUser.getPassword())) {
 			throw new UserException(UserErrorCode.USER_WRONG_PW);
@@ -97,6 +98,7 @@ public class UserService {
 
 		String encodedPw = passwordEncoder.encode(requestDto.getNewPw());
 		findUser.setPassword(encodedPw);
+		System.out.printf("비번 변경 완료 🚀🚀🚀🚀");
 	}
 }
 

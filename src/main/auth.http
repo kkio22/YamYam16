@@ -35,6 +35,7 @@ Content-Type: application/json
   "email": "test@example.com",
   "password": "Password1!"
 }
+###
 > {%
     client.global.set("accessToken", response.body)
 %}
@@ -58,6 +59,15 @@ Content-Type: text/plain
 Authorization: Bearer {{eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaXNlcmx5QG5hdmVyLmNvbSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzQ1NjY3MTQwLCJleHAiOjE3NDU2Njg5NDB9.4tO1vSN287ZsaxJ86Hgqatb1Q9uTgWNy8SU05N2dmp8}}
 
 Password12!
+
+### 비밀번호 업데이트
+PATCH http://localhost:8080/auth/user
+Content-Type: application/json
+
+{
+  "currentPw": "Password1!",
+  "newPw": "Password12!"
+}
 
 ### 비밀번호 업데이트
 PATCH http://localhost:8080/auth/user

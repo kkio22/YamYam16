@@ -1,7 +1,13 @@
 package com.example.yamyam16.auth.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,6 +50,7 @@ public class UserController {
 		//로그인 유저 조회
 		LoginResponseDto responseDto = userService.login(requestDto);
 		Long userId = responseDto.getId();
+		System.out.printf("유저 조회 성공 🚀🚀🚀🚀");
 
 		//로그인 성공
 		//getSession(true) : default, 세션 없으면 생성
@@ -54,12 +61,23 @@ public class UserController {
 		// 세션에 로그인 회원 정보 저장
 		session.setAttribute(Const.LOGIN_USER, loginUser);
 
+		// 스프링 시큐리티 인증 객체 등록
+		SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + loginUser.getUserType().name());
+		UsernamePasswordAuthenticationToken authentication =
+			new UsernamePasswordAuthenticationToken(loginUser, null, List.of(authority));
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+
+		// SecurityContext를 세션에 저장 (이거 추가!)
+		SecurityContext securityContext = SecurityContextHolder.getContext();
+		session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
+
 		return new ResponseEntity<>("로그인 성공", HttpStatus.OK);
 	}
 
 	@PatchMapping("/user")
 	public ResponseEntity<String> updatePw(@Valid @RequestBody UpdatePasswordRequestDto requestDto,
 		@SessionAttribute(name = "loginUser") User loginUSer) {
+		System.out.printf("업데이트 컨트롤러 진입 🚀🚀🚀🚀");
 		Long userId = loginUSer.getId();
 		userService.updatePw(userId, requestDto);
 		return new ResponseEntity<>("업데이트 완료", HttpStatus.OK);
