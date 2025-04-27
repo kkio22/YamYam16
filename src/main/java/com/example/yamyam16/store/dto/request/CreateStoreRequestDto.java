@@ -1,6 +1,5 @@
 package com.example.yamyam16.store.dto.request;
 
-import com.example.yamyam16.store.entity.enums.CategoryType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -23,7 +22,7 @@ public class CreateStoreRequestDto {
     @NotNull(message = "최소주문금액을 입력해주세요")
     private final Long minOrderPrice;
     @NotBlank(message = "카테고리를 입력해주세요")
-    private final CategoryType category;
+    private final String category;
     private final String notice;
 
 }

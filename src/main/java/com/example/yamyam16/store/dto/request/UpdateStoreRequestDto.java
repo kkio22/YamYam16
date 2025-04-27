@@ -1,6 +1,5 @@
 package com.example.yamyam16.store.dto.request;
 
-import com.example.yamyam16.store.entity.enums.CategoryType;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +16,7 @@ public class UpdateStoreRequestDto {
     private LocalTime openTime;
     private LocalTime closeTime;
     private Long minOrderPrice;
-    private CategoryType category;
+    private String category;
     @Size(max = 100, message = "공지는 30글자 이하로 입력해주세요.")
     private String notice;
 

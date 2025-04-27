@@ -1,7 +1,6 @@
 package com.example.yamyam16.store.dto.response;
 
 import com.example.yamyam16.store.entity.Store;
-import com.example.yamyam16.store.entity.enums.CategoryType;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
@@ -14,7 +13,7 @@ public class UpdateStoreResponseDto {
     private LocalTime opentime;
     private LocalTime closetime;
     private Long minOrderPrice;
-    private CategoryType category;
+    private String category;
     @Size(max = 100, message = "공지는 30글자 이하로 입력해주세요.")
     private String notice;
 
@@ -24,7 +23,7 @@ public class UpdateStoreResponseDto {
         this.opentime = store.getOpenTime();
         this.closetime = store.getCloseTime();
         this.minOrderPrice = store.getMinOrderPrice();
-        this.category = CategoryType.valueOf(store.getCategory());
+        this.category = store.getCategory().name();
         this.notice = store.getNotice();
     }
 }

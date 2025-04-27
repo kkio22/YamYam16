@@ -69,17 +69,17 @@ public class StoreController {
 //        return ResponseEntity.of()
 //    }
 
-//    //본인 운영 가게 조회
-//    @GetMapping("/{userId}")
-//    public ResponseEntity<Page<SearchStoreResponseDto>> getAllStoresByUserId(
-//            @SessionAttribute(name = Const.LOGIN_USER) User user,
-//            @PathVariable Long userId,
-//            @RequestParam(defaultValue = "1") int page,
-//            @RequestParam(defaultValue = "10") int size
-//    ) {
-//        Pageable pageable = PageRequest.of(page, size);
-//        return ResponseEntity.ok(storeService.getAllStoresByOwner(userId));
-//    }
+    //본인 운영 가게 조회
+    @GetMapping("/{userId}")
+    public ResponseEntity<Page<SearchStoreResponseDto>> getAllStoresByUserId(
+            @SessionAttribute(name = Const.LOGIN_USER) User user,
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(storeService.getAllStoresByOwner(userId));
+    }
 
 
     //가게 단일 조회

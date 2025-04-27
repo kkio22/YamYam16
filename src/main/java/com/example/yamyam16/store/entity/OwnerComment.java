@@ -29,7 +29,7 @@ public class OwnerComment {
 
     //유저
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     // unique 설정 일대일 매핑
