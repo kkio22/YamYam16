@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.CreatedDate;
 
+import com.example.yamyam16.order.entity.Order;
 import com.example.yamyam16.store.entity.Store;
 
 import jakarta.persistence.Column;
@@ -30,6 +31,10 @@ public class Review {
 	@Column(nullable = false)
 	private String content;
 	private int grade;
+
+	@ManyToOne
+	@JoinColumn(name = "order_id")
+	private Order order;
 
 	@CreatedDate
 	@Column(updatable = false)
