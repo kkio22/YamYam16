@@ -2,9 +2,11 @@ package com.example.yamyam16.store.dto.response;
 
 import com.example.yamyam16.store.entity.OwnerComment;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
+@Getter
 public class OwnerCommentResponseDto {
 
     private Long id;

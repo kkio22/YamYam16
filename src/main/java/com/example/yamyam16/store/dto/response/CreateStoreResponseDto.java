@@ -2,9 +2,11 @@ package com.example.yamyam16.store.dto.response;
 
 import com.example.yamyam16.store.entity.Store;
 import com.example.yamyam16.store.entity.enums.CategoryType;
+import lombok.Getter;
 
 import java.time.LocalTime;
 
+@Getter
 public class CreateStoreResponseDto {
 
     private Long id;
