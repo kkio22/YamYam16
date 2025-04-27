@@ -49,7 +49,7 @@ public class Store {
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, length = 30)
-	private String category;
+	private CategoryType category;
 
 	@Column(length = 30)
 	private String notice;
