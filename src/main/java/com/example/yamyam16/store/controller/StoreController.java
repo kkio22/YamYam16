@@ -3,6 +3,7 @@ package com.example.yamyam16.store.controller;
 import com.example.yamyam16.auth.common.consts.Const;
 import com.example.yamyam16.auth.entity.User;
 import com.example.yamyam16.auth.service.UserService;
+import com.example.yamyam16.menu.service.MenuService;
 import com.example.yamyam16.store.dto.request.CreateStoreRequestDto;
 import com.example.yamyam16.store.dto.request.UpdateStoreRequestDto;
 import com.example.yamyam16.store.dto.response.*;
@@ -25,6 +26,7 @@ public class StoreController {
 
     private final StoreService storeService;
     private final UserService userService;
+    private final MenuService menuService;
 
     //가게생성
     @PostMapping
@@ -52,7 +54,7 @@ public class StoreController {
 
     }
 
-//    //가게 카테고리별 조회
+    //가게 카테고리별 조회
 //
 //    @GetMapping("/{storeId}")
 //    public ResponseEntity<Page<SearchStoreResponseDto>> getStoresByCategory(
@@ -63,15 +65,28 @@ public class StoreController {
 //        return ResponseEntity.of()
 //    }
 
+//    //본인 운영 가게 조회
+//    @GetMapping("/{userId}")
+//    public ResponseEntity<Page<SearchStoreResponseDto>> getAllStoresByUserId(
+//            @SessionAttribute(name = Const.LOGIN_USER) User user,
+//            @PathVariable Long userId,
+//            @RequestParam(defaultValue = "1") int page,
+//            @RequestParam(defaultValue = "10") int size
+//    ) {
+//        Pageable pageable = PageRequest.of(page, size);
+//        return ResponseEntity.ok(storeService.getAllStoresByOwner(userId));
+//    }
+
+
     //가게 단일 조회
 
-    @GetMapping("/store/{storeId}")
+    @GetMapping("/{storeId}")
     public ResponseEntity<List<MenuListResponseDto>> findMenuByPage(
             @PathVariable Long storeId,
             @RequestParam(defaultValue = "1") Long page, // 페이지 번호
             @RequestParam(defaultValue = "10") Long size // 한페이지에 몇개의 데이터를 가져올지
     ) {//url 파라미터로 페이지 번호, 크기 받기
-        List<MenuListResponseDto> menuList = storeService.findMenuByPage(storeId, page, size);
+        List<MenuListResponseDto> menuList = menuService.findMenuByPage(storeId, page, size);
         return new ResponseEntity<>(menuList, HttpStatus.OK);
     }
 

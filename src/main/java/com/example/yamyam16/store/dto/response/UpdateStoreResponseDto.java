@@ -1,7 +1,7 @@
 package com.example.yamyam16.store.dto.response;
 
-import com.example.yamyam16.store.entity.CategoryType;
 import com.example.yamyam16.store.entity.Store;
+import com.example.yamyam16.store.entity.enums.CategoryType;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 

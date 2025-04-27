@@ -1,13 +1,12 @@
 package com.example.yamyam16.auth.common.aop;
 
+import com.example.yamyam16.exception.CustomException;
+import com.example.yamyam16.exception.ErrorCode;
+import com.example.yamyam16.store.repository.StoreRepository;
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
-
-import com.example.yamyam16.exception.CustomException;
-import com.example.yamyam16.exception.ErrorCode;
-
-import lombok.RequiredArgsConstructor;
 
 /*
 AOP를 사용하는 이유는 애플리케이션의 핵심 로직과 별개로 로깅, 트랙잭션 처리, 보안 등과 같은 공통된 로직을 분리해서 관리하는 기술이다.
@@ -23,7 +22,7 @@ AOP를 사용하는 이유는 애플리케이션의 핵심 로직과 별개로 �
 @RequiredArgsConstructor// 생성자 주입
 public class StoreCheckAspect {
 
-	private final StoreRepository storeRepository;
+    private final StoreRepository storeRepository;
 	/*
 	aop annotation
 	1. @Pointcut : 어떤 매소드에 대해 aop를 적용할지 정의함
@@ -43,10 +42,10 @@ public class StoreCheckAspect {
 
 	 */
 
-	@Before("@annotation(com.example.yamyam16.auth.common.annotation.CheckStoreByStoreId) && args(StoreId)")
-	public void checkStoreByStoreId(Long StoreId) {
-		storeRepository.findById(storeId).orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
+    @Before("@annotation(com.example.yamyam16.auth.common.annotation.CheckStoreByStoreId) && args(storeId)")
+    public void checkStoreByStoreId(Long storeId) {
+        storeRepository.findById(storeId).orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
-	}
+    }
 
 }
