@@ -38,8 +38,6 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/auth")
 public class UserController {
 	private final UserService userService;
-	private final JwtTokenProvider jwtTokenProvider;
-	private final RefreshTokenRepository refreshTokenRepository;
 
 	@PostMapping("/signup")
 	public ResponseEntity<SignUpResponseDto> signUp(@Valid @RequestBody SignUpRequestDto requestDto) {

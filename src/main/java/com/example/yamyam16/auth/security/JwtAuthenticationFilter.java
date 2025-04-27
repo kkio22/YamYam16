@@ -33,6 +33,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws ServletException, IOException {
 
+		// 🔥 로그인/회원가입 요청이면 필터 건너뛰기
+		String path = request.getRequestURI();
+		if (path.startsWith("/auth/login") || path.startsWith("/auth/signup")) {
+			filterChain.doFilter(request, response);
+			return;
+		}
+
 		String header = request.getHeader("Authorization");
 		if (header != null && header.startsWith("Bearer ")) { // 규약에 따라 토큰은 Bearer 다음에 토큰이 오는 구조임
 			String token = header.substring(7); // Bearer 문자를 자른 토큰값 가져오기
