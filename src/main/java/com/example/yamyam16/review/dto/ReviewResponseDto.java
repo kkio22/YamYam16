@@ -9,8 +9,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReviewResponseDto {
 
-	private final String content;
-	private final Integer grade;
-	private final LocalDateTime createdAt;
+	private Long id;
+	private String content;
+	private int grade;
+	private LocalDateTime createdAt;
 
+	public ReviewResponseDto(String content, int grade, LocalDateTime createdAt) {
+		this.content = content;
+		this.grade = grade;
+		this.createdAt = createdAt;
+	}
 }

@@ -23,6 +23,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -100,6 +101,16 @@ public class Store extends BaseEntity {
 
 	public void deactivate() {
 		this.isDelete = true;
+	}
+
+	//test 코드때문에 넣음
+	@Builder
+	public Store(String name, Long openTime, Long closeTime, Long minOrderPrice, CategoryType category) {
+		this.name = name;
+		this.openTime = openTime;
+		this.closeTime = closeTime;
+		this.minOrderPrice = minOrderPrice;
+		this.category = category;
 	}
 
 }
