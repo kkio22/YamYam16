@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.yamyam16.cart.dto.request.CartRequestDto;
+import com.example.yamyam16.cart.dto.request.DeleteCartRequestDto;
 import com.example.yamyam16.cart.dto.request.UpdateCartRequestDto;
 import com.example.yamyam16.cart.dto.response.FindAllCartResponseDto;
 import com.example.yamyam16.cart.dto.response.SaveCartResponseDto;
@@ -65,19 +66,19 @@ public class CartController {
 		return new ResponseEntity<>(cartService.update(userId, requestDto), HttpStatus.OK);
 	}
 
-	@DeleteMapping("/{cartId}")
+	@DeleteMapping
 	public ResponseEntity<FindAllCartResponseDto> deleteCart(
-		@PathVariable Long cartId,
+		@RequestBody DeleteCartRequestDto requestDto,
 		HttpServletRequest userRequest
 	) {
 		// 로그인 정보 불러오기
 		HttpSession session = userRequest.getSession();
 		Long userId = (Long)session.getAttribute("userId");
 
-		return new ResponseEntity<>(cartService.delete(userId, cartId), HttpStatus.OK);
+		return new ResponseEntity<>(cartService.delete(userId, requestDto), HttpStatus.OK);
 	}
 
-	@DeleteMapping
+	@DeleteMapping("/all")
 	public ResponseEntity<String> deleteAllCart(
 		HttpServletRequest userRequest
 	) {
