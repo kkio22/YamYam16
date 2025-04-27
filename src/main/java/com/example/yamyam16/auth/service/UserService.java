@@ -72,7 +72,7 @@ public class UserService {
 						// 만료되거나 검증 통과 안될경우
 						String newRefreshToken = jwtTokenProvider.createRefreshToken(requestDto);
 						token.updateToken(newRefreshToken);
-						refreshTokenRepository.save(token);
+						refreshTokenRepository.save(new RefreshToken(user.getId(), newRefreshToken));
 						tokens.put("refreshToken", newRefreshToken);
 					} else {
 						// 유효한 기존 토큰 그대로 사용
@@ -159,3 +159,4 @@ public class UserService {
 		return tokens;
 	}
 }
+

@@ -18,7 +18,7 @@ Content-Type: application/json
   "password": "asdf"
 }
 
-### 로그인, 틀리 비밀번호로
+### 로그인, 틀린 비밀번호로
 POST http://localhost:8080/auth/login
 Content-Type: application/json
 
@@ -32,7 +32,7 @@ POST http://localhost:8080/auth/login
 Content-Type: application/json
 
 {
-  "email": "test1@example.com",
+  "email": "test@example.com",
   "password": "Password1!"
 }
 > {%
