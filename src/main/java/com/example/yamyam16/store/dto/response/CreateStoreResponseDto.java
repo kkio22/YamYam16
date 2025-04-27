@@ -9,9 +9,9 @@ public class CreateStoreResponseDto {
     @NotBlank(message = "상호명을 입력해주세요")
     private String name;
     @NotBlank(message = "개장시간을 입력해주세요")
-    private Long open_time;
+    private Long openTime;
     @NotBlank(message = "마감시간을 입력해주세요")
-    private Long close_time;
+    private Long closeTime;
     @NotBlank(message = "최소주문금액을 입력해주세요")
     private Long minOrderPrice;
     @NotBlank(message = "카테고리를 입력해주세요")
@@ -21,8 +21,8 @@ public class CreateStoreResponseDto {
     private CreateStoreResponseDto(Store store) {
         this.id = store.getId();
         this.name = store.getName();
-        this.open_time = store.getOpenTime();
-        this.close_time = store.getCloseTime();
+        this.openTime = store.getOpenTime();
+        this.closeTime = store.getCloseTime();
         this.minOrderPrice = store.getMinOrderPrice();
         this.category = store.getCategory();
         this.notice = store.getNotice();

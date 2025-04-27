@@ -13,9 +13,9 @@ public class CreateStoreRequestDto {
     @NotBlank(message = "상호명을 입력해주세요")
     private String name;
     @NotBlank(message = "개장시간을 입력해주세요")
-    private Long open_time;
+    private Long openTime;
     @NotBlank(message = "마감시간을 입력해주세요")
-    private Long close_time;
+    private Long closeTime;
     @NotBlank(message = "최소주문금액을 입력해주세요")
     private Long minOrderPrice;
     @NotBlank(message = "카테고리를 입력해주세요")
