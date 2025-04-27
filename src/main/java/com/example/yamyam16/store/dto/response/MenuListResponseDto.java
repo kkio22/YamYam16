@@ -7,10 +7,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public class MenuListResponseDto {
 
-    private Long id;
+	private Long id;
 
-    private String menuName;
+	private String menuName;
 
-    private long menuPrice;
+	private Long menuPrice;
 
 }

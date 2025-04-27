@@ -82,8 +82,8 @@ public class Store extends BaseEntity {
 		this.category = dto.getCategory();
 		this.notice = dto.getNotice();
 		this.minOrderPrice = dto.getMinOrderPrice();
-		this.openTime = dto.getOpen_time();
-		this.closeTime = dto.getClose_time();
+		this.openTime = dto.getOpentime();
+		this.closeTime = dto.getClosetime();
 		this.user = user;
 		this.isDelete = false;
 	}
@@ -91,8 +91,8 @@ public class Store extends BaseEntity {
 	//crud관련
 	public void update(UpdateStoreRequestDto dto) {
 		this.name = dto.getStorename();
-		this.openTime = dto.getOpen_time();
-		this.closeTime = dto.getClose_time();
+		this.openTime = dto.getOpenTime();
+		this.closeTime = dto.getCloseTime();
 		this.minOrderPrice = dto.getMinOrderPrice();
 		this.category = dto.getCategory();
 		this.notice = dto.getNotice();
