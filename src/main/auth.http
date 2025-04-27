@@ -1,5 +1,4 @@
 ### GET request to example server
-
 POST http://localhost:8080/auth/signup
 Content-Type: application/json
 
@@ -10,8 +9,7 @@ Content-Type: application/json
   "nickname": "테스트"
 }
 
-###
-
+### 로그인, 없는 계정으로
 POST http://localhost:8080/auth/login
 Content-Type: application/json
 
@@ -20,8 +18,7 @@ Content-Type: application/json
   "password": "asdf"
 }
 
-###
-
+### 로그인, 틀리 비밀번호로
 POST http://localhost:8080/auth/login
 Content-Type: application/json
 
@@ -30,35 +27,39 @@ Content-Type: application/json
   "password": "asdf"
 }
 
-###
-
+### 로그인, 맞는 비밀번호 및 계정, access token 전달
 POST http://localhost:8080/auth/login
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "email": "test1@example.com",
   "password": "Password1!"
 }
 > {%
-    client.global.set("accessToken", response.body.accessToken)
+    client.global.set("accessToken", response.body)
 %}
 
-###
-PATCH http://localhost:8080/auth/user
+### 삭제 진행, access token 없이
+DELETE http://localhost:8080/auth/user
 Content-Type: text/plain
 
 Password12!
 
-###
+### 삭제 진행, 토큰이랑
 DELETE http://localhost:8080/auth/user
 Content-Type: text/plain
 Authorization: Bearer {{accessToken}}
 
 Password12!
 
+### 삭제 진행, 토큰이랑
+DELETE http://localhost:8080/auth/user
+Content-Type: text/plain
+Authorization: Bearer {{eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaXNlcmx5QG5hdmVyLmNvbSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzQ1NjY3MTQwLCJleHAiOjE3NDU2Njg5NDB9.4tO1vSN287ZsaxJ86Hgqatb1Q9uTgWNy8SU05N2dmp8}}
 
-###
+Password12!
 
+### 비밀번호 업데이트
 PATCH http://localhost:8080/auth/user
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
@@ -67,3 +68,26 @@ Authorization: Bearer {{accessToken}}
   "currentPw": "Password1!",
   "newPw": "Password12!"
 }
+
+### 토큰 재발급 요청
+POST http://localhost:8080/auth/reissue
+Content-Type: application/json
+Cookie: refreshToken={{refreshToken}}
+
+### 이건 직접 브라우저에 URL을 입력해야 함!
+https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=4b804796974a8f356f2743a81910964c&
+    redirect_uri=http://localhost:8080/login/oauth2/code/kakao
+
+### 로그인 후 받은 accessToken으로 유저 정보 수정
+PATCH http://localhost:8080/auth/user
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "currentPw": "KAKAO",
+  "newPw": "새비번"
+}
+
+### 로그인 유저 정보 찾기
+GET http://localhost:8080/api/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaXNlcmx5QG5hdmVyLmNvbSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzQ1NjcyNDc5LCJleHAiOjE3NDU2NzQyNzl9._kZlzsINFBnmP_zsMoFCcZn7Nm1a9J08Gy-vCYMz1SQ
