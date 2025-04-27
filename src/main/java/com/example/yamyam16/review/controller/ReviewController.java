@@ -42,17 +42,18 @@ public class ReviewController {
 			(org.springframework.data.domain.Pageable)pageable));
 	}
 
-	@PutMapping("/store/{storeId}/review/{reviewid}")
-	public ResponseEntity<Void> updateReview(@PathVariable Long reviewId,
+	@PutMapping("/store/{storeId}/review/{reviewId}")
+	public ResponseEntity<String> updateReview(@PathVariable Long storeId, @PathVariable Long reviewId,
 		@RequestBody ReviewRequestDto reviewRequestDto, HttpSession session) {
-		reviewService.updateReview(reviewId, reviewRequestDto, session);
-		return ResponseEntity.ok().build();
+		reviewService.updateReview(storeId, reviewId, reviewRequestDto, session);
+		return ResponseEntity.ok("리뷰 수정 완료");
 	}
 
-	@DeleteMapping("/store/{storeId}/review/{reviewid}")
-	public ResponseEntity<Void> deleteReview(@PathVariable Long reviewId, HttpSession session) {
-		reviewService.deleteReview(reviewId, session);
-		return ResponseEntity.noContent().build();
+	@DeleteMapping("/store/{storeId}/review/{reviewId}")
+	public ResponseEntity<String> deleteReview(@PathVariable Long storeId, @PathVariable Long reviewId,
+		HttpSession session) {
+		reviewService.deleteReview(storeId, reviewId, session);
+		return ResponseEntity.ok("리뷰 삭제 완료");
 	}
 
 }

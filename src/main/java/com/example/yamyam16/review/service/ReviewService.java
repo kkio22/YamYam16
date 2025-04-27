@@ -10,9 +10,9 @@ import jakarta.servlet.http.HttpSession;
 
 public interface ReviewService {
 
-	void updateReview(Long reviewId, ReviewRequestDto dto, HttpSession session);
+	void updateReview(Long storeId, Long reviewId, ReviewRequestDto dto, HttpSession session);
 
-	void deleteReview(Long reviewId, HttpSession session);
+	void deleteReview(Long storeId, Long reviewId, HttpSession session);
 
 	void createReview(Long storeId, Long orderId, ReviewRequestDto reviewRequestDto,
 		HttpSession session);
@@ -22,4 +22,5 @@ public interface ReviewService {
 		Integer minGrading,
 		Integer maxGrading,
 		org.springframework.data.domain.Pageable pageable);
+
 }

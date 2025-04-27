@@ -15,6 +15,8 @@ import com.example.yamyam16.review.dto.ReviewResponseDto;
 import com.example.yamyam16.review.entity.Review;
 import com.example.yamyam16.review.exceptionhandler.ReviewUnauthorizedException;
 import com.example.yamyam16.review.repository.ReviewRepository;
+import com.example.yamyam16.store.entity.Store;
+import com.example.yamyam16.store.repository.StoreRepository;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +27,11 @@ public class ReviewServiceImpl implements ReviewService {
 	private final ReviewRepository reviewRepository;
 	private final UserRepository userRepository;
 	private final OrderRepository orderRepository;
+	private final StoreRepository storeRepository;
 
 	@Override
 	public void createReview(Long storeId, Long orderId, ReviewRequestDto reviewRequestDto,
 		HttpSession session) {
-		System.out.println("세션 userId: " + session.getAttribute("userId"));
 
 		Long userId = (Long)session.getAttribute("userId");
 
@@ -51,8 +53,15 @@ public class ReviewServiceImpl implements ReviewService {
 			throw new IllegalAccessError("본인 주문에 대해서만 리뷰 작성이 가능합니다");
 		}
 
-		Review savereview = new Review(reviewRequestDto.getContent(), reviewRequestDto.getGrade());
-		reviewRepository.save(savereview); // 엔티티 저장
+		Store store = storeRepository.findByIdOrElseThrow(order.getStoreId());
+
+		Review review = new Review();
+		review.setContent(reviewRequestDto.getContent());
+		review.setGrade(reviewRequestDto.getGrade());
+		review.setOrder(order);
+		review.setStore(store);
+
+		reviewRepository.save(review);
 
 	}
 
@@ -75,8 +84,8 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public void updateReview(Long reviewId, ReviewRequestDto dto, HttpSession session) {
-		Long userId = (Long)session.getAttribute("user");
+	public void updateReview(Long storeId, Long reviewId, ReviewRequestDto dto, HttpSession session) {
+		Long userId = (Long)session.getAttribute("userId");
 		if (userId == null) {
 			throw new ReviewUnauthorizedException("로그인이 필요합니다");
 		}
@@ -84,17 +93,25 @@ public class ReviewServiceImpl implements ReviewService {
 		Review review = reviewRepository.findById(reviewId)
 			.orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다"));
 
+		Order order = review.getOrder();
+		if (order == null) {
+			throw new IllegalStateException("리뷰에 연결된 주문 정보가 없습니다.");
+		}
+
 		if (!review.getOrder().getUserId().equals(userId)) {
 			throw new IllegalAccessError("본인의 리뷰만 수정할 수 있습니다");
 		}
 
 		review.setContent(dto.getContent());
 		review.setGrade(dto.getGrade());
+
+		reviewRepository.save(review);
+
 	}
 
 	@Override
-	public void deleteReview(Long reviewId, HttpSession session) {
-		Long userId = (Long)session.getAttribute("user");
+	public void deleteReview(Long storeId, Long reviewId, HttpSession session) {
+		Long userId = (Long)session.getAttribute("userId");
 		if (userId == null) {
 			throw new ReviewUnauthorizedException("로그인이 필요합니다");
 		}
