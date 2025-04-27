@@ -1,6 +1,7 @@
 package com.example.yamyam16.store.dto.response;
 
 import com.example.yamyam16.store.entity.Store;
+import com.example.yamyam16.store.entity.enums.CategoryType;
 
 import java.time.LocalTime;
 
@@ -11,7 +12,7 @@ public class CreateStoreResponseDto {
     private LocalTime openTime;
     private LocalTime closeTime;
     private Long minOrderPrice;
-    private String category;
+    private CategoryType category;
     private String notice;
 
     private CreateStoreResponseDto(Store store) {
