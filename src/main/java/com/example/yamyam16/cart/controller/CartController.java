@@ -22,7 +22,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/store/{storeId}/cart/")
+@RequestMapping("/store/{storeId}/cart")
 @RequiredArgsConstructor
 public class CartController {
 
@@ -53,7 +53,7 @@ public class CartController {
 		return new ResponseEntity<>(cartService.findAll(userId, storeId), HttpStatus.OK);
 	}
 
-	@PatchMapping("{cartId}")
+	@PatchMapping("/{cartId}")
 	public ResponseEntity<FindAllCartResponseDto> updateCart(
 		@PathVariable Long cartId,
 		@RequestBody UpdateCartRequestDto requestDto,
@@ -66,7 +66,7 @@ public class CartController {
 		return new ResponseEntity<>(cartService.update(userId, cartId, requestDto), HttpStatus.OK);
 	}
 
-	@DeleteMapping("{cartId}")
+	@DeleteMapping("/{cartId}")
 	public ResponseEntity<FindAllCartResponseDto> deleteCart(
 		@PathVariable Long cartId,
 		HttpServletRequest userRequest

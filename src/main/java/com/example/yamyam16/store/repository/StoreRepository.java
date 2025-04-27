@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import com.example.yamyam16.auth.entity.User;
 import com.example.yamyam16.menu.entity.Menu;
@@ -15,6 +16,7 @@ import com.example.yamyam16.store.common.exception.StoreCustomErrorCode;
 import com.example.yamyam16.store.common.exception.StoreCustomException;
 import com.example.yamyam16.store.entity.Store;
 
+@Repository
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
 	/**

@@ -16,6 +16,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Entity //store와 menu는 1:n 관계
@@ -42,6 +43,7 @@ public class Menu {
 	@Column(nullable = false)
 	private MenuStatus menuStatus;
 
+	@Setter
 	@ManyToOne
 	@JoinColumn(name = "store_id") //연관관계 매핑
 	private Store store;

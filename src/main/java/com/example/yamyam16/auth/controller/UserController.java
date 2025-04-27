@@ -60,6 +60,7 @@ public class UserController {
 
 		// 세션에 로그인 회원 정보 저장
 		session.setAttribute(Const.LOGIN_USER, loginUser);
+		session.setAttribute("userId", loginUser.getId());
 
 		// 스프링 시큐리티 인증 객체 등록
 		SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + loginUser.getUserType().name());

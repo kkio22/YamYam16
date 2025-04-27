@@ -21,13 +21,16 @@ import com.example.yamyam16.menu.repository.MenuRepository;
 import com.example.yamyam16.store.entity.Store;
 import com.example.yamyam16.store.repository.StoreRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
 
-	private static CartRepository cartRepository;
-	private static UserRepository userRepository;
-	private static MenuRepository menuRepository;
-	private static StoreRepository storeRepository;
+	private final CartRepository cartRepository;
+	private final UserRepository userRepository;
+	private final MenuRepository menuRepository;
+	private final StoreRepository storeRepository;
 
 	@Override
 	public SaveCartResponseDto save(Long storeId, Long userId, CartRequestDto requestDto) {
@@ -36,7 +39,11 @@ public class CartServiceImpl implements CartService {
 		Store findStore = storeRepository.findById(storeId).orElseThrow(() -> new RuntimeException());
 
 		// 메뉴 찾기 (가게 메뉴에서 금액 가져와야함)
-		Menu findMenu = menuRepository.findByMenuNameAndStore(requestDto.getMenu(), findStore);
+		Menu findMenu = menuRepository.findByMenuNameAndStore_Id(requestDto.getMenuName(), storeId);
+
+		if (findMenu == null) {
+			throw new RuntimeException("메뉴를 찾을 수 없습니다");
+		}
 
 		// 해당 유저의 다른 카트들 조회
 		List<Cart> userCarts = cartRepository.findByUserIdAndStatus(userId, CartStatus.IN_CART);

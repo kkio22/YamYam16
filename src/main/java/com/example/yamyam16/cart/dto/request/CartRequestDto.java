@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class CartRequestDto {
 
 	@NotBlank(message = "메뉴 이름을 입력해주세요.")
-	private String menu;
+	private String menuName;
 
 	@Min(value = 1, message = "메뉴 수량은 1개 이상으로 입력해주세요.")
 	private Long quantity;
