@@ -3,6 +3,7 @@ package com.example.yamyam16.cart.service;
 import org.springframework.stereotype.Service;
 
 import com.example.yamyam16.cart.dto.request.CartRequestDto;
+import com.example.yamyam16.cart.dto.request.DeleteCartRequestDto;
 import com.example.yamyam16.cart.dto.request.UpdateCartRequestDto;
 import com.example.yamyam16.cart.dto.response.FindAllCartResponseDto;
 import com.example.yamyam16.cart.dto.response.SaveCartResponseDto;
@@ -16,7 +17,7 @@ public interface CartService {
 
 	FindAllCartResponseDto update(Long userId, UpdateCartRequestDto requestDto);
 
-	FindAllCartResponseDto delete(Long userId, Long cartId);
+	FindAllCartResponseDto delete(Long userId, DeleteCartRequestDto requestDto);
 
 	void deleteAll(Long userId);
 }
