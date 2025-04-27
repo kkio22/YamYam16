@@ -2,9 +2,11 @@ package com.example.yamyam16.auth.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class UpdatePasswordRequestDto {
 	private String currentPw;
 
