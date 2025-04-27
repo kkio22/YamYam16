@@ -38,7 +38,7 @@ public class MenuController {
 		return new ResponseEntity<>(menuCreateResponseDto, HttpStatus.CREATED);
 	}
 
-	@GetMapping("/store/{storeId}/menu")
+	@GetMapping("/stores/{storeId}/menu")
 	public ResponseEntity<List<MenuListResponseDto>> findMenuByPage(
 		@PathVariable Long storeId,
 		@RequestParam(defaultValue = "1") Long page, // 페이지 번호
@@ -58,7 +58,7 @@ public class MenuController {
 		return new ResponseEntity<>(menuUpdateResponseDto, HttpStatus.OK);
 	}
 
-	@DeleteMapping("/store/{storeId}/menu/{menuId}")
+	@DeleteMapping("/stores/{storeId}/menu/{menuId}")
 	public ResponseEntity<Void> deleteMenu(
 		@PathVariable Long storeId,
 		Long menuId
