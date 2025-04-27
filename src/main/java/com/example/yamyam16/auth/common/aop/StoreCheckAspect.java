@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.yamyam16.exception.CustomException;
 import com.example.yamyam16.exception.ErrorCode;
+import com.example.yamyam16.store.repository.StoreRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -43,8 +44,8 @@ public class StoreCheckAspect {
 
 	 */
 
-	@Before("@annotation(com.example.yamyam16.auth.common.annotation.CheckStoreByStoreId) && args(StoreId)")
-	public void checkStoreByStoreId(Long StoreId) {
+	@Before("@annotation(com.example.yamyam16.auth.common.annotation.CheckStoreByStoreId) && args(storeId)")
+	public void checkStoreByStoreId(Long storeId) {
 		storeRepository.findById(storeId).orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
 	}
