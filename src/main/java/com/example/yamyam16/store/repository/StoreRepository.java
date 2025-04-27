@@ -11,6 +11,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
     /**
@@ -32,8 +35,9 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     }
 
     /**
-     * 유저의 영업하고 있는 가게갯수 확인
+     * 유저의 영업하고 있는 가게,갯수 확인
      */
+    Optional<Store> findByOwnerId(Long userId);
 
     Long countByUserAndIsDeleteFalse(User user);
 
@@ -45,6 +49,9 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     Double findAverageGrade(@Param("store_id") Long storeId);
 
     Store findByUserId(Long userId);
+
+
+    List<Store> findAllByIsDeleteFalseAndOwnerId(Long userId);
 }
 
 
