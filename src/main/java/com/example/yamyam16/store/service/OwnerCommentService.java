@@ -25,7 +25,6 @@ public class OwnerCommentService extends CommonAuthforOwner {
     private final ReviewRepository reviewRepository;
     private final StoreRepository storeRepository;
 
-    //오너 댓글 생성
     @Transactional
     public ReviewWithOwnerCommentResponseDto createComment(User user, Long storeId, Long reviewId, OwnerCommmentRequestDto createDto) {
         // 오너인지 확인
@@ -48,6 +47,11 @@ public class OwnerCommentService extends CommonAuthforOwner {
 
         // 사장님 댓글 생성
         OwnerComment ownerComment = new OwnerComment(createDto, user);
+
+        // 리뷰와 댓글 연결
+        ownerComment.setReview(review);
+
+        // 댓글 저장
         OwnerComment savedComment = ownerCommentRepository.save(ownerComment);
 
         // DTO 변환
@@ -94,7 +98,6 @@ public class OwnerCommentService extends CommonAuthforOwner {
 //
 //    }
 
-    //오너 코멘트 수정
     @Transactional
     public OwnerCommentResponseDto updateComment(User user, Long storeId, Long reviewId, OwnerCommmentRequestDto updateDto) {
         // 오너인지 확인
@@ -102,28 +105,34 @@ public class OwnerCommentService extends CommonAuthforOwner {
 
         Long ownerId = user.getId();
 
+        // 가게 조회 및 소유자 확인
         Store store = storeRepository.findByIdAndUserId(storeId, ownerId)
                 .orElseThrow(() -> new StoreCustomException(StoreCustomErrorCode.STORE_NOT_MATCH));
 
-        // 리뷰 가져오기
+        // 리뷰 조회
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new StoreCustomException(StoreCustomErrorCode.COMMENT_NOT_FOUND));
 
-        // 리뷰가 내 가게에 속한 것인지 확인
+        // 리뷰가 해당 가게 소속인지 검증
         if (!review.getStore().getId().equals(store.getId())) {
             throw new StoreCustomException(StoreCustomErrorCode.STORE_NOT_MATCH);
         }
 
-        // 오너 코멘트 가져오기
+        // 오너 코멘트 조회
         OwnerComment comment = ownerCommentRepository.findByReview_Id(reviewId)
                 .orElseThrow(() -> new StoreCustomException(StoreCustomErrorCode.COMMENT_NOT_FOUND));
 
         // 수정할 내용 적용
         comment.updateContent(updateDto);
 
+        // 리뷰와 댓글 연결 (Review가 변경되지 않더라도 리뷰와 연결된 상태 유지)
+        comment.setReview(review);
+
         // 수정된 코멘트 저장
-        ownerCommentRepository.save(comment);
-        return OwnerCommentResponseDto.fromCommentToDto(comment);
+        OwnerComment savedComment = ownerCommentRepository.save(comment);
+
+        // DTO 변환
+        return OwnerCommentResponseDto.fromCommentToDto(savedComment);
     }
 
     @Transactional
