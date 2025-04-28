@@ -26,6 +26,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import com.example.yamyam16.exception.CustomException;
 import com.example.yamyam16.menu.dto.MenuCreateRequestDto;
 import com.example.yamyam16.menu.dto.MenuCreateResponseDto;
 import com.example.yamyam16.menu.dto.MenuListResponseDto;
@@ -73,10 +74,12 @@ class MenuServiceTest {
 
 	@Test
 	@DisplayName("메뉴 생성이되었는지 확인")
-	void createMenu() {
+	void createMenuSuccess() {
 		//store 확인 -> 연관관계가 맺어져 있어서 조건으로 넣어줘야 함, 유효성 검사에서 필요한가를 생각해서 필요하면 넣어야 함
 		Long storeId = 1L; //지역변수 & 전역변수
+
 		given(storeRepository.findById(storeId)).willReturn(Optional.of(store));
+
 		//menu 생성
 		Menu menu = new Menu(
 			"치킨",
@@ -98,7 +101,7 @@ class MenuServiceTest {
 
 	@Test
 	@DisplayName("메뉴가 조회되는지 확인")
-	void findMenuByPage() {
+	void findMenuByPageSuccess() {
 		Long storeId = 1L;
 		Long page = 1L;
 		Long size = 10L;
@@ -108,12 +111,12 @@ class MenuServiceTest {
 		List<Menu> dummyMenus = Arrays.asList(
 			new Menu("치킨", 13000L, AVAILABLE),
 			new Menu("불고기버거", 5000L, AVAILABLE),
-			new Menu("피자", 15000L, HOLDOUT),
+			new Menu("피자", 15000L, SOLDOUT),
 			new Menu("떡볶이", 8000L, AVAILABLE),
 			new Menu("짜장면", 6000L, AVAILABLE),
 			new Menu("김밥", 3000L, AVAILABLE),
 			new Menu("볶음밥", 7000L, AVAILABLE),
-			new Menu("돈까스", 12000L, HOLDOUT),
+			new Menu("돈까스", 12000L, SOLDOUT),
 			new Menu("라면", 4000L, AVAILABLE),
 			new Menu("갈비", 20000L, AVAILABLE)
 		);
@@ -145,9 +148,10 @@ class MenuServiceTest {
 
 	@Test
 	@DisplayName("메뉴가 수정되는지 확인")
-	void updateMenu() {
+	void updateMenuSuccess() {
 		Long storeId = 1L;
 		Long menuId = 1L;
+
 		given(storeRepository.findById(storeId)).willReturn(Optional.of(store));
 		// 메뉴 수정
 		Menu menu = Menu.builder()
@@ -155,9 +159,11 @@ class MenuServiceTest {
 			.menuPrice(13000L)
 			.menuStatus(AVAILABLE)
 			.build();
+
 		when(menuRepository.findById(menuId)).thenReturn(Optional.of(menu));
 
-		MenuUpdateRequestDto menuUpdateRequestDto = new MenuUpdateRequestDto("마라탕", 9000L, HOLDOUT);
+		MenuUpdateRequestDto menuUpdateRequestDto = new MenuUpdateRequestDto("마라탕", 9000L, SOLDOUT);
+
 		MenuUpdateResponseDto menuUpdateResponseDto = menuService.updateMenu(storeId, menuId, menuUpdateRequestDto);
 
 		assertEquals("마라탕", menuUpdateResponseDto.getMenuName());
@@ -168,9 +174,10 @@ class MenuServiceTest {
 
 	@Test
 	@DisplayName("메뉴가 삭제되는지 확인")
-	void deleteMenu() {
+	void deleteMenuSuccess() {
 		Long storeId = 1L;
 		Long menuId = 1L;
+
 		given(storeRepository.findById(storeId)).willReturn(Optional.of(store));
 
 		//메뉴 삭제
@@ -193,5 +200,69 @@ class MenuServiceTest {
 
 		assertThat(menuRepository.findById(menuId)).isPresent(); //존재하는지 확인
 	}
+
+	@Test
+	@DisplayName("가게가 없으면 메뉴 생성할 때 예외 발생")
+	void creatMenuWhenStoreIdNotFound() {
+		Long storeId = null;
+
+		MenuCreateRequestDto menuCreateRequestDto = new MenuCreateRequestDto("치킨", 13000L, AVAILABLE);
+
+		CustomException customException = assertThrows(CustomException.class, () -> { //예외 타입 클래스를 나타냄
+			menuService.createMenu(storeId, menuCreateRequestDto); //람다식 : (매개변수)  -> {실행할 코드}, 매개변수는 없으면 비워둠
+			// 이거로 보고 싶은게 service가 실행되면 예외가 발생하는지임 -> 그래서 람다식으로 서비스 나타내고, 실행될 때 예외가 발생함 그래서 자료형이 예외 클래스임
+		});
+
+		assertEquals(404, customException.getErrorCode().getStatus());
+		assertEquals("Not Found", customException.getErrorCode().getError());
+		assertEquals("S001", customException.getErrorCode().getCode());
+		assertEquals("조회된 가게가 없습니다.", customException.getErrorCode().getMessage());
+
+	}
+
+	@Test
+	@DisplayName("수정할 메뉴의 메뉴 아이디가 없을 때 예외 발생")
+	void updateMenuWhenMenuIdNotFound() {
+		Long storeId = 1L;
+		Long menuId = 1L;
+
+		given(storeRepository.findById(storeId)).willReturn(Optional.of(store));
+
+		//Optional.empty() 빈 객체를 만드는 것 / isEmpty = 비어있는지 확인하는 것
+		when(menuRepository.findById(menuId)).thenReturn(Optional.empty());
+
+		MenuUpdateRequestDto menuUpdateRequestDto = new MenuUpdateRequestDto("마라탕", 9000L, SOLDOUT);
+
+		CustomException customException = assertThrows(CustomException.class,
+			() -> menuService.updateMenu(storeId, menuId, menuUpdateRequestDto));
+
+		assertEquals(404, customException.getErrorCode().getStatus());
+		assertEquals("Not Found", customException.getErrorCode().getError());
+		assertEquals("M002", customException.getErrorCode().getCode());
+		assertEquals("조회된 메뉴가 없습니다.", customException.getErrorCode().getMessage());
+
+	}
+
+	@Test
+	@DisplayName("삭제할 메뉴의 메뉴 아이디가 없을 때 예외 발생")
+	void deleteMenuWhenMenuIdNotFound() {
+		Long storeId = 1L;
+		Long menuId = 1L;
+
+		given(storeRepository.findById(storeId)).willReturn(Optional.of(store));
+
+		//Optional.empty() 빈 객체를 만드는 것 / isEmpty = 비어있는지 확인하는 것
+		when(menuRepository.findById(menuId)).thenReturn(Optional.empty());
+
+		CustomException customException = assertThrows(CustomException.class,
+			() -> menuService.deleteMenu(storeId, menuId));
+
+		assertEquals(404, customException.getErrorCode().getStatus());
+		assertEquals("Not Found", customException.getErrorCode().getError());
+		assertEquals("M002", customException.getErrorCode().getCode());
+		assertEquals("조회된 메뉴가 없습니다.", customException.getErrorCode().getMessage());
+
+	}
+
 }
 
