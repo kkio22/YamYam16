@@ -83,7 +83,7 @@ class CartServiceImplTest {
 
 		// then
 		assertThat(response.getMessage()).contains("추가되었습니다");
-		assertTrue(response.isCanOrder() || !response.isCanOrder()); // 상태만 검증
+		assertTrue(response.isCanOrder()); // 최소 주문 조건 만족
 		// assertThat 실제 결과가 기대한 조건을 만족하는지” 확인하는 검증 구문
 		// response.getMessage()가 가져온 문자열 안에
 		// "추가되었습니다"라는 문구가 포함되어 있는지 검사
