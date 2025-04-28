@@ -38,6 +38,7 @@ public class Cart {
 	@JoinColumn(name = "menu_id", nullable = false)
 	private Menu menu;
 
+	@Setter
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "order_id")
 	private Order orders;

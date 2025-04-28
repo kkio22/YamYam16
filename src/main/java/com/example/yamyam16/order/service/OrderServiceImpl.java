@@ -54,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
 			throw new EmptyCartOrderException();
 		}
 
-		// 카트 - 해당 스토어 조회
+		//  스토어 조회
 		Store findStore = userCarts.get(0).getMenu().getStore();
 		// 주문시 전체 금액 조회
 		Long totalPrice = userCarts.stream()
@@ -68,6 +68,8 @@ public class OrderServiceImpl implements OrderService {
 		// 카트 상태 변경
 		for (Cart cart : userCarts) {
 			cart.setStatus(CartStatus.ORDERED);
+			cart.setOrders(order); // 객체를 연결만 해둔거 (setter)
+			cartRepository.save(cart); // 지금 db에서 orderid가 null 이므로 저장을 따로해ㅐ줘야,,,
 		}
 		// 리스트 만들기 -> Menuitemdto 사용
 		List<MenuItemDto> menuItems = userCarts.stream().map(MenuItemDto::toDto).toList();
@@ -88,6 +90,7 @@ public class OrderServiceImpl implements OrderService {
 
 		// 주문 상태 설정
 		order.setStatus(OrderStatus.PREPARING);
+		orderRepository.save(order);
 
 		List<Cart> carts = cartRepository.findByOrders_OrderId(orderId);
 
@@ -106,6 +109,7 @@ public class OrderServiceImpl implements OrderService {
 		Order order = orderRepository.findByIdOrElseThrow(orderId);
 		// 상태 변경
 		order.setStatus(statusRequestDto.getStatus());
+		orderRepository.save(order);
 
 		// 카트 상태 복구
 		if (statusRequestDto.getStatus() == OrderStatus.CANCELED) {
@@ -128,18 +132,17 @@ public class OrderServiceImpl implements OrderService {
 			throw new UnauthorizedOrderCancelException();
 		}
 
-		// 이미 취소라면?
+		// 취소 불가 - 이미 취소인경우, 수락 이후의 상태
 		if (order.getStatus() == OrderStatus.CANCELED) {
 			throw new AlreadyCanceledOrderException();
-		}
-
-		// 주문 상태 확인
-		if (order.getStatus() != OrderStatus.ORDERED) {
+		} else if (order.getStatus() != OrderStatus.ORDERED) {
 			throw new OrderAlreadyAcceptedException();
 		}
 
 		// 상태 변경 -> 취소완료
 		order.setStatus(OrderStatus.CANCELED);
+		orderRepository.save(order);
+
 		// 카트 상태 복구
 		for (Cart cart : order.getCarts()) {
 			cart.setStatus(CartStatus.IN_CART);
