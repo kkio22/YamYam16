@@ -1,8 +1,7 @@
 package com.example.yamyam16.review.controller;
 
-import java.awt.print.Pageable;
-
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,8 +37,8 @@ public class ReviewController {
 	public ResponseEntity<Page<ReviewResponseDto>> getReviews(@PathVariable Long storeId,
 		@RequestParam(required = false) Integer minGrating, @RequestParam(required = false) Integer maxGrating,
 		Pageable pageable) {
-		return ResponseEntity.ok(reviewService.getReviewByStore(storeId, minGrating, maxGrating,
-			(org.springframework.data.domain.Pageable)pageable));
+		Page<ReviewResponseDto> reviews = reviewService.getReviewByStore(storeId, minGrating, maxGrating, pageable);
+		return ResponseEntity.ok(reviews);
 	}
 
 	@PutMapping("/store/{storeId}/review/{reviewId}")

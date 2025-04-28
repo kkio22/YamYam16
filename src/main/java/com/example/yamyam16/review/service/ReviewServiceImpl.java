@@ -78,6 +78,7 @@ public class ReviewServiceImpl implements ReviewService {
 			.findByOrderStoreIdAndGradeBetweenOrderByCreatedAtDesc(storeId, min, max, pageable);
 
 		return reviewPage.map(review -> new ReviewResponseDto(
+			review.getId(),
 			review.getContent(),
 			review.getGrade(),
 			review.getCreatedAt()));

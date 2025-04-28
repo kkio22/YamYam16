@@ -14,9 +14,11 @@ public class ReviewResponseDto {
 	private int grade;
 	private LocalDateTime createdAt;
 
-	public ReviewResponseDto(String content, int grade, LocalDateTime createdAt) {
+	public ReviewResponseDto(Long id, String content, int grade, LocalDateTime createdAt) {
+		this.id = id;
 		this.content = content;
 		this.grade = grade;
 		this.createdAt = createdAt;
 	}
+
 }
