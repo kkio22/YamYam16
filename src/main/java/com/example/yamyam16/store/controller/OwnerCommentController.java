@@ -4,6 +4,7 @@ import com.example.yamyam16.auth.common.consts.Const;
 import com.example.yamyam16.auth.entity.User;
 import com.example.yamyam16.store.dto.request.OwnerCommmentRequestDto;
 import com.example.yamyam16.store.dto.response.OwnerCommentResponseDto;
+import com.example.yamyam16.store.dto.response.ReviewWithOwnerCommentResponseDto;
 import com.example.yamyam16.store.service.OwnerCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,47 +18,49 @@ public class OwnerCommentController {
 
     private final OwnerCommentService ownercommentService;
 
-    //댓글 생성
+    // 댓글 생성
     @PostMapping("/{storeId}/{reviewId}")
-    public ResponseEntity<OwnerCommentResponseDto> createOwnerComment(
+    public ResponseEntity<ReviewWithOwnerCommentResponseDto> createOwnerComment(
             @SessionAttribute(name = Const.LOGIN_USER) User user,
             @PathVariable Long storeId,
             @PathVariable Long reviewId,
             @RequestBody OwnerCommmentRequestDto requestDto) {
 
-        OwnerCommentResponseDto responseDto = ownercommentService.createComment(user, storeId, reviewId, requestDto);
-        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+        // 서비스 계층을 호출하여 댓글 생성 및 DTO 변환
+        ReviewWithOwnerCommentResponseDto responseDto = ownercommentService.createComment(user, storeId, reviewId, requestDto);
 
+        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
-//    //댓글 수정
-//    @PutMapping("/{storeId}/{reviewId}")
-//    public ResponseEntity<OwnerCommentResponseDto> updateOwnerComment(
-//            @SessionAttribute(name = Const.LOGIN_USER) User user,
-//            @PathVariable Long storeId,
-//            @PathVariable Long reviewId,
-//            @RequestBody OwnerCommmentRequestDto requestDto) {
-//
-//        // 댓글 수정 서비스 호출
-//        OwnerCommentResponseDto responseDto = ownercommentService.updateComment(user, storeId, reviewId, requestDto);
-//
-//        return new ResponseEntity<>(responseDto, HttpStatus.OK);
-//    }
 
-    // 댓글 조회
-    @GetMapping("/{storeId}/{reviewId}")
-    public ResponseEntity<OwnerCommentResponseDto> getOwnerComment(
+    //댓글 수정
+    @PutMapping("/{storeId}/{reviewId}")
+    public ResponseEntity<OwnerCommentResponseDto> updateOwnerComment(
             @SessionAttribute(name = Const.LOGIN_USER) User user,
             @PathVariable Long storeId,
-            @PathVariable Long reviewId
+            @PathVariable Long reviewId,
+            @RequestBody OwnerCommmentRequestDto requestDto) {
 
-    ) {
-
-        // 댓글 조회 서비스 호출
-        OwnerCommentResponseDto responseDto = ownercommentService.getOwnerCommentByReviewId(user, storeId, reviewId);
+        // 댓글 수정 서비스 호출
+        OwnerCommentResponseDto responseDto = ownercommentService.updateComment(user, storeId, reviewId, requestDto);
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
+//
+//    // 댓글 조회
+//    @GetMapping("/{storeId}/{reviewId}")
+//    public ResponseEntity<OwnerCommentResponseDto> getOwnerComment(
+//            @SessionAttribute(name = Const.LOGIN_USER) User user,
+//            @PathVariable Long storeId,
+//            @PathVariable Long reviewId
+//
+//    ) {
+//
+//        // 댓글 조회 서비스 호출
+//        OwnerCommentResponseDto responseDto = ownercommentService.getOwnerCommentByReviewId(user, storeId, reviewId);
+//
+//        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+//    }
 
     // 댓글삭제
     @DeleteMapping("/{storeId}/{reviewId}")
@@ -71,6 +74,6 @@ public class OwnerCommentController {
         return ResponseEntity.ok("댓글이 삭제되었습니다");
 
     }
-
 }
+
 
