@@ -51,7 +51,7 @@ public class MenuController {
 	@PatchMapping("/stores/{storeId}/menu/{menuId}")// url이 달라야 함,
 	public ResponseEntity<MenuUpdateResponseDto> updateMenu(
 		@PathVariable Long storeId,
-		Long menuId,
+		@PathVariable Long menuId,
 		@Valid @RequestBody MenuUpdateRequestDto menuUpdateRequestDto
 	) {
 		MenuUpdateResponseDto menuUpdateResponseDto = menuService.updateMenu(storeId, menuId, menuUpdateRequestDto);
@@ -61,7 +61,7 @@ public class MenuController {
 	@DeleteMapping("/stores/{storeId}/menu/{menuId}")
 	public ResponseEntity<Void> deleteMenu(
 		@PathVariable Long storeId,
-		Long menuId
+		@PathVariable Long menuId
 	) {
 		menuService.deleteMenu(storeId, menuId);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);

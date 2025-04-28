@@ -50,7 +50,7 @@ public class UserController {
 		//로그인 유저 조회
 		LoginResponseDto responseDto = userService.login(requestDto);
 		Long userId = responseDto.getId();
-		System.out.printf("유저 조회 성공 🚀🚀🚀🚀");
+		System.out.println("유저 조회 성공 🚀🚀🚀🚀");
 
 		//로그인 성공
 		//getSession(true) : default, 세션 없으면 생성
@@ -72,13 +72,15 @@ public class UserController {
 		SecurityContext securityContext = SecurityContextHolder.getContext();
 		session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
 
+		System.out.println("로그인 성공 🚀🚀🚀🚀");
 		return new ResponseEntity<>("로그인 성공", HttpStatus.OK);
+
 	}
 
 	@PatchMapping("/user")
 	public ResponseEntity<String> updatePw(@Valid @RequestBody UpdatePasswordRequestDto requestDto,
 		@SessionAttribute(name = "loginUser") User loginUSer) {
-		System.out.printf("업데이트 컨트롤러 진입 🚀🚀🚀🚀");
+		System.out.println("업데이트 컨트롤러 진입 🚀🚀🚀🚀");
 		Long userId = loginUSer.getId();
 		userService.updatePw(userId, requestDto);
 		return new ResponseEntity<>("업데이트 완료", HttpStatus.OK);
