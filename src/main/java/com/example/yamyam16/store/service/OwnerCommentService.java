@@ -25,9 +25,23 @@ public class OwnerCommentService extends CommonAuthforOwner {
 
     //오너 코멘트 생성
     @Transactional
-    public OwnerCommentResponseDto createComment(User user, OwnerCommmentRequestDto createDto) {
+    public OwnerCommentResponseDto createComment(User user, Long storeId, Long reviewId, OwnerCommmentRequestDto createDto) {
         //오너인지 확인
         validateOwnerRole(user);
+
+        Long ownerId = user.getId();
+
+        Store store = storeRepository.findByIdAndUserId(storeId, ownerId)
+                .orElseThrow(() -> new StoreCustomException(StoreCustomErrorCode.STORE_NOT_MATCH));
+
+        // 리뷰 가져오기
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new StoreCustomException(StoreCustomErrorCode.COMMENT_NOT_FOUND));
+
+        // 리뷰가 내 가게에 속한 것인지 확인
+        if (!review.getStore().getId().equals(store.getId())) {
+            throw new StoreCustomException(StoreCustomErrorCode.STORE_NOT_MATCH);
+        }
 
         //코멘트 생성
         OwnerComment comment = new OwnerComment(createDto, user);
@@ -68,38 +82,38 @@ public class OwnerCommentService extends CommonAuthforOwner {
 
     }
 
-    //오너 코멘트 수정
-    @Transactional
-    public OwnerCommentResponseDto updateComment(User user, Long storeId, Long reviewId, OwnerCommmentRequestDto updateDto) {
-        // 오너인지 확인
-        validateOwnerRole(user);
-
-        Long ownerId = user.getId();
-
-        Store store = storeRepository.findByIdAndUserId(storeId, ownerId)
-                .orElseThrow(() -> new StoreCustomException(StoreCustomErrorCode.STORE_NOT_MATCH));
-
-        // 리뷰 가져오기
-        Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new StoreCustomException(StoreCustomErrorCode.COMMENT_NOT_FOUND));
-
-        // 리뷰가 내 가게에 속한 것인지 확인
-        if (!review.getStore().getId().equals(store.getId())) {
-            throw new StoreCustomException(StoreCustomErrorCode.STORE_NOT_MATCH);
-        }
-
-        // 오너 코멘트 가져오기
-        OwnerComment comment = ownerCommentRepository.findByReview_Id(reviewId)
-                .orElseThrow(() -> new StoreCustomException(StoreCustomErrorCode.COMMENT_NOT_FOUND));
-
-        // 수정할 내용 적용
-        comment.updateContent(updateDto);
-
-        // 수정된 코멘트 저장
-        ownerCommentRepository.save(comment);
-        return OwnerCommentResponseDto.fromCommentToDto(comment);
-    }
-
+//    //오너 코멘트 수정
+//    @Transactional
+//    public OwnerCommentResponseDto updateComment(User user, Long storeId, Long reviewId, OwnerCommmentRequestDto updateDto) {
+//        // 오너인지 확인
+//        validateOwnerRole(user);
+//
+//        Long ownerId = user.getId();
+//
+//        Store store = storeRepository.findByIdAndUserId(storeId, ownerId)
+//                .orElseThrow(() -> new StoreCustomException(StoreCustomErrorCode.STORE_NOT_MATCH));
+//
+//        // 리뷰 가져오기
+//        Review review = reviewRepository.findById(reviewId)
+//                .orElseThrow(() -> new StoreCustomException(StoreCustomErrorCode.COMMENT_NOT_FOUND));
+//
+//        // 리뷰가 내 가게에 속한 것인지 확인
+//        if (!review.getStore().getId().equals(store.getId())) {
+//            throw new StoreCustomException(StoreCustomErrorCode.STORE_NOT_MATCH);
+//        }
+//
+//        // 오너 코멘트 가져오기
+//        OwnerComment comment = ownerCommentRepository.findByReview_Id(reviewId)
+//                .orElseThrow(() -> new StoreCustomException(StoreCustomErrorCode.COMMENT_NOT_FOUND));
+//
+//        // 수정할 내용 적용
+//        comment.updateContent(updateDto);
+//
+//        // 수정된 코멘트 저장
+//        ownerCommentRepository.save(comment);
+//        return OwnerCommentResponseDto.fromCommentToDto(comment);
+//    }
+//
 
     //오너 코멘트 삭제
     @Transactional
@@ -111,7 +125,7 @@ public class OwnerCommentService extends CommonAuthforOwner {
 
         Store store = storeRepository.findByIdAndUserId(storeId, ownerId)
                 .orElseThrow(() -> new StoreCustomException(StoreCustomErrorCode.STORE_NOT_MATCH));
-        
+
         // 리뷰 가져오기
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new StoreCustomException(StoreCustomErrorCode.COMMENT_NOT_FOUND));
