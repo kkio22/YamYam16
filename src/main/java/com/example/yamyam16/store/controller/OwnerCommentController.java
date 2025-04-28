@@ -11,12 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/ownercomment")
+@RequestMapping("ownercomment")
 @RequiredArgsConstructor
-public class OwnerCommentConroller {
+public class OwnerCommentController {
 
     private final OwnerCommentService ownercommentService;
 
+    //댓글 생성
     @PostMapping
     public ResponseEntity<OwnerCommentResponseDto> createOwnerComment(
             @SessionAttribute(name = Const.LOGIN_USER) User user,
@@ -25,6 +26,35 @@ public class OwnerCommentConroller {
         OwnerCommentResponseDto responseDto = ownercommentService.createComment(user, requestDto);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
 
+    }
+
+    //댓글 수정
+    @PutMapping("/{storeId}/{reviewId}")
+    public ResponseEntity<OwnerCommentResponseDto> updateOwnerComment(
+            @SessionAttribute(name = Const.LOGIN_USER) User user,
+            @PathVariable Long storeId,
+            @PathVariable Long reviewId,
+            @RequestBody OwnerCommmentRequestDto requestDto) {
+
+        // 댓글 수정 서비스 호출
+        OwnerCommentResponseDto responseDto = ownercommentService.updateComment(user, storeId, reviewId, requestDto);
+
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
+
+    // 댓글 조회
+    @GetMapping("/{storeId}/{reviewId}")
+    public ResponseEntity<OwnerCommentResponseDto> getOwnerComment(
+            @SessionAttribute(name = Const.LOGIN_USER) User user,
+            @PathVariable Long storeId,
+            @PathVariable Long reviewId
+
+    ) {
+
+        // 댓글 조회 서비스 호출
+        OwnerCommentResponseDto responseDto = ownercommentService.getOwnerCommentByReviewId(user, storeId, reviewId);
+
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     // 댓글삭제

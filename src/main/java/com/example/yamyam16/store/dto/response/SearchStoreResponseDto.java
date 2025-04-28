@@ -8,22 +8,22 @@ public class SearchStoreResponseDto {
 
     private Long id;
 
-    private String storename;
+    private String name;
     private Double grade;
-    private Long opentime;
-    private Long closetime;
+    private Long openTime;
+    private Long closeTime;
 
 
     public SearchStoreResponseDto(Store store) {
 
         this.id = store.getId();
-        this.storename = store.getName();
+        this.name = store.getName();
         this.grade = store.getReviews().stream()
                 .mapToLong(review_grade -> review_grade.getGrade())
                 .average()
                 .orElse(0.0);
-        this.opentime = store.getOpenTime();
-        this.closetime = store.getCloseTime();
+        this.openTime = store.getOpenTime();
+        this.closeTime = store.getCloseTime();
     }
 
     public static SearchStoreResponseDto fromStoreToDto(Store store) {

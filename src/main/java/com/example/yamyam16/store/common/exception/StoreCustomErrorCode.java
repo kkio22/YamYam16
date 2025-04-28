@@ -12,7 +12,8 @@ public enum StoreCustomErrorCode implements StoreErrorResponse {
     AUTH_NOT_FOUND(HttpStatus.NOT_FOUND, "사장님 권한이 없습니다"),
     STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "가게가 존재하지 않습니다"),
     OVER_CREATE(HttpStatus.BAD_REQUEST, "가게는 최대 3개만 만들 수 있습니다"),
-    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "사장님의 댓글이 존재하지 않습니다");
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "댓글이 존재하지 않습니다"),
+    STORE_NOT_MATCH(HttpStatus.BAD_REQUEST, "본인의 가게가 아닙니다");
 
 
     private final HttpStatus httpStatus;
