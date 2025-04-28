@@ -49,10 +49,12 @@ public class MenuService {
 			menu); //repository에 엔티티 보내서 데이터 베이스 테이블에 값 생성하고 그 값이 다시 반환됨 그래서 자료형이 Menu / 그래서
 
 		return new MenuCreateResponseDto(
+			findStore.getId(),
 			savedMenu.getId(),
 			savedMenu.getMenuName(),
 			savedMenu.getMenuPrice(),
 			savedMenu.getMenuStatus().getDescription()
+
 		); //내가 저장한 내용에 있는 상태가져오는 것
 	}
 
@@ -75,6 +77,7 @@ public class MenuService {
 		//entity -> dto로 변환해서 반환 => stream이나 for문 사용해야 함
 		return menuList.stream() //컬렉션인 List를 스트림으로 변환
 			.map(menu -> new MenuListResponseDto(
+				findStore.getId(),
 				menu.getId(),
 				menu.getMenuName(),//스트릶에 있는 menu객체를 하나씩 꺼내옴
 				menu.getMenuPrice())
@@ -97,6 +100,7 @@ public class MenuService {
 			menuUpdateRequestDto.getMenuStatus()); //entity update
 
 		return new MenuUpdateResponseDto(
+			findStore.getId(),
 			findMenu.getId(),
 			findMenu.getMenuName(),
 			findMenu.getMenuPrice(),

@@ -7,6 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public class MenuCreateResponseDto {
 
+	private Long storeId;
+
 	private Long id;
 
 	private String menuName;
