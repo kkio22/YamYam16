@@ -100,7 +100,7 @@ public class MenuService {
 			findMenu.getId(),
 			findMenu.getMenuName(),
 			findMenu.getMenuPrice(),
-			menuUpdateRequestDto.getMenuStatus().getDescription()
+			findMenu.getMenuStatus().getDescription()
 		);
 	}
 
