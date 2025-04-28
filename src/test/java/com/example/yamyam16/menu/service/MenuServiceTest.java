@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +24,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import com.example.yamyam16.menu.dto.MenuCreateRequestDto;
 import com.example.yamyam16.menu.dto.MenuCreateResponseDto;
@@ -49,31 +51,14 @@ class MenuServiceTest {
 
 	@InjectMocks
 	private MenuService menuService;
+	private Store store; //순수 자바 객체여서 의존성 주입 필요없음 전역변수
 
-	// @BeforeEach (공통으로 필요하면 사용)
-	// void setUp() {
-	// 	Long storeId = 1L;
-	//
-	// 	Store store = Store.builder()
-	// 		.name("다 있는 음식점")
-	// 		.openTime(8L)
-	// 		.closeTime(10L)
-	// 		.minOrderPrice(15000L)
-	// 		.category(Koreancusine)
-	// 		.build();
-	//
-	// 	ReflectionTestUtils.setField(store, "id", storeId); //store 객체의 id필드가 private이면 리플렉션을 통해 값을 설정할 수 있다.
-	//
-	// 	given(storeRepository.findById(storeId)).willReturn(Optional.of(store));
-	// }
-
-	@Test
-	@DisplayName("메뉴 생성이되었는지 확인")
-	void createMenu() {
-		//store 확인
+	@BeforeEach
+		//(공통으로 필요하면 사용)
+	void setUp() {
 		Long storeId = 1L;
 
-		Store store = Store.builder()
+		store = Store.builder()
 			.name("다 있는 음식점")
 			.openTime(8L)
 			.closeTime(10L)
@@ -81,8 +66,17 @@ class MenuServiceTest {
 			.category(Koreancusine)
 			.build();
 
-		given(storeRepository.findById(storeId)).willReturn(Optional.of(store));
+		ReflectionTestUtils.setField(store, "id", storeId); //store 객체의 id필드가 private이면 리플렉션을 통해 값을 설정할 수 있다.
 
+	}
+	// 실제 로직에 없으면 작성하면 안 됨
+
+	@Test
+	@DisplayName("메뉴 생성이되었는지 확인")
+	void createMenu() {
+		//store 확인 -> 연관관계가 맺어져 있어서 조건으로 넣어줘야 함, 유효성 검사에서 필요한가를 생각해서 필요하면 넣어야 함
+		Long storeId = 1L; //지역변수 & 전역변수
+		given(storeRepository.findById(storeId)).willReturn(Optional.of(store));
 		//menu 생성
 		Menu menu = new Menu(
 			"치킨",
@@ -108,13 +102,8 @@ class MenuServiceTest {
 		Long storeId = 1L;
 		Long page = 1L;
 		Long size = 10L;
-		Store store = Store.builder()
-			.name("다 있는 음식점")
-			.openTime(8L)
-			.closeTime(10L)
-			.minOrderPrice(15000L)
-			.category(Koreancusine)
-			.build();
+
+		given(storeRepository.findById(storeId)).willReturn(Optional.of(store));
 
 		List<Menu> dummyMenus = Arrays.asList(
 			new Menu("치킨", 13000L, AVAILABLE),
@@ -159,6 +148,7 @@ class MenuServiceTest {
 	void updateMenu() {
 		Long storeId = 1L;
 		Long menuId = 1L;
+		given(storeRepository.findById(storeId)).willReturn(Optional.of(store));
 		// 메뉴 수정
 		Menu menu = Menu.builder()
 			.menuName("치킨")
@@ -181,6 +171,7 @@ class MenuServiceTest {
 	void deleteMenu() {
 		Long storeId = 1L;
 		Long menuId = 1L;
+		given(storeRepository.findById(storeId)).willReturn(Optional.of(store));
 
 		//메뉴 삭제
 		Menu menu = Menu.builder()
