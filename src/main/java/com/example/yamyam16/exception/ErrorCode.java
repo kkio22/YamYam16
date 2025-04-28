@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum ErrorCode {
 	//menu
 	INVALID_INPUT_VALUE(404, "Not Found", "M001", "Invalid Input Value"),
-	MENU_NOT_FOUND(404, "Not Found", "M002", "Menu Not Found"),
+	MENU_NOT_FOUND(404, "Not Found", "M002", "조회된 메뉴가 없습니다."),
 
 	// Store
 	STORE_NOT_FOUND(404, "Not Found", "S001", "조회된 가게가 없습니다."),
