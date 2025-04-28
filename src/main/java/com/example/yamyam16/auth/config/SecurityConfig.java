@@ -21,7 +21,7 @@ public class SecurityConfig {
 			.csrf(csrf -> csrf.disable()) // 세션 쓸거면 CSRF 켜는게 좋음 (보안)
 			.authorizeHttpRequests(auth -> auth
 				.requestMatchers("/auth/login", "/auth/signup").permitAll()
-				.requestMatchers("/auth/user").hasRole("USER")
+				.requestMatchers("/auth/user").hasAnyRole("USER", "OWNER")
 				.anyRequest().authenticated()
 			)
 			.formLogin(withDefaults()); // 세션 기반 로그인 쓰는 경우
