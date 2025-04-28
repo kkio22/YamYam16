@@ -53,6 +53,7 @@ class CartServiceImplTest {
 	@Test
 	@DisplayName("카트 저장 성공")
 	void saveCart() {
+		// 가게와 메뉴를 찾고, 기존 장바구니 비어있을 때 새 메뉴 담기 성공하는지 검증
 		// given
 		Long storeId = 1L;
 		Long userId = 1L;
@@ -83,11 +84,16 @@ class CartServiceImplTest {
 		// then
 		assertThat(response.getMessage()).contains("추가되었습니다");
 		assertTrue(response.isCanOrder() || !response.isCanOrder()); // 상태만 검증
+		// assertThat 실제 결과가 기대한 조건을 만족하는지” 확인하는 검증 구문
+		// response.getMessage()가 가져온 문자열 안에
+		// "추가되었습니다"라는 문구가 포함되어 있는지 검사
+		// assertTrue 괄호 안 조건이 true여야 테스트가 성공
 	}
 
 	@Test
 	@DisplayName("카트 전체 조회 성공")
 	void findAllCart() {
+		// 유저의 장바구니 목록을 불러오고, 메시지가 제대로 오는지 확인
 		// given
 		Long userId = 1L;
 		Long storeId = 1L;
@@ -122,6 +128,7 @@ class CartServiceImplTest {
 	@Test
 	@DisplayName("카트 수량 수정 성공")
 	void updateCart() {
+		// 기존 카트 항목에서 수량을 수정한 뒤, 수정된 수량과 메시지를 검증
 		// given
 		Long userId = 1L;
 
@@ -160,6 +167,7 @@ class CartServiceImplTest {
 	@Test
 	@DisplayName("카트 항목 삭제 성공")
 	void deleteCart() {
+		// 장바구니에서 특정 메뉴를 삭제하고, 삭제 메시지가 제대로 뜨는지 확인
 		// given
 		Long userId = 1L;
 		// DeleteCartRequestDto requestDto = new DeleteCartRequestDto("Burger");
@@ -195,6 +203,7 @@ class CartServiceImplTest {
 	@Test
 	@DisplayName("모든 카트 삭제 성공")
 	void deleteAllCart() {
+		// 유저의 모든 장바구니 항목을 삭제하고, deleteAll 메소드가 호출됐는지 검증
 		// given
 		Long userId = 1L;
 
@@ -221,5 +230,9 @@ class CartServiceImplTest {
 
 		// then
 		verify(cartRepository, times(1)).deleteAll(anyList());
+		// verfiy() Mockito 기능, Mock 객체에서 특정 메소드가 실제로 호출 됐는지 확인
+		// 1.	cartRepository.deleteAll(…) 이라는 메소드가
+		// 2.	정확히 1번 호출됐는지 (times(1))
+		// 3. 그리고 deleteAll 메소드의 인자로 어떤 리스트(anyList()) 가 들어갔는지 체크
 	}
 }
