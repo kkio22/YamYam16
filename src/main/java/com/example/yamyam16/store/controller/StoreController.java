@@ -40,6 +40,20 @@ public class StoreController {
         return new ResponseEntity<>(createPostsResponseDto, HttpStatus.CREATED);
     }
 
+
+    //가게 자기 소유 조회
+    @GetMapping("/owner")
+    public ResponseEntity<Page<SearchStoreResponseDto>> getAllStoresByOwner(
+            @SessionAttribute(name = Const.LOGIN_USER) User user,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "3") int size
+    ) {
+
+        return ResponseEntity.ok(storeService.getAllStoresByOwner(user, page, size));
+
+    }
+
+
     //가게 전체 조회
     @GetMapping("all")
     public ResponseEntity<Page<SearchStoreResponseDto>> getAllStores(
@@ -49,6 +63,17 @@ public class StoreController {
 
         return ResponseEntity.ok(storeService.getAllStores(page, size));
 
+    }
+
+    //가게 단건 조회
+    @GetMapping("/search/{storeId}/menu")
+    public ResponseEntity<List<MenuListResponseDto>> findMenuByPage(
+            @PathVariable Long storeId,
+            @RequestParam(defaultValue = "1") Long page, // 페이지 번호
+            @RequestParam(defaultValue = "10") Long size // 한페이지에 몇개의 데이터를 가져올지
+    ) {//url 파라미터로 페이지 번호, 크기 받기
+        List<MenuListResponseDto> menuList = menuService.findMenuByPage(storeId, page, size);
+        return new ResponseEntity<>(menuList, HttpStatus.OK);
     }
 
     //가게 전체 이름으로 조회-> filtering 개념으로 requestParam dto로 구현 X
@@ -64,29 +89,8 @@ public class StoreController {
 
     }
 
-    //가게 자기 소유 조회
-    @GetMapping("/owner")
-    public ResponseEntity<Page<SearchStoreResponseDto>> getAllStoresByOwner(
-            @SessionAttribute(name = Const.LOGIN_USER) User user,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "3") int size
-    ) {
-
-        return ResponseEntity.ok(storeService.getAllStoresByOwner(user, page, size));
-
-    }
-
-    //가게 단건 조회
-    @GetMapping("/search/{storeId}/menu")
-    public ResponseEntity<List<MenuListResponseDto>> findMenuByPage(
-            @PathVariable Long storeId,
-            @RequestParam(defaultValue = "1") Long page, // 페이지 번호
-            @RequestParam(defaultValue = "10") Long size // 한페이지에 몇개의 데이터를 가져올지
-    ) {//url 파라미터로 페이지 번호, 크기 받기
-        List<MenuListResponseDto> menuList = menuService.findMenuByPage(storeId, page, size);
-        return new ResponseEntity<>(menuList, HttpStatus.OK);
-    }
-
+    //추천검색
+    
 
     //가게수정
     @PatchMapping("/owner/{storeId}")

@@ -62,6 +62,7 @@ class OrderServiceImplTest {
 	@Test
 	@DisplayName("주문 저장 성공")
 	void saveOrder() {
+		// 장바구니(IN_CART) 상태인 상품들 조회 - 주문 생성 후, 총 가격과 상태(ORDERED) 검증
 		// given
 		Long userId = 1L;
 		Store store = Store.builder()
@@ -89,6 +90,7 @@ class OrderServiceImplTest {
 	@Test
 	@DisplayName("주문 수락 성공")
 	void acceptOrder() {
+		// 가게 사장님이 주문을 수락하는 상황 - 주문 상태가 PREPARING으로 바뀌는지 검증
 		// given
 		Long userId = 1L;
 		Long orderId = 1L;
@@ -107,6 +109,7 @@ class OrderServiceImplTest {
 
 		Order order = new Order(userId, store.getId(), 10000L, OrderStatus.ORDERED, LocalDateTime.now());
 
+		// 해당 메서드 호출시 반환할 가짜 객체 지정
 		when(orderRepository.findByIdOrElseThrow(orderId)).thenReturn(order);
 		when(storeRepository.findByIdOrElseThrow(userId)).thenReturn(store);
 		when(cartRepository.findByOrders_OrderId(orderId)).thenReturn(Collections.emptyList());
@@ -121,6 +124,7 @@ class OrderServiceImplTest {
 	@Test
 	@DisplayName("주문 상태 변경 성공")
 	void changeOrderStatus() {
+		// 주문 상태를 다른 상태(DELIVERING)로 변경 - 변경된 상태가 정확히 반영되는지 검증
 		// given
 		Long userId = 1L;
 		Long orderId = 1L;
@@ -140,6 +144,7 @@ class OrderServiceImplTest {
 	@Test
 	@DisplayName("주문 취소 성공")
 	void cancelOrder() {
+		// 사용자가 자신의 주문을 취소하는 상황 - 주문 상태가 CANCELED로 바뀌는지 검증
 		// given
 		Long orderId = 1L;
 		Long loginUserId = 1L;
@@ -157,6 +162,7 @@ class OrderServiceImplTest {
 	@Test
 	@DisplayName("주문 전체 조회 성공 (유저)")
 	void findAllOrders_User() {
+		// UserType이 USER인 경우 - 유저의 주문 리스트를 조회하고 사이즈가 맞는지 확인
 		// given
 		Long userId = 1L;
 		User user = new User();
@@ -165,6 +171,7 @@ class OrderServiceImplTest {
 
 		Order order = new Order(userId, 1L, 10000L, OrderStatus.ORDERED, LocalDateTime.now());
 
+		// 해당 메서드 호출시 반환할 가짜 객체 지정
 		when(userRepository.findByIdOrElseThrow(userId)).thenReturn(user);
 		when(orderRepository.findAllByUserIdOrElseThrow(userId)).thenReturn(List.of(order));
 		when(storeService.findStoreName(order.getStoreId())).thenReturn("Test Store");
@@ -179,6 +186,7 @@ class OrderServiceImplTest {
 	@Test
 	@DisplayName("주문 상세 조회 성공")
 	void findOneOrder() {
+		// 특정 주문을 상세 조회 - 반환된 주문 ID가 일치하는지 검증
 		// given
 		Long userId = 1L;
 		Long orderId = 1L;

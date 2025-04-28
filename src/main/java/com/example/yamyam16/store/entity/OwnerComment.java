@@ -47,4 +47,8 @@ public class OwnerComment {
         this.content = updateDto.getContent();
         this.createAt = LocalDateTime.now();
     }
+
+    public void setReview(Review review) {
+
+    }
 }
