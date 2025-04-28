@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum MenuStatus {
 
 	AVAILABLE("판매중"),
-	HOLDOUT("품절"),
+	SOLDOUT("품절"),
 	DELETED("삭제");
 
 	private final String description;
