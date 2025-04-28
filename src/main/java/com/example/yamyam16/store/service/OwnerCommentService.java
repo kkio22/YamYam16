@@ -126,7 +126,6 @@ public class OwnerCommentService extends CommonAuthforOwner {
         return OwnerCommentResponseDto.fromCommentToDto(comment);
     }
 
-    //오너 댓글 삭제
     @Transactional
     public void deleteComment(User user, Long storeId, Long reviewId) {
         // 오너인지 확인
@@ -134,25 +133,26 @@ public class OwnerCommentService extends CommonAuthforOwner {
 
         Long ownerId = user.getId();
 
-        // 가게 조회 및 소유자 확인
+        // 가게 정보 가져오기
         Store store = storeRepository.findByIdAndUserId(storeId, ownerId)
                 .orElseThrow(() -> new StoreCustomException(StoreCustomErrorCode.STORE_NOT_MATCH));
 
-        // 리뷰 조회
+        // 리뷰 정보 가져오기
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new StoreCustomException(StoreCustomErrorCode.COMMENT_NOT_FOUND));
 
-        // 리뷰가 해당 가게 소속인지 검증
+        // 리뷰가 내 가게에 속한 것인지 확인
         if (!review.getStore().getId().equals(store.getId())) {
             throw new StoreCustomException(StoreCustomErrorCode.STORE_NOT_MATCH);
         }
 
-        // 댓글 찾기
+        // 오너 코멘트 가져오기
         OwnerComment comment = ownerCommentRepository.findByReview_Id(reviewId)
                 .orElseThrow(() -> new StoreCustomException(StoreCustomErrorCode.COMMENT_NOT_FOUND));
 
         // 댓글 삭제
         ownerCommentRepository.delete(comment);
+
     }
 
 }

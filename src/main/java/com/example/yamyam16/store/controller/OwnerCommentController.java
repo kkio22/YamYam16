@@ -34,7 +34,7 @@ public class OwnerCommentController {
 
 
     //댓글 수정
-    @PutMapping("/{storeId}/{reviewId}")
+    @PatchMapping("/{storeId}/{reviewId}")
     public ResponseEntity<OwnerCommentResponseDto> updateOwnerComment(
             @SessionAttribute(name = Const.LOGIN_USER) User user,
             @PathVariable Long storeId,
