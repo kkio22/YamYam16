@@ -85,6 +85,7 @@ public class MenuService {
 			.toList(); // 다시 List로 변환
 	}
 
+	@Transactional
 	public MenuUpdateResponseDto updateMenu(
 		Long storeId,
 		Long menuId,
