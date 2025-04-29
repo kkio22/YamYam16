@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+	private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
@@ -23,6 +25,8 @@ public class SecurityConfig {
 				.requestMatchers("/auth/login", "/auth/signup").permitAll()
 				.requestMatchers("/auth/user").hasAnyRole("USER", "OWNER")
 				.anyRequest().authenticated()
+			).exceptionHandling(exception -> exception
+				.authenticationEntryPoint(customAuthenticationEntryPoint) // 여기 추가!
 			)
 			.formLogin(withDefaults()); // 세션 기반 로그인 쓰는 경우
 		return http.build();
